@@ -1,0 +1,367 @@
+<div class="relative">
+  <div class="mx-auto">
+    <!-- filter top -->
+    <div class="flex justify-end bg-gray-500 h-20">
+      <!-- add new -->
+      <div (click)="addNew()" tooltip="{{ 'OCR.THEMMOI' | translate }}" placement="bottom" delay="500" class="flex m-4">
+        <button
+          class="
+            px-4
+            py-3
+            flex
+            bg-gray-200
+            justify-center
+            items-center
+            w-full
+            rounded-md
+            focus:text-gray-900 focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105
+          "
+        >
+          <svg
+            fill="currentColor"
+            height="24"
+            id="svg2"
+            viewBox="0 0 32 32"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg"
+          >
+            <g id="document_x5F_image_x5F_add">
+              <path
+                d="M32,23.001c0-4.633-3.5-8.444-8-8.942V5.584L18.414,0H0v32h24v-0.059C28.5,31.443,32,27.633,32,23.001z M17.998,2.413   L21.586,6h-3.588V2.413z M2,30V1.998h14v6.001h6v6.06c-0.863,0.095-1.688,0.311-2.461,0.633C18.956,14.013,18,14,18,14l-2,0l-2-2   h-4l-2,2H6c0,0-2,0-2,2v6c0,2,2,2,2,2s4.531,0,8.058,0c0.267,2.42,1.493,4.548,3.29,6H2z M12,22c-1.658,0-3-1.342-3-3 c0-1.656,1.342-3,3-3c1.624,0,2.94,1.295,2.991,2.907c-0.333,0.651-0.589,1.347-0.756,2.077C13.685,21.603,12.892,22,12,22z M23,30 c-3.865-0.008-6.995-3.135-7-6.999c0.006-3.865,3.135-6.995,7-7.001c3.864,0.006,6.991,3.136,6.999,7.001 C29.991,26.865,26.864,29.992,23,30z"
+              />
+              <g><polygon points="28,22 24.002,22 24.002,18 22,18 22,22 18,22 18,24 22,24 22,28 24.002,28 24.002,24 28,24" /></g>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <!-- filter -->
+      <div class="flex m-4">
+        <button
+          tooltip="{{ 'OCR.LOC' | translate }}"
+          placement="bottom"
+          delay="500"
+          class="
+            px-4
+            py-3
+            flex
+            justify-center
+            items-center
+            w-full
+            bg-gray-200
+            rounded-md
+            focus:text-gray-900 focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105
+          "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24 " fill="currentColor">
+            <path
+              d="M7.5 14.5c-1.58 0-2.903 1.06-3.337 2.5H2v2h2.163c.434 1.44 1.757 2.5 3.337 2.5s2.903-1.06 3.337-2.5H22v-2H10.837c-.434-1.44-1.757-2.5-3.337-2.5zm0 5c-.827 0-1.5-.673-1.5-1.5s.673-1.5 1.5-1.5S9 17.173 9 18s-.673 1.5-1.5 1.5zm9-11c-1.58 0-2.903 1.06-3.337 2.5H2v2h11.163c.434 1.44 1.757 2.5 3.337 2.5s2.903-1.06 3.337-2.5H22v-2h-2.163c-.434-1.44-1.757-2.5-3.337-2.5zm0 5c-.827 0-1.5-.673-1.5-1.5s.673-1.5 1.5-1.5 1.5.673 1.5 1.5-.673 1.5-1.5 1.5z"
+            ></path>
+            <path
+              d="M12.837 5C12.403 3.56 11.08 2.5 9.5 2.5S6.597 3.56 6.163 5H2v2h4.163C6.597 8.44 7.92 9.5 9.5 9.5s2.903-1.06 3.337-2.5h9.288V5h-9.288zM9.5 7.5C8.673 7.5 8 6.827 8 6s.673-1.5 1.5-1.5S11 5.173 11 6s-.673 1.5-1.5 1.5z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+      <!-- search -->
+      <div class="flex m-4">
+        <button
+          tooltip="{{ 'OCR.TIMKIEM' | translate }}"
+          placement="bottom"
+          delay="500"
+          class="
+            px-4
+            py-3
+            flex
+            justify-center
+            items-center
+            w-full
+            bg-gray-200
+            rounded-md
+            focus:text-gray-900 focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105
+          "
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor">
+            <path
+              d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"
+            ></path>
+            <path
+              d="M11.412 8.586c.379.38.588.882.588 1.414h2a3.977 3.977 0 0 0-1.174-2.828c-1.514-1.512-4.139-1.512-5.652 0l1.412 1.416c.76-.758 2.07-.756 2.826-.002z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col">
+      <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="shadow overflow-hidden border-b border-gray-200">
+            <mat-table class="min-w-full divide-y divide-gray-200 bg-white" #table [dataSource]="dataSource | async" matSort>
+              <ng-container matColumnDef="drag">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider max-w-[70px]"
+                  *matHeaderCellDef
+                >
+                </mat-header-cell>
+                <mat-cell
+                  class="pl-6 px-4 py-4 text-center whitespace-nowrap align-middle max-w-[70px]"
+                  *matCellDef="let element; let pos = index"
+                >
+                  <span
+                    class="
+                      cursor-move
+                      inline-block
+                      focus:text-gray-900 focus:outline-none
+                      transition
+                      duration-500
+                      ease-in-out
+                      transform
+                      lg:hover:-translate-x lg:hover:scale-105
+                    "
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
+                    </svg>
+                  </span>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="name">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.TEN' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  <span class="pr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                      <path
+                        d="M20 5h-9.586L8.707 3.293A.997.997 0 0 0 8 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2z"
+                      ></path>
+                    </svg> </span
+                  >{{ element.name }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="trangthai">
+                <mat-header-cell
+                  class="min-w-[220px] bg-gray-200 px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.TRANGTHAI' | translate }}
+                </mat-header-cell>
+                <mat-cell class="min-w-[220px] px-4 py-4 items-start flex flex-col" *matCellDef="let element; let pos = index">
+                  <ng-container *ngIf="isOCR(element)">
+                    <div class="text-orange-500 font-bold">
+                      {{ getStateOCR(element) }}
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="isExtract(element)">
+                    <div class="text-purple-500 font-bold">
+                      {{ getStateExtract(element) }}
+                    </div>
+                  </ng-container>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="nguoitao">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.NGUOITAO' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.createdBy }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ngaytao">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.NGAYTAO' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.createdDate | date: 'dd/MM/yyyy' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="loaivanban">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.LOAIVANBAN' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.loaivanban }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="coquanbanhanh">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.COQUANBANHANH' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.coquanbanhanh }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ngaybanhanh">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.NGAYBANHANH' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.ngaybanhanh | date: 'dd/MM/yyyy' }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="sovanban">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.SOVANBAN' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.sovanban }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="nguoiky">
+                <mat-header-cell
+                  class="bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+                  *matHeaderCellDef
+                >
+                  {{ 'OCR.NGUOIKY' | translate }}
+                </mat-header-cell>
+                <mat-cell class="px-4 py-4 text-center whitespace-nowrap align-middle" *matCellDef="let element; let pos = index">
+                  {{ element.nguoiky }}
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                matRipple
+                [ngClass]="{ highlight: selectedRowIndex == row.name }"
+                (click)="isActive(row)"
+                class="element-row"
+                [cdkDetailRow]="row"
+                [cdkDetailRowTpl]="tpl"
+              >
+              </mat-row>
+            </mat-table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #tpl let-element>
+      <div [@detailExpand] style="overflow: hidden" class="row-expanded">
+        <div class="flex cell-expand" *ngFor="let file of element.files">
+          <span class="relative px-4 py-2 text-center whitespace-nowrap align-middle min-w-[70px]">
+            <ng-container *ngIf="file.progressOcr.pending">
+              <div class="relative ocr-progress-spinner text-orange-600">
+                <mat-progress-spinner mode="determinate" value="{{ file.progressOcr.total }}" diameter="30"></mat-progress-spinner>
+                <span class="text-sm" style="position: absolute; left: 7px; top: 6px">{{ file.progressOcr.total }}</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="file.progressExtract.pending">
+              <div class="relative extract-progress-spinner">
+                <mat-progress-spinner mode="indeterminate" diameter="30"></mat-progress-spinner>
+              </div>
+            </ng-container>
+          </span>
+          <span class="min-w-xl relative px-4 py-2 whitespace-nowrap align-middle" [matMenuTriggerFor]="menu">
+            <ng-container *ngIf="file.filesNormal">
+              <div class="cursor-pointer">
+                {{ getNameFile(file.filesNormal) }}
+              </div>
+            </ng-container>
+            <ng-container *ngIf="file.filesOcr">
+              <div class="text-orange-600 cursor-pointer">
+                {{ getNameFile(file.filesOcr) }}
+              </div>
+            </ng-container>
+            <ng-container *ngIf="file.filesExtract">
+              <div class="text-purple-600 cursor-pointer">
+                {{ getNameFile(file.filesExtract) }}
+              </div>
+            </ng-container>
+          </span>
+        </div>
+        <mat-menu #menu="matMenu">
+          <div>
+            <button mat-menu-item>
+              <span class="font-semibold text-orange-400">
+                <svg class="inline" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="24" height="24" viewBox="0 0 24 24">
+                  <path
+                    d="M3 4v5h2V5h4V3H4a1 1 0 0 0-1 1zm18 5V4a1 1 0 0 0-1-1h-5v2h4v4h2zm-2 10h-4v2h5a1 1 0 0 0 1-1v-5h-2v4zM9 21v-2H5v-4H3v5a1 1 0 0 0 1 1h5zM2 11h20v2H2z"
+                  ></path>
+                </svg>
+                Nhận dạng</span
+              >
+            </button>
+            <button mat-menu-item>
+              <span class="font-semibold text-purple-400">
+                <svg class="inline" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="M11 16h2V7h3l-4-5-4 5h3z"></path>
+                  <path
+                    d="M5 22h14c1.103 0 2-.897 2-2v-9c0-1.103-.897-2-2-2h-4v2h4v9H5v-9h4V9H5c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2z"
+                  ></path>
+                </svg>
+                Trích xuất metadata</span
+              >
+            </button>
+            <button mat-menu-item>
+              <span class="font-semibold text-blue-500">
+                <svg class="inline" fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <path d="m12 16 4-5h-3V4h-2v7H8z"></path>
+                  <path d="M20 18H4v-7H2v7c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2v-7h-2v7z"></path>
+                </svg>
+                Tải xuống</span
+              >
+            </button>
+            <button mat-menu-item>
+              <span class="font-semibold text-red-400">
+                <svg class="inline" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path
+                    d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"
+                  ></path>
+                  <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
+                </svg>
+                Xoá</span
+              >
+            </button>
+          </div>
+        </mat-menu>
+      </div>
+    </ng-template>
+  </div>
+</div>

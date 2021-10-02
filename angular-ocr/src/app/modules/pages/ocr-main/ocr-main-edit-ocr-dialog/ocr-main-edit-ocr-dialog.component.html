@@ -1,0 +1,70 @@
+<mat-tab-group mat-stretch-tabs (selectedIndexChange)="getIndexTab($event)">
+  <mat-tab label="Thêm mới tập tin">
+    <!-- body -->
+    <ocr-uploading-dialog (files)="getFiles($event)"></ocr-uploading-dialog>
+  </mat-tab>
+  <mat-tab label="Nhận dạng ký tự và trính xuất thông tin metadata" [disabled]="files.length == 0">
+    <mat-tab-group color="warn" [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+      <mat-tab *ngFor="let file of files; let index = index" [label]="file.name.split('.')[0]">
+        <ocr-progressing [file]="file"></ocr-progressing>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+</mat-tab-group>
+<!-- footer -->
+<ng-container *ngIf="tabIndex == 0"
+  ><div class="justify-end items-center px-4 py-3 sm:px-8 sm:flex sm:flex-row p-4 border-solid border-t-2 border-gray-200">
+    <button
+      class="
+        w-full
+        inline-flex
+        justify-center
+        rounded-xl
+        border border-gray-300
+        shadow-sm
+        px-4
+        py-2
+        bg-white
+        text-base
+        font-medium
+        text-gray-700
+        hover:bg-gray-50
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
+        sm:mt-0 sm:mr-5 sm:w-auto sm:text-sm
+        lg:hover:shadow-inner
+        transition
+        duration-500
+        ease-in-out
+        transform
+      "
+    >
+      Trở lại
+    </button>
+    <button
+      class="
+        w-full
+        inline-flex
+        justify-center
+        border border-transparent
+        px-4
+        py-2
+        text-base
+        font-medium
+        sm:w-auto sm:text-sm sm:mr-3
+        bg-gray-600
+        lg:hover:bg-gray-900
+        rounded-xl
+        text-white
+        shadow-sm
+        lg:hover:shadow-inner
+        transition
+        duration-500
+        ease-in-out
+        transform
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900
+      "
+    >
+      Nhận dạng
+    </button>
+  </div></ng-container
+>

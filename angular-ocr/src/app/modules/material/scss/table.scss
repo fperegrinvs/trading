@@ -1,0 +1,18 @@
+mat-row,
+mat-header-row,
+mat-footer-row {
+  border-width: 0 !important;
+  border-bottom-width: 0 !important;
+  border-style: none !important;
+  align-items: inherit !important;
+  box-sizing: border-box;
+}
+
+mat-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  word-wrap: break-word;
+  min-height: 40px;
+}

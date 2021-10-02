@@ -1,0 +1,11 @@
+.dropzone {
+  input {
+    display: none;
+  }
+
+  &.hovering {
+    //blue-apple-aqua-600
+    border-style: solid;
+    border-color: #006fe6;
+  }
+}
