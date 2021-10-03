@@ -65,15 +65,8 @@ export class OcrMainService {
     let body = new FormData();
     body.append('file', file);
     const url = ` http://103.170.122.74:8000/api/ocr/transformer/`;
-    let httpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Credentials': 'true',
-    });
-    return this.http.post<any>(url, body, {
-      headers: httpHeaders,
-    });
+
+    return this.http.post<any>(url, body);
   }
 
   public getTaskOCR(task: string): Observable<any> {
