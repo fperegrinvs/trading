@@ -10,6 +10,7 @@ import { OcrMainService } from './service/ocr-main.service';
 import { OcrActionFilesComponent } from './share/ocr-action-files/ocr-action-files.component';
 import { OcrProgressingDialogComponent } from './ocr-progressing-dialog/ocr-progressing-dialog.component';
 import { OcrUploadingDialogComponent } from './ocr-uploading-dialog/ocr-uploading-dialog.component';
+import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { OcrUploadingDialogComponent } from './ocr-uploading-dialog/ocr-uploadin
     OcrUploadTaskComponent,
     OcrProgressingDialogComponent,
     OcrUploadingDialogComponent,
+    OcrProgressTask,
   ],
   declarations: [
     OcrMainListComponent,
@@ -38,6 +40,7 @@ import { OcrUploadingDialogComponent } from './ocr-uploading-dialog/ocr-uploadin
     OcrUploadTaskComponent,
     OcrProgressingDialogComponent,
     OcrUploadingDialogComponent,
+    OcrProgressTask,
   ],
   providers: [OcrMainService],
 })

@@ -18,18 +18,9 @@ export class OcrDefault {
 
 export class OcrModel extends OcrDefault {
   id: string;
-  loaivanban: string;
-  coquanbanhanh: string;
-  ngaybanhanh: Date;
-  sovanban: string;
-  nguoiky: string;
+
   constructor() {
     super();
-    this.loaivanban = '';
-    this.coquanbanhanh = '';
-    this.ngaybanhanh = undefined;
-    this.sovanban = '';
-    this.nguoiky = '';
   }
 }
 

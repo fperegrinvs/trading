@@ -1,5 +1,5 @@
 import { OcrMainService } from './../service/ocr-main.service';
-import { FileOCRModel, OcrModel, ProgressOcr } from './../model/ocr-model';
+import { FileOCRModel, OcrModel, ProgressOcr } from '../models/ocr-model';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -68,9 +68,7 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.forEach((item) => item.unsubscribe());
   }
 
-  ngAfterViewInit(): void {
-    this.addNew();
-  }
+  ngAfterViewInit(): void {}
 
   isExpansionDetailRow = (index: any, row: any) => row.hasOwnProperty('detailRow');
 

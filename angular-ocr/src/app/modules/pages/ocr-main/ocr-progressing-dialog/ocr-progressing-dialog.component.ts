@@ -1,7 +1,9 @@
+import { EState, OcrTask } from '../models/ocr-task.model';
 import { OcrMainService } from './../service/ocr-main.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'ocr-progressing',
@@ -16,7 +18,7 @@ export class OcrProgressingDialogComponent implements OnInit {
   taskid: string;
   subjectOCR = new BehaviorSubject<string>('');
   progressOCR = new BehaviorSubject<number>(0);
-  state = 'PENDING';
+  state: EState;
   constructor(public dialogRef: MatDialogRef<OcrProgressingDialogComponent>, public service: OcrMainService) {}
 
   ngOnInit() {
@@ -42,26 +44,26 @@ export class OcrProgressingDialogComponent implements OnInit {
     this.service.transformer(this.file).subscribe((res) => {
       this.taskid = res.task_id;
       console.log('taskid==========', res.task_id);
-      const x = setInterval(() => {
-        if (this.state == 'PENDING') {
-          this.service.getTaskOCR(this.taskid).subscribe(
-            (res) => {
-              console.log('getTaskOCR============', res);
-              if (res.state !== this.state) {
-                this.state = res.state;
-                this.ocrtext = res.result.data;
-                clearInterval(x);
-              }
-            },
-            (error: any) => {
-              console.log(error);
-              clearInterval(x);
+      const time = timer(100, 2000);
+      const sb = time.subscribe((val) => {
+        console.log('==============', val);
+        this.service.getTaskOCR(this.taskid).subscribe(
+          (res: OcrTask) => {
+            this.state = res.state;
+            this.progressOCR.next(res.progress.current);
+            console.log('=-=-=-=-=', res);
+            console.log('progress', res.progress.percent);
+            if (res.complete) {
+              this.ocrtext = res.result.data[0];
+              sb.unsubscribe();
             }
-          );
-        } else {
-          clearInterval(x);
-        }
-      }, 2000);
+          },
+          (error: any) => {
+            console.log(error);
+            sb.unsubscribe();
+          }
+        );
+      });
     });
   }
 

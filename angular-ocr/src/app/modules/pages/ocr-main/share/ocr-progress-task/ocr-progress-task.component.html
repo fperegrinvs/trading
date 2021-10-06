@@ -1,0 +1,73 @@
+<!-- <div class="flex flex-1 justify-between">
+  <ng-container *ngIf="state">
+    <div>
+      <span
+        class="xl:text-base lg:text-base md:text-sm font-extrabold overflow-ellipsis whitespace-nowrap overflow-hidden fadeInOutAnimation"
+      >
+        {{ getState() }}
+      </span>
+    </div></ng-container
+  >
+
+  <div>
+    <span class="text-sm text-gray-400 mr-3">
+      <span class="mr-3"> {{ percentage }}% </span>
+      <ng-container *ngIf="percentage < 100">
+        <span> {{ seconds }} giây </span>
+      </ng-container>
+    </span>
+    <ng-container *ngIf="percentage < 100; else success">
+      <ng-container *ngIf="!isPause; else play">
+        <span class="cursor-pointer" (click)="clickPause()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            class="inline text-gray-400"
+            fill="currentColor"
+          >
+            <path
+              d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"
+            ></path>
+            <path d="M13 9h2v6h-2zM9 9h2v6H9z"></path>
+          </svg>
+        </span>
+      </ng-container>
+      <ng-template #play
+        ><span class="cursor-pointer" (click)="clickPlay()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            class="inline text-red-400"
+            fill="currentColor"
+          >
+            <path
+              d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"
+            ></path>
+            <path d="m9 17 8-5-8-5z"></path>
+          </svg>
+        </span>
+      </ng-template>
+    </ng-container>
+    <ng-template #success>
+      <span class="cursor-pointer">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          class="inline text-green-400"
+          fill="currentColor"
+        >
+          <path
+            d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"
+          ></path>
+          <path d="M9.999 13.587 7.7 11.292l-1.412 1.416 3.713 3.705 6.706-6.706-1.414-1.414z"></path>
+        </svg> </span
+    ></ng-template>
+  </div>
+</div>
+<mat-progress-bar color="{{ color }}" [value]="percentage" mode="determinate" max="100"></mat-progress-bar> -->
