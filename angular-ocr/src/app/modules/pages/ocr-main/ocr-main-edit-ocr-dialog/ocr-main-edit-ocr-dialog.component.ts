@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { OcrModel } from './../models/ocr-model';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { OcrMainAddFileDialogComponent } from '../ocr-main-add-file-dialog/ocr-main-add-file-dialog.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ocr-main-edit-ocr-dialog',
@@ -11,9 +11,18 @@ import { OcrMainAddFileDialogComponent } from '../ocr-main-add-file-dialog/ocr-m
 export class OcrMainEditOcrDialogComponent implements OnInit {
   tabIndex: number = 0;
   files: File[] = [];
-  constructor(public dialogRef: MatDialogRef<OcrMainAddFileDialogComponent>) {}
+  ocrModel: OcrModel;
+  showTrichXuatMetadata: boolean = false;
+  constructor(public dialogRef: MatDialogRef<OcrMainEditOcrDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: OcrModel) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    //create new data
+    if (!this.data) {
+      this.ocrModel = new OcrModel();
+    } else {
+      this.ocrModel = this.data;
+    }
+  }
 
   getIndexTab(tabIndex: number) {
     this.tabIndex = tabIndex;
@@ -34,5 +43,10 @@ export class OcrMainEditOcrDialogComponent implements OnInit {
 
   removeTab(index: number) {
     this.files.splice(index, 1);
+  }
+
+  getOrcModel($event: OcrModel) {
+    this.ocrModel = $event;
+    this.showTrichXuatMetadata = true;
   }
 }

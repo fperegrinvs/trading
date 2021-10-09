@@ -1,10 +1,10 @@
 <mat-tab-group mat-stretch-tabs (selectedIndexChange)="getIndexTab($event)">
   <mat-tab label="Thêm mới tập tin">
     <!-- body -->
-    <ocr-uploading-dialog (files)="getFiles($event)"></ocr-uploading-dialog>
+    <ocr-uploading-dialog [ocrModel]="ocrModel" (emitOcrModel)="getOrcModel($event)" (files)="getFiles($event)"></ocr-uploading-dialog>
   </mat-tab>
   <mat-tab label="Nhận dạng ký tự và trính xuất thông tin metadata" [disabled]="files.length == 0">
-    <mat-tab-group color="warn" [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
+    <mat-tab-group style="max-height: 80vh" color="warn" [selectedIndex]="selected.value" (selectedIndexChange)="selected.setValue($event)">
       <mat-tab *ngFor="let file of files; let index = index" [label]="file.name.split('.')[0]">
         <ocr-progressing [file]="file"></ocr-progressing>
       </mat-tab>

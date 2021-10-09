@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { GeneralModule } from '../../general-share.module';
-import { OcrMainAddFileDialogComponent } from './ocr-main-add-file-dialog/ocr-main-add-file-dialog.component';
+
 import { OcrMainEditOcrDialogComponent } from './ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
 
 import { OcrMainListComponent } from './ocr-main-list/ocr-main-list.component';
@@ -26,7 +26,6 @@ import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.com
   exports: [],
   entryComponents: [
     OcrMainEditOcrDialogComponent,
-    OcrMainAddFileDialogComponent,
     OcrUploadTaskComponent,
     OcrProgressingDialogComponent,
     OcrUploadingDialogComponent,
@@ -36,7 +35,6 @@ import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.com
     OcrMainListComponent,
     OcrMainEditOcrDialogComponent,
     OcrActionFilesComponent,
-    OcrMainAddFileDialogComponent,
     OcrUploadTaskComponent,
     OcrProgressingDialogComponent,
     OcrUploadingDialogComponent,

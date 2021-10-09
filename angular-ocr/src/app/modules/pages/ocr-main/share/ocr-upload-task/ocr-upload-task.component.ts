@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewEncapsulation, Output } from '@angular/core';
+import { OcrMainService } from './../../service/ocr-main.service';
+import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { Observer, of, Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -13,7 +14,8 @@ export class OcrUploadTaskComponent implements OnInit {
   color: string = 'primary';
   isPause: boolean = false;
   seconds: number = 10;
-  constructor() {}
+
+  constructor(public service: OcrMainService) {}
 
   ngOnInit() {
     this.startUpload();
@@ -47,7 +49,6 @@ export class OcrUploadTaskComponent implements OnInit {
   }
 
   getFileName() {
-    console.log();
     const maxLength = 20;
     const length = this.file.name.length;
     let name = this.file.name.substr(0, maxLength);

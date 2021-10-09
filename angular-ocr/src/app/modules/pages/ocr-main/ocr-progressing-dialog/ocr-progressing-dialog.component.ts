@@ -19,6 +19,7 @@ export class OcrProgressingDialogComponent implements OnInit {
   subjectOCR = new BehaviorSubject<string>('');
   progressOCR = new BehaviorSubject<number>(0);
   state: EState;
+  showBtnExtract: boolean = false;
   constructor(public dialogRef: MatDialogRef<OcrProgressingDialogComponent>, public service: OcrMainService) {}
 
   ngOnInit() {
@@ -43,27 +44,32 @@ export class OcrProgressingDialogComponent implements OnInit {
   nhanDang() {
     this.service.transformer(this.file).subscribe((res) => {
       this.taskid = res.task_id;
-      console.log('taskid==========', res.task_id);
-      const time = timer(100, 2000);
-      const sb = time.subscribe((val) => {
-        console.log('==============', val);
-        this.service.getTaskOCR(this.taskid).subscribe(
-          (res: OcrTask) => {
-            this.state = res.state;
-            this.progressOCR.next(res.progress.current);
-            console.log('=-=-=-=-=', res);
-            console.log('progress', res.progress.percent);
-            if (res.complete) {
-              this.ocrtext = res.result.data[0];
+      console.log('taskid xxxxxxxxxx', res.task_id);
+      setTimeout(() => {
+        const time = timer(0, 2000);
+        const sb = time.subscribe((val) => {
+          console.log('==============', val);
+          this.service.getTaskOCR(this.taskid).subscribe(
+            (res: OcrTask) => {
+              this.state = res.state;
+              this.progressOCR.next(res.result.percent);
+              console.log('OcrTask', res);
+              console.log('progress', res.result.percent);
+              if (res.state == EState.success) {
+                this.ocrtext = res.result.data;
+                this.showBtnExtract = true;
+                sb.unsubscribe();
+              } else if (res.state == EState.failure) {
+                sb.unsubscribe();
+              }
+            },
+            (error: any) => {
+              console.log(error);
               sb.unsubscribe();
             }
-          },
-          (error: any) => {
-            console.log(error);
-            sb.unsubscribe();
-          }
-        );
-      });
+          );
+        });
+      }, 5000);
     });
   }
 

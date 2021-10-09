@@ -1,4 +1,4 @@
-<!-- <div class="flex flex-1 justify-between">
+<div class="flex flex-1 justify-between">
   <ng-container *ngIf="state">
     <div>
       <span
@@ -12,9 +12,6 @@
   <div>
     <span class="text-sm text-gray-400 mr-3">
       <span class="mr-3"> {{ percentage }}% </span>
-      <ng-container *ngIf="percentage < 100">
-        <span> {{ seconds }} giây </span>
-      </ng-container>
     </span>
     <ng-container *ngIf="percentage < 100; else success">
       <ng-container *ngIf="!isPause; else play">
@@ -70,4 +67,4 @@
     ></ng-template>
   </div>
 </div>
-<mat-progress-bar color="{{ color }}" [value]="percentage" mode="determinate" max="100"></mat-progress-bar> -->
+<mat-progress-bar color="{{ color }}" [value]="percentage" mode="determinate" max="100"></mat-progress-bar>

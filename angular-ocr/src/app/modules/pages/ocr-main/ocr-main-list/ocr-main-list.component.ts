@@ -1,5 +1,5 @@
 import { OcrMainService } from './../service/ocr-main.service';
-import { FileOCRModel, OcrModel, ProgressOcr } from '../models/ocr-model';
+import { OcrModel } from '../models/ocr-model';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -7,7 +7,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { OcrMainEditOcrDialogComponent } from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
-import { OcrMainAddFileDialogComponent } from '../ocr-main-add-file-dialog/ocr-main-add-file-dialog.component';
 
 @Component({
   selector: 'app-ocr-main-list',
@@ -22,9 +21,7 @@ import { OcrMainAddFileDialogComponent } from '../ocr-main-add-file-dialog/ocr-m
   ],
 })
 export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
-  private subject = new BehaviorSubject<OcrModel[]>([]);
-
-  data$: Observable<OcrModel[]> = this.subject.asObservable();
+  data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
   private subs: Subscription[] = [];
 
@@ -56,9 +53,8 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoading = true;
     this.service.getLstOcrModel();
 
-    const sb = this.service.getLstOcrModelUpdateListener().subscribe((lst: OcrModel[]) => {
+    const sb = this.data$.subscribe((lst: OcrModel[]) => {
       this.isLoading = false;
-      this.subject.next(lst);
     });
 
     this.subs.push(sb);
@@ -86,23 +82,23 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isOCR(model: OcrModel) {
     let res = false;
-    model.files.forEach((element) => {
-      if (element.progressOcr.pending) {
-        res = true;
-        return res;
-      }
-    });
+    // model.files.forEach((element) => {
+    //   if (element.progressOcr.pending) {
+    //     res = true;
+    //     return res;
+    //   }
+    // });
     return res;
   }
 
   isExtract(model: OcrModel) {
     let res = false;
-    model.files.forEach((element) => {
-      if (element.progressExtract.pending) {
-        res = true;
-        return res;
-      }
-    });
+    // model.files.forEach((element) => {
+    //   if (element.progressExtract.pending) {
+    //     res = true;
+    //     return res;
+    //   }
+    // });
     return res;
   }
 
