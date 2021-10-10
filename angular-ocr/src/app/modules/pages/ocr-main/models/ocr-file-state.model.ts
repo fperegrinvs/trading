@@ -27,7 +27,7 @@ export class OcrFileStateModel {
     this.isExtractingMetadata = false;
     this.acceptExtractMetadata = false;
     this.filesExtractMetadataUrl = '';
-    this.filesExtractMetadataUrl = '';
+    this.filesRecogntitionUrl = '';
     this.filesRawUrl = '';
     this.name = '';
     this.createdDate = new Date();

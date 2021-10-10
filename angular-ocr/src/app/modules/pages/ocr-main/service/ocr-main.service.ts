@@ -23,6 +23,7 @@ export class OcrMainService {
             return {
               id: model._id,
               files: model.files,
+              folders: model.folders,
               name: model.name,
               createdBy: model.createdBy,
               createdDate: model.createdDate,

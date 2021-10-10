@@ -11,12 +11,18 @@ import { OcrActionFilesComponent } from './share/ocr-action-files/ocr-action-fil
 import { OcrProgressingDialogComponent } from './ocr-progressing-dialog/ocr-progressing-dialog.component';
 import { OcrUploadingDialogComponent } from './ocr-uploading-dialog/ocr-uploading-dialog.component';
 import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.component';
+import { OcrMainListNewComponent } from './ocr-main-list-new/ocr-main-list-new.component';
 
 @NgModule({
   imports: [
     RouterModule.forChild([
       {
         path: '',
+        component: OcrMainListNewComponent,
+        children: [],
+      },
+      {
+        path: 'old',
         component: OcrMainListComponent,
         children: [],
       },
@@ -39,6 +45,7 @@ import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.com
     OcrProgressingDialogComponent,
     OcrUploadingDialogComponent,
     OcrProgressTask,
+    OcrMainListNewComponent,
   ],
   providers: [OcrMainService],
 })

@@ -1,4 +1,4 @@
-import { OcrMainService } from './../service/ocr-main.service';
+import { OcrMainService } from '../service/ocr-main.service';
 import { OcrModel } from '../models/ocr-model';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
@@ -10,9 +10,9 @@ import { OcrMainEditOcrDialogComponent } from '../ocr-main-edit-ocr-dialog/ocr-m
 import { FolderOcrFileStateModel, OcrFileStateModel } from '../models/ocr-file-state.model';
 
 @Component({
-  selector: 'app-ocr-main-list',
-  templateUrl: 'ocr-main-list.component.html',
-  styleUrls: ['./ocr-main-list-component.scss'],
+  selector: 'app-ocr-main-list-new',
+  templateUrl: 'ocr-main-list-new.component.html',
+  styleUrls: ['./ocr-main-list-new.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
@@ -21,7 +21,7 @@ import { FolderOcrFileStateModel, OcrFileStateModel } from '../models/ocr-file-s
     ]),
   ],
 })
-export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OcrMainListNewComponent implements OnInit, AfterViewInit, OnDestroy {
   data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
   private subs: Subscription[] = [];
