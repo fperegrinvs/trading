@@ -1,6 +1,6 @@
 import {OcrMainService} from '../service/ocr-main.service';
 import {OcrModel} from '../models/ocr-model';
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MatPaginator} from '@angular/material/paginator';

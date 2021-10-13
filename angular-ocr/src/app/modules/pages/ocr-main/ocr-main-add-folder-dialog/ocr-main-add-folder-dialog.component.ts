@@ -16,7 +16,7 @@ export class OcrMainAddfolderDialogComponent implements OnInit {
   }
 
   createFolder() {
-
+    console.log('nameFolder', this.nameFolder);
   }
 
   close() {

@@ -121,7 +121,6 @@ export class AuthStore {
   }
 
   private setAuthTimer(duration: number) {
-    console.log("Setting timer: " + duration);
     this._tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000);
