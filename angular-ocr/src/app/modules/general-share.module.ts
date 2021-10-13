@@ -11,7 +11,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FileDropDirective } from './material/directives/file-drop.directive';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -29,7 +28,6 @@ import { FormsModule } from '@angular/forms';
     FileDropDirective,
     MatProgressBarModule,
     MatTabsModule,
-    PdfViewerModule,
     FormsModule,
   ],
   declarations: [TooltipDirective, CdkDetailRowDirective, FileDropDirective],

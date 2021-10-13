@@ -27,16 +27,16 @@
 <ng-container *ngIf="auth.isLoggedIn$ | async">
   <div class="relative flex">
     <div class="block cursor-pointer">
-      <ng-container *ngIf="(auth.user$ | async).avatarUrl as avatarUrl">
-        <ngx-avatar size="40" [src]="avatarUrl"></ngx-avatar>
+      <ng-container *ngIf="(auth.user$ | async).customData.avatarUrl as avatarUrl">
+        <ngx-avatar [src]="avatarUrl" size="40"></ngx-avatar>
       </ng-container>
-      <ng-container *ngIf="!(auth.user$ | async).avatarUrl">
+      <ng-container *ngIf="!(auth.user$ | async).customData.avatarUrl">
         <ngx-avatar
+          [name]="(auth.user$ | async).customData.name.slice(0, 1)"
           [textSizeRatio]="2.5"
+          bgColor="#000"
           initialsSize="2"
           size="40"
-          [name]="(auth.user$ | async).name.slice(0, 1)"
-          bgColor="#000"
         ></ngx-avatar>
       </ng-container>
     </div>

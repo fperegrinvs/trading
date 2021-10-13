@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   },
 });
 
-router.post('/uploadfile', multer({ storage: storage }).single('file'), (req, res, next) => {
+router.post('/uploadfile', multer({storage: storage}).single('file'), (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   res.status(201).json({
     message: 'Upload file successfully!',
@@ -28,16 +28,16 @@ router.post('/uploadfile', multer({ storage: storage }).single('file'), (req, re
 });
 
 router.post('', (req, res, next) => {
-  const ocrmodel = new OcrModel({
+  const ocrModel = new OcrModel({
     folders: req.body.folders,
     files: req.body.files,
-    name: req.body.name,
+    customerId: req.body.customerId,
     createdBy: req.body.createdBy,
     createdDate: req.body.createdDate,
     editedDate: req.body.editedDate,
   });
 
-  ocrmodel.save().then((createdData) => {
+  ocrModel.save().then((createdData) => {
     res.status(201).json({
       message: 'Create OcrModel Successfully',
       data: createdData,
@@ -55,7 +55,7 @@ router.get('', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  OcrModel.deleteOne({ _id: req.params.id }).then((documents) => {
+  OcrModel.deleteOne({_id: req.params.id}).then((documents) => {
     res.status(200).json({
       message: 'Post delete successfully!',
     });

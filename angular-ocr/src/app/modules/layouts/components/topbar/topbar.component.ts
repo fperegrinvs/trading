@@ -1,7 +1,6 @@
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { AuthStore } from 'src/app/modules/auth/auth.store';
+import {Router} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {AuthStore} from 'src/app/modules/auth/auth.store';
 
 @Component({
   selector: 'app-topbar',
@@ -9,9 +8,12 @@ import { AuthStore } from 'src/app/modules/auth/auth.store';
   styleUrls: ['./topbar.component.scss'],
 })
 export class TopBarComponent implements OnInit {
-  constructor(public auth: AuthStore, private router: Router) {}
+  constructor(public auth: AuthStore, private router: Router) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
   clickLogin() {
     this.router.navigateByUrl('/login');
   }

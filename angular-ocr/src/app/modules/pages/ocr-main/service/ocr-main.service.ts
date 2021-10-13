@@ -72,7 +72,7 @@ export class OcrMainService {
   }
 
   public extractMetadata(data: string): Observable<any> {
-    const url = `http://103.124.95.102:9006/vanban/extract_vanban`;
+    const url = `https://103.124.95.102:9006/vanban/extract_vanban`;
     return this.http.post(url, {
       content: data,
     });
@@ -81,12 +81,12 @@ export class OcrMainService {
   public transformer(file: File): Observable<any> {
     let body = new FormData();
     body.append('file', file);
-    const url = ` http://103.170.122.74:8000/api/ocr/transformer`;
+    const url = `https://ocr.chinhta123.com/api/ocr/attention`;
     return this.http.post(url, body);
   }
 
   public getTaskOCR(task: string): Observable<any> {
-    const url = `http://103.170.122.74:8000/api/task/${task}`;
+    const url = `https://ocr.chinhta123.com/api/task/${task}`;
     return this.http.get(url);
   }
 

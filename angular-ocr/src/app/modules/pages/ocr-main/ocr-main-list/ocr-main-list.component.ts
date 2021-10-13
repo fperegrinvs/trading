@@ -1,13 +1,13 @@
-import { OcrMainService } from './../service/ocr-main.service';
-import { OcrModel } from '../models/ocr-model';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
-import { OcrMainEditOcrDialogComponent } from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
-import { FolderOcrFileStateModel, OcrFileStateModel } from '../models/ocr-file-state.model';
+import {OcrMainService} from './../service/ocr-main.service';
+import {OcrModel} from '../models/ocr-model';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
+import {OcrMainEditOcrDialogComponent} from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
+import {FolderOcrFileStateModel, OcrFileStateModel} from '../models/ocr-file-state.model';
 
 @Component({
   selector: 'app-ocr-main-list',
@@ -15,8 +15,8 @@ import { FolderOcrFileStateModel, OcrFileStateModel } from '../models/ocr-file-s
   styleUrls: ['./ocr-main-list-component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('void', style({ height: '0px', minHeight: '0', visibility: 'hidden' })),
-      state('*', style({ height: '*', visibility: 'visible' })),
+      state('void', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+      state('*', style({height: '*', visibility: 'visible'})),
       transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
@@ -24,8 +24,6 @@ import { FolderOcrFileStateModel, OcrFileStateModel } from '../models/ocr-file-s
 export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
   data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
-  private subs: Subscription[] = [];
-
   displayedColumns: string[] = [
     'drag',
     'name',
@@ -38,13 +36,14 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
     'sovanban',
     'nguoiky',
   ];
-
   dataSource = this.data$;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  selectedRowIndex: any = '';
+  private subs: Subscription[] = [];
 
-  constructor(public dialog: MatDialog, private service: OcrMainService) {}
+  constructor(public dialog: MatDialog, private service: OcrMainService) {
+  }
 
   ngOnInit() {
     this.init();
@@ -65,7 +64,8 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subs.forEach((item) => item.unsubscribe());
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+  }
 
   isExpansionDetailRow = (index: any, row: any) => row.hasOwnProperty('detailRow');
 
@@ -77,7 +77,7 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
   getStateOCR(model: OcrModel): string {
     let index = 0;
     model.files.forEach((file) => {
-      if (file.isRecogniting) {
+      if (file.isRecognition) {
         index = index + 1;
       }
     });
@@ -93,7 +93,7 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getIndexOcr(index: number, folderOcrFileStateModel: FolderOcrFileStateModel): number {
     folderOcrFileStateModel.files.forEach((file) => {
-      if (file.isRecogniting) index = index + 1;
+      if (file.isRecognition) index = index + 1;
     });
     index = this.getIndexOcr(index, folderOcrFileStateModel);
     return index;
@@ -102,7 +102,7 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
   getStateExtract(model: OcrModel): string {
     let index = 0;
     model.files.forEach((file) => {
-      if (file.isRecogniting) {
+      if (file.isRecognition) {
         index = index + 1;
       }
     });
@@ -124,7 +124,6 @@ export class OcrMainListComponent implements OnInit, AfterViewInit, OnDestroy {
     return index;
   }
 
-  selectedRowIndex: any = '';
   isActive(index: any) {
     this.selectedRowIndex = index.name;
   }

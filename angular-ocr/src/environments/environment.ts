@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  HOST_OCR_API: 'https://ocr.chinhta123.com',
+  HOST_LAYOUT_API: 'http://localhost:3001'
 };
 
 /*

@@ -1,7 +1,7 @@
-import { OcrModel } from './../models/ocr-model';
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {OcrModel} from './../models/ocr-model';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ocr-main-edit-ocr-dialog',
@@ -13,7 +13,10 @@ export class OcrMainEditOcrDialogComponent implements OnInit {
   files: File[] = [];
   ocrModel: OcrModel;
   showTrichXuatMetadata: boolean = false;
-  constructor(public dialogRef: MatDialogRef<OcrMainEditOcrDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: OcrModel) {}
+  selected = new FormControl(0);
+
+  constructor(public dialogRef: MatDialogRef<OcrMainEditOcrDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: OcrModel) {
+  }
 
   ngOnInit() {
     //create new data
@@ -32,7 +35,6 @@ export class OcrMainEditOcrDialogComponent implements OnInit {
     this.files = files;
   }
 
-  selected = new FormControl(0);
   addTab(selectAfterAdding: boolean, file: File) {
     this.files.push(file);
 
@@ -48,5 +50,9 @@ export class OcrMainEditOcrDialogComponent implements OnInit {
   getOrcModel($event: OcrModel) {
     this.ocrModel = $event;
     this.showTrichXuatMetadata = true;
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

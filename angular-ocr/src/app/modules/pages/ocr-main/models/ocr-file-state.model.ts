@@ -1,19 +1,19 @@
-import { MetaDataModel } from './ocr-metadata.model';
-import { OcrTask } from './ocr-task.model';
+import {MetaDataModel} from './ocr-metadata.model';
+import {OcrTask} from './ocr-task.model';
 
 export class OcrFileStateModel {
   id: string;
-  taskid: string;
+  taskId: string;
   completeRecognition: boolean;
   acceptRecognition: boolean;
   progressRecognition: OcrTask;
-  isRecogniting: boolean;
+  isRecognition: boolean;
   isExtractingMetadata: boolean;
   acceptExtractMetadata: boolean;
   completeExtractMetadata: boolean;
   metadata: MetaDataModel;
   filesRawUrl: string;
-  filesRecogntitionUrl: string;
+  filesRecognitionUrl: string;
   filesExtractMetadataUrl: string;
   name: string;
   createdBy: string;
@@ -21,13 +21,13 @@ export class OcrFileStateModel {
   editedDate: Date;
 
   constructor() {
-    this.taskid = '';
+    this.taskId = '';
     this.acceptRecognition = false;
-    this.isRecogniting = false;
+    this.isRecognition = false;
     this.isExtractingMetadata = false;
     this.acceptExtractMetadata = false;
     this.filesExtractMetadataUrl = '';
-    this.filesRecogntitionUrl = '';
+    this.filesRecognitionUrl = '';
     this.filesRawUrl = '';
     this.name = '';
     this.createdDate = new Date();

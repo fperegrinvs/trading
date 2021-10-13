@@ -18,6 +18,8 @@ export const locale = {
       NGAYBANHANH: 'Ngày ban hành',
       SOVANBAN: 'Số văn bản',
       NGUOIKY: 'Người ký',
+      TAOFOLDER: 'Tạo thư mục',
+      THEMTHUMUCMOI: 'Thêm thư mục mới'
     },
   },
 };
