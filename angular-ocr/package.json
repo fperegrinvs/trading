@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --port 3000",
-    "build": "NODE_ENV=production ng build --prod --output-path=/apps/layout",
+    "build": "--configuration=production ng build --prod --output-path=/apps/layout",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
@@ -63,6 +63,7 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "nodemon": "^2.0.13",
     "tailwindcss-debug-screens": "^2.1.0",
-    "typescript": "~4.3.5"
+    "typescript": "~4.3.5",
+    "prettier": "^2.4.1"
   }
 }

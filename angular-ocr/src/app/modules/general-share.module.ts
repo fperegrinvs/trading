@@ -12,9 +12,13 @@ import { FileDropDirective } from './material/directives/file-drop.directive';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
+import { ShareMessagesComponent } from './pages/shares/error-messages/share-messages.component';
+import { MatIconModule } from '@angular/material/icon';
+import { ShareMessagesService } from './pages/shares/error-messages/share-messages.service';
+import { ClickOutsideDirective } from './material/directives/click-outside.directive';
 
 @NgModule({
-  imports: [],
+  imports: [MatIconModule, CommonModule],
   exports: [
     TooltipDirective,
     CdkDetailRowDirective,
@@ -29,8 +33,16 @@ import { FormsModule } from '@angular/forms';
     MatProgressBarModule,
     MatTabsModule,
     FormsModule,
+    ShareMessagesComponent,
+    MatIconModule,
   ],
-  declarations: [TooltipDirective, CdkDetailRowDirective, FileDropDirective],
-  providers: [],
+  declarations: [
+    TooltipDirective,
+    CdkDetailRowDirective,
+    FileDropDirective,
+    ClickOutsideDirective,
+    ShareMessagesComponent,
+  ],
+  providers: [ShareMessagesService],
 })
 export class GeneralModule {}

@@ -1,14 +1,27 @@
-import {OcrMainService} from '../service/ocr-main.service';
-import {OcrModel} from '../models/ocr-model';
-import {Observable, Subscription} from 'rxjs';
-import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatDialog} from '@angular/material/dialog';
-import {OcrMainEditOcrDialogComponent} from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
-import {FolderOcrFileStateModel, OcrFileStateModel} from '../models/ocr-file-state.model';
-import {OcrMainAddfolderDialogComponent} from "../ocr-main-add-folder-dialog/ocr-main-add-folder-dialog.component";
+import { OcrMainService } from '../service/ocr-main.service';
+import { OcrModel } from '../models/ocr-model';
+import { Observable, Subscription } from 'rxjs';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { OcrMainEditOcrDialogComponent } from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
+import { FolderOcrFileStateModel } from '../models/ocr-file-state.model';
+import { OcrMainAddfolderDialogComponent } from '../ocr-main-add-folder-dialog/ocr-main-add-folder-dialog.component';
 
 @Component({
   selector: 'app-ocr-main-list-new',
@@ -16,45 +29,40 @@ import {OcrMainAddfolderDialogComponent} from "../ocr-main-add-folder-dialog/ocr
   styleUrls: ['./ocr-main-list-new.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('void', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
-      state('*', style({height: '*', visibility: 'visible'})),
+      state(
+        'void',
+        style({ height: '0px', minHeight: '0', visibility: 'hidden' })
+      ),
+      state('*', style({ height: '*', visibility: 'visible' })),
       transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
-export class OcrMainListNewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class OcrMainListNewComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
-  displayedColumns: string[] = [
-    'drag',
-    'name',
-    'trangthai',
-    'nguoitao',
-    'ngaytao',
-    'loaivanban',
-    'coquanbanhanh',
-    'ngaybanhanh',
-    'sovanban',
-    'nguoiky',
-  ];
-  dataSource = this.data$;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
   selectedRowIndex: any = '';
+  lengthMetadata: number = 5;
+  lengthColTable: number = 9;
   private subs: Subscription[] = [];
 
-  constructor(public dialog: MatDialog, private service: OcrMainService) {
-  }
+  constructor(public dialog: MatDialog, private service: OcrMainService) {}
 
   ngOnInit() {
     this.init();
+    this.data$.subscribe((res) => {
+      console.log('resssssssss', res);
+    });
   }
 
   init() {
     this.isLoading = true;
     this.service.getLstOcrModel();
 
-    const sb = this.data$.subscribe((lst: OcrModel[]) => {
+    const sb = this.data$.subscribe((model: OcrModel[]) => {
       this.isLoading = false;
     });
 
@@ -65,64 +73,114 @@ export class OcrMainListNewComponent implements OnInit, AfterViewInit, OnDestroy
     this.subs.forEach((item) => item.unsubscribe());
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
-  isExpansionDetailRow = (index: any, row: any) => row.hasOwnProperty('detailRow');
+  isExpansionDetailRow = (index: any, row: any) =>
+    row.hasOwnProperty('detailRow');
 
   getNameFile(fileName: string): string {
     const words = fileName.split('/');
     return words[words.length - 1];
   }
 
-  getStateOCR(model: OcrModel): string {
+  getStateOCR(model: FolderOcrFileStateModel): string {
     let index = 0;
-    model.files.forEach((file) => {
-      if (file.isRecognition) {
-        index = index + 1;
-      }
-    });
-    model.folders.forEach((folder) => {
-      index = this.getIndexOcr(index, folder);
-    });
-
-    if (index != 0) {
-      return 'Đang nhận dạng ' + index + ' tập tin';
+    if (model.files.length > 0) {
+      model.files?.forEach((file) => {
+        if (file.isRecognition) {
+          index = index + 1;
+        }
+      });
     }
-    return '';
+    if (model.folders.length > 0) {
+      model.folders?.forEach((folder) => {
+        index = this.getIndexOcr(index, folder);
+      });
+
+      if (index != 0) {
+        return 'Đang nhận dạng ' + index + ' tập tin';
+      }
+      return '';
+    }
   }
 
-  getIndexOcr(index: number, folderOcrFileStateModel: FolderOcrFileStateModel): number {
-    folderOcrFileStateModel.files.forEach((file) => {
-      if (file.isRecognition) index = index + 1;
-    });
-    index = this.getIndexOcr(index, folderOcrFileStateModel);
+  getIndexOcr(
+    index: number,
+    folderOcrFileStateModel: FolderOcrFileStateModel
+  ): number {
+    if (folderOcrFileStateModel.files.length > 0) {
+      folderOcrFileStateModel.files?.forEach((file) => {
+        if (file.isRecognition) index = index + 1;
+      });
+      index = this.getIndexOcr(index, folderOcrFileStateModel);
+    }
     return index;
   }
 
-  getStateExtract(model: OcrModel): string {
+  getStateExtract(model: FolderOcrFileStateModel): string {
     let index = 0;
-    model.files.forEach((file) => {
-      if (file.isRecognition) {
-        index = index + 1;
-      }
-    });
-    model.folders.forEach((folder) => {
-      index = this.getIndexExtract(index, folder);
-    });
-
+    if (model.files.length > 0) {
+      model.files?.forEach((file) => {
+        if (file.isRecognition) {
+          index = index + 1;
+        }
+      });
+    }
+    if (model.folders.length > 0) {
+      model.folders?.forEach((folder) => {
+        index = this.getIndexExtract(index, folder);
+      });
+    }
     if (index != 0) {
       return 'Đang trích xuất ' + index + ' tập tin';
     }
     return '';
   }
 
-  getIndexExtract(index: number, folderOcrFileStateModel: FolderOcrFileStateModel): number {
-    folderOcrFileStateModel.files.forEach((file) => {
-      if (file.isExtractingMetadata) index = index + 1;
-    });
-    index = this.getIndexExtract(index, folderOcrFileStateModel);
-    return index;
+  getIndexExtract(
+    index: number,
+    folderOcrFileStateModel: FolderOcrFileStateModel
+  ): number {
+    if (folderOcrFileStateModel.files.length > 0) {
+      folderOcrFileStateModel.files?.forEach((file) => {
+        if (file.isExtractingMetadata) index = index + 1;
+      });
+      index = this.getIndexExtract(index, folderOcrFileStateModel);
+      return index;
+    }
+  }
+
+  getStateNormal(model: FolderOcrFileStateModel): string {
+    let index = 0;
+    if (model.files.length > 0) {
+      model.files?.forEach((file) => {
+        if (!file.taskId) {
+          index = index + 1;
+        }
+      });
+    }
+    if (model.folders.length > 0) {
+      model.folders?.forEach((folder) => {
+        index = this.getIndexExtract(index, folder);
+      });
+    }
+    if (index != 0) {
+      return index + ' tập tin mới';
+    }
+    return '';
+  }
+
+  getIndexStateNormal(
+    index: number,
+    folderOcrFileStateModel: FolderOcrFileStateModel
+  ): number {
+    if (folderOcrFileStateModel.files.length > 0) {
+      folderOcrFileStateModel.files?.forEach((file) => {
+        if (!file.taskId) index = index + 1;
+      });
+      index = this.getIndexStateNormal(index, folderOcrFileStateModel);
+      return index;
+    }
   }
 
   isActive(index: any) {
@@ -139,9 +197,11 @@ export class OcrMainListNewComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   addNewFoler() {
+    const data = new FolderOcrFileStateModel();
     const dialogRef = this.dialog.open(OcrMainAddfolderDialogComponent, {
       minWidth: '30vw',
       height: 'auto',
+      data: data,
     });
   }
 }

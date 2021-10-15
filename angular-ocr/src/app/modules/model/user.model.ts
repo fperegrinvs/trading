@@ -2,6 +2,7 @@ export class UserAuth {
   token: string;
   expiresIn: number;
   userId: string;
+  username: string;
 }
 
 export class CustomData {

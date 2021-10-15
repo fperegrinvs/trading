@@ -18,6 +18,14 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.auth.login(this.username, this.password);
+    this.auth.login(this.username, this.password).subscribe(
+      () => {
+      },
+      error => {
+
+        this.message.showErrors("Tên đăng nhập hoặc mật khẩu không đúng")
+      }
+    )
+    ;
   }
 }

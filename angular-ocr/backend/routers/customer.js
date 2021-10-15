@@ -4,6 +4,7 @@ const Customer = require('../models/customer');
 
 const router = express.Router();
 
+
 router.post('', (req, res, next) => {
   const model = new Customer({
     name: req.body.name,
@@ -28,7 +29,7 @@ router.get('', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  Customer.deleteOne({ _id: req.params.id }).then((documents) => {
+  Customer.deleteOne({_id: req.params.id}).then((documents) => {
     res.status(200).json({
       message: 'Customer delete successfully!',
     });

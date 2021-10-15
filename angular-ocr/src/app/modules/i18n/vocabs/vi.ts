@@ -5,6 +5,10 @@ export const locale = {
       PAGENOTFOUND: 'Không tìm thấy trang',
       PAGENOTLOOKING: 'Không không tồn tại hoặc đã bị xoá',
     },
+    LOGIN: {
+      DANGNHAP: 'Đăng nhập',
+      DANGXUAT: 'Đăng xuất'
+    },
     OCR: {
       THEMMOI: 'Thêm mới',
       LOC: 'Lọc',

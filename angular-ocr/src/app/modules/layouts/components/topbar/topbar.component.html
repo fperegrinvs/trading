@@ -25,8 +25,8 @@
 </ng-container>
 <!-- <ng-container *ngIf="auth.isLoggedIn$ | async"> -->
 <ng-container *ngIf="auth.isLoggedIn$ | async">
-  <div class="relative flex">
-    <div class="block cursor-pointer">
+  <div #trigger="cdkOverlayOrigin" (click)="isOpen = !isOpen" cdkOverlayOrigin class="relative flex cursor-pointer">
+    <div class="block ">
       <ng-container *ngIf="(auth.user$ | async).customData.avatarUrl as avatarUrl">
         <ngx-avatar [src]="avatarUrl" size="40"></ngx-avatar>
       </ng-container>
@@ -41,4 +41,12 @@
       </ng-container>
     </div>
   </div>
+  <!-- This template displays the overlay content and is connected to the button -->
+  <ng-template (overlayOutsideClick)="clickOutsideOverlay()"
+               [cdkConnectedOverlayOpen]="isOpen"
+               [cdkConnectedOverlayOrigin]="trigger"
+               cdkConnectedOverlay
+  >
+    <app-bottom-topbar></app-bottom-topbar>
+  </ng-template>
 </ng-container>

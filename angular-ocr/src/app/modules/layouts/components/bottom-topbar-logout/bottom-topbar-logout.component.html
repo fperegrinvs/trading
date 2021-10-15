@@ -1,0 +1,58 @@
+<ng-container *ngIf="(auth.user$ | async) as user">
+  <div
+    class="w-[340px] bg-gray-50 border-[1px] rounded-lg border-solid shadow-2xl border-gray-300 mt-2 drop-shadow-lg">
+    <div class="h-[200px] relative flex flex-col items-center   p-[20px]">
+      <div>
+        <ng-container *ngIf="user.customData.avatarUrl as avatarUrl">
+          <ngx-avatar [src]="avatarUrl" size="80"></ngx-avatar>
+        </ng-container>
+        <ng-container *ngIf="!user.customData.avatarUrl">
+          <ngx-avatar
+            [name]="(auth.user$ | async).customData.name.slice(0, 1)"
+            [textSizeRatio]="2.5"
+            bgColor="#000"
+            initialsSize="2"
+            size="80"
+          ></ngx-avatar>
+        </ng-container>
+      </div>
+      <div class=" mt-2 text-center">
+        <div class="text-base font-normal">
+          {{user?.customData.fullName}}
+        </div>
+        <div class="text-1 font-light">
+          {{user?.customData.email}}
+        </div>
+        <div class="text-1 font-light">
+          {{user?.customData.jobTitle}}
+        </div>
+      </div>
+    </div>
+    <div class=" border-b-2 border-solid border-gray-200 h-[2px]">
+    </div>
+    <div class="mt-2 text-center mb-2">
+      <button
+        (click)="logout()"
+        class="
+                bg-gray-600
+                lg:hover:bg-gray-900
+                w-4/5
+                py-3
+                rounded-3xl
+                text-white
+                shadow-xl
+                lg:hover:shadow-inner`
+                focus:outline-none
+                transition
+                duration-500
+                ease-in-out
+                transform
+                lg:hover:-translate-x lg:hover:scale-105
+              "
+      >
+        {{'LOGIN.DANGXUAT' | translate}}
+      </button>
+    </div>
+  </div>
+
+</ng-container>

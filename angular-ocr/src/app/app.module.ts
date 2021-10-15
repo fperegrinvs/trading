@@ -35,6 +35,7 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
   providers: [LoadingService, MessagesService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
+  exports: [MessagesComponent]
 })
 export class AppModule {
 }
