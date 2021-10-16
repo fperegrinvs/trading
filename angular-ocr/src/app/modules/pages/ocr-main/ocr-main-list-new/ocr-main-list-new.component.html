@@ -142,36 +142,44 @@
       </div>
     </div>
 
-    <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white">
-      <div class="w-full overflow-x-auto">
-        <table class="w-full table-auto">
-          <thead>
-          <tr
-            class="h-[50px] items-center bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border-solid border-b-2 border-gray-apple-aqua-500">
-            <th class="px-4 py-3 align-middle">TÊN</th>
-            <th class="px-4 py-3 align-middle">TRẠNG THÁI</th>
-            <th class="px-4 py-3 align-middle">NGƯỜI TẠO</th>
-            <th class="px-4 py-3 align-middle">NGÀY TẠO</th>
-            <th class="px-4 py-3 align-middle">LOẠI VĂN BẢN</th>
-            <th class="px-4 py-3 align-middle">CƠ QUAN BAN HÀNH</th>
-            <th class="px-4 py-3 align-middle">NGÀY BAN HÀNH</th>
-            <th class="px-4 py-3 align-middle">SỐ VĂN BẢN</th>
-            <th class="px-4 py-3 align-middle">NGƯỜI KÝ</th>
-          </tr>
-          </thead>
-          <ng-container *ngIf="(data$ | async) as datasoucre">
-            <ng-container *ngFor="let element of datasoucre">
-              <ng-container *ngFor="let item of element.folders">
-                <tbody (click)="activeOcrModel(element)" [folder]="item" [lengthColTable]="lengthColTable"
-                       [lengthMetadata]="lengthColTable"
-                       class="bg-white"
-                       table-ocr-folder>
-                </tbody>
+    <div [ngClass]="isOpenShowComponentOcr? 'grid grid-cols-4 gap-4 body-list-table m-2' : ''">
+      <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white h-full">
+        <div class="w-full overflow-x-auto h-full">
+          <table class="w-full table-auto ">
+            <thead>
+            <tr
+              class="h-[50px] items-center bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border-solid border-b-2 border-gray-apple-aqua-500">
+              <th class="px-4 py-3 align-middle min-w-[200px]">TÊN</th>
+              <th class="px-4 py-3 align-middle min-w-[200px]">TRẠNG THÁI</th>
+              <th class="px-4 py-3 align-middle min-w-[150px]">NGƯỜI TẠO</th>
+              <th class="px-4 py-3 align-middle min-w-[100px]">NGÀY TẠO</th>
+              <th class="px-4 py-3 align-middle min-w-[150px]">LOẠI VĂN BẢN</th>
+              <th class="px-4 py-3 align-middle min-w-[100px]">CƠ QUAN BAN HÀNH</th>
+              <th class="px-4 py-3 align-middle min-w-[100px]">NGÀY BAN HÀNH</th>
+              <th class="px-4 py-3 align-middle min-w-[100px]">SỐ VĂN BẢN</th>
+              <th class="px-4 py-3 align-middle min-w-[150px]">NGƯỜI KÝ</th>
+            </tr>
+            </thead>
+            <ng-container *ngIf="(data$ | async) as datasoucre">
+              <ng-container *ngFor="let element of datasoucre">
+                <ng-container *ngFor="let item of element.folders">
+                  <tbody (click)="activeOcrModel(element)" [folder]="item" [lengthColTable]="lengthColTable"
+                         [lengthMetadata]="lengthColTable"
+                         class="bg-white"
+                         table-ocr-folder>
+                  </tbody>
+                </ng-container>
               </ng-container>
             </ng-container>
-          </ng-container>
-        </table>
+          </table>
+        </div>
       </div>
+      <ng-container *ngIf="isOpenShowComponentOcr">
+        <div class="col-span-3 bg-white border-solid boder-2 border-gray-300 m-2 ">
+          <ocr-progressing></ocr-progressing>
+        </div>
+
+      </ng-container>
     </div>
 
   </div>

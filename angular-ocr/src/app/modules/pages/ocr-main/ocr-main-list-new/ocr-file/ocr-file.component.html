@@ -1,6 +1,7 @@
 <td [attr.colspan]="lengthColTable" class="h-full whitespace-nowrap align-middle">
   <ng-container *ngIf="files">
-    <div *ngFor="let file of files" class="flex cell-expand">
+    <ng-container *ngFor="let file of files">
+      <div (click)="clickFile(file)" class="flex cell-expand">
           <span *ngIf="file.isRecognition || file.isExtractingMetadata"
                 class="relative px-4 py-2 text-center whitespace-nowrap align-middle min-w-[70px]">
             <ng-container *ngIf="file.isRecognition">
@@ -18,7 +19,7 @@
               </div>
             </ng-container>
           </span>
-      <span class="min-w-xl relative px-4 py-2 whitespace-nowrap align-middle">
+        <span class="min-w-xl relative px-4 py-2 whitespace-nowrap align-middle">
             <ng-container *ngIf="file.fileRawUrl">
               <div class="cursor-pointer">
                 {{ file.name }}
@@ -35,6 +36,7 @@
               </div>
             </ng-container>
           </span>
-    </div>
+      </div>
+    </ng-container>
   </ng-container>
 </td>

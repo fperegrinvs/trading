@@ -64,3 +64,7 @@ $hover-active: #eef9fe; //cyan-apple-aqua-100
   // cyan-apple-aqua-300
   background: $hover-active;
 }
+
+.body-list-table {
+  height: calc(100vh - 170px);
+}

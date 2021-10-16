@@ -11,6 +11,7 @@ import {
 } from '../models/ocr-file-state.model';
 import { AuthStore } from '../../../auth/auth.store';
 import { OcrFolderComponent } from '../ocr-main-list-new/ocr-folder/ocr-folder.component';
+import { EState } from '../models/ocr-task.model';
 
 const API_PRODUCT = environment.HOST_LAYOUT_API;
 const API_CHINHTA_OCR = environment.HOST_OCR_API;
@@ -18,6 +19,11 @@ const API_EXTRACT = environment.HOST_EXTRACT_API;
 
 @Injectable({ providedIn: 'root' })
 export class OcrMainService {
+  public subjectEState = new BehaviorSubject<EState>(null);
+  public activeEState$ = this.subjectEState.asObservable();
+  public subjectPercentOcr = new BehaviorSubject<number>(null);
+  public percentOcr$: Observable<number> =
+    this.subjectPercentOcr.asObservable();
   private subject = new BehaviorSubject<OcrModel[]>([]);
   public lstOcrModel$: Observable<OcrModel[]> = this.subject.asObservable();
   private subjectActiveFoder = new BehaviorSubject<FolderOcrFileStateModel>(
@@ -31,6 +37,11 @@ export class OcrMainService {
   private subjectActiveOrcModel = new BehaviorSubject<OcrModel>(null);
   public ocrModelActive$: Observable<OcrModel> =
     this.subjectActiveOrcModel.asObservable();
+  private subjectShowComponentProgressFile = new BehaviorSubject<boolean>(
+    false
+  );
+  public showComponentProgressFile: Observable<boolean> =
+    this.subjectShowComponentProgressFile.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -49,7 +60,7 @@ export class OcrMainService {
         map((res) => {
           return res.data.map((model: any) => {
             return {
-              id: model._id,
+              _id: model._id,
               files: model.files,
               folders: model.folders,
               createdBy: model.createdBy,
@@ -62,7 +73,7 @@ export class OcrMainService {
       )
       .subscribe((transformData) => {
         this.subject.next(transformData);
-        console.log('xxxxxxx subject first: xxxxxx', this.subject.getValue());
+        console.log(' subject first: ', this.subject.getValue());
       });
   }
 
@@ -93,12 +104,16 @@ export class OcrMainService {
 
   saveSubjectOcrModel(model: OcrModel) {
     const lstOcrModel = this.subject.getValue();
-    const ocrIndex = lstOcrModel.findIndex((ocrModel) => {
-      ocrModel.id === model.id;
-    });
-
+    const ocrIndex = lstOcrModel.findIndex(
+      (ocrModel) => ocrModel._id === model._id
+    );
     const newLstOcrModel = lstOcrModel.slice(0);
+    console.log('old', newLstOcrModel[ocrIndex]);
+    console.log('new', model);
+
     newLstOcrModel[ocrIndex] = model;
+    console.log('after', newLstOcrModel[ocrIndex]);
+
     this.subject.next(newLstOcrModel);
   }
 
@@ -110,7 +125,7 @@ export class OcrMainService {
     const url = `${API_PRODUCT}/api/ocrmodels/createOcrModelRoot`;
     return this.http.post(url, ocrModel).pipe(
       tap((res: any) => {
-        ocrModel.id = res.data._id;
+        ocrModel._id = res.data._id;
         ocrModel.createdBy = res.data.createdBy;
         ocrModel.createdDate = res.data.createdDate;
         ocrModel.editedDate = res.data.editedDate;
@@ -140,7 +155,7 @@ export class OcrMainService {
   }
 
   public getTaskOCR(task: string): Observable<any> {
-    const url = `${API_CHINHTA_OCR}api/task/${task}`;
+    const url = `${API_CHINHTA_OCR}/api/task/${task}`;
     return this.http.get(url).pipe(shareReplay());
   }
 
@@ -213,10 +228,10 @@ export class OcrMainService {
   ) {
     let model = this.subjectActiveOrcModel.getValue();
     if (model !== null && model !== undefined) {
-      this.getOcrModel(model.id).subscribe((res) => {
+      this.getOcrModel(model._id).subscribe((res) => {
         model = res.data;
         model = this.pushFolderToOcrModel(model, folder, folderParentId);
-
+        this.saveSubjectOcrModel(model);
         const url = `${API_PRODUCT}/api/ocrmodels/findAndUpateFolderOcrModel`;
         return this.http
           .post<{ message: string; data: OcrModel }>(url, {
@@ -253,9 +268,10 @@ export class OcrMainService {
     let model = this.subjectActiveOrcModel.getValue();
 
     if (model !== null && model !== undefined) {
-      this.getOcrModel(model.id).subscribe((res) => {
+      this.getOcrModel(model._id).subscribe((res) => {
         model = res.data;
         model = this.pushFileToOcrModel(model, file, folderParentId);
+        this.saveSubjectOcrModel(model);
         const url = `${API_PRODUCT}/api/ocrmodels/findAndUpateFolderOcrModel`;
         return this.http
           .post<{ message: string; data: OcrModel }>(url, {
@@ -290,5 +306,20 @@ export class OcrMainService {
   ): Observable<{ message: string; data: OcrModel }> {
     const url = `${API_PRODUCT}/api/ocrmodels/${id}`;
     return this.http.get<{ message: string; data: OcrModel }>(url);
+  }
+
+  public openShowComponentProgressFile() {
+    this.subjectShowComponentProgressFile.next(true);
+  }
+
+  public closeShowComponentProgressFile() {
+    this.subjectShowComponentProgressFile.next(false);
+  }
+
+  public ocrTransformer(
+    documentID: string
+  ): Observable<{ message: string; task_id: string }> {
+    const url = `${API_CHINHTA_OCR}/api/document/${documentID}/ocr-transformer`;
+    return this.http.post<{ message: string; task_id: string }>(url, null);
   }
 }

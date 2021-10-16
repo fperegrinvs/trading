@@ -1,51 +1,32 @@
 import { OcrMainService } from '../service/ocr-main.service';
 import { OcrModel } from '../models/ocr-model';
 import { Observable, Subscription } from 'rxjs';
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+
 import { MatDialog } from '@angular/material/dialog';
 import { OcrMainEditOcrDialogComponent } from '../ocr-main-edit-ocr-dialog/ocr-main-edit-ocr-dialog.component';
-import { FolderOcrFileStateModel } from '../models/ocr-file-state.model';
+import {
+  FolderOcrFileStateModel,
+  OcrFileStateModel,
+} from '../models/ocr-file-state.model';
 import { OcrMainAddfolderDialogComponent } from '../ocr-main-add-folder-dialog/ocr-main-add-folder-dialog.component';
 
 @Component({
   selector: 'app-ocr-main-list-new',
   templateUrl: 'ocr-main-list-new.component.html',
   styleUrls: ['./ocr-main-list-new.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state(
-        'void',
-        style({ height: '0px', minHeight: '0', visibility: 'hidden' })
-      ),
-      state('*', style({ height: '*', visibility: 'visible' })),
-      transition('void <=> *', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
 })
 export class OcrMainListNewComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
-
+  isOpenShowComponentOcr: boolean;
   lengthMetadata: number = 5;
   lengthColTable: number = 9;
+
+  fileClick: OcrFileStateModel;
+
   private subs: Subscription[] = [];
 
   constructor(public dialog: MatDialog, private service: OcrMainService) {}
@@ -54,6 +35,12 @@ export class OcrMainListNewComponent
     this.init();
     this.data$.subscribe((res) => {
       console.log('resssssssss', res);
+    });
+    this.service.showComponentProgressFile.subscribe((res) => {
+      this.isOpenShowComponentOcr = res;
+    });
+    this.service.fileActive$.subscribe((res) => {
+      this.fileClick = res;
     });
   }
 
@@ -94,5 +81,14 @@ export class OcrMainListNewComponent
 
   activeOcrModel(ocr: OcrModel) {
     this.service.activeOcrModel(ocr);
+  }
+
+  clickShowComponentOcr() {
+    this.isOpenShowComponentOcr = !this.isOpenShowComponentOcr;
+    if (this.isOpenShowComponentOcr) {
+      this.service.openShowComponentProgressFile();
+    } else {
+      this.service.closeShowComponentProgressFile();
+    }
   }
 }

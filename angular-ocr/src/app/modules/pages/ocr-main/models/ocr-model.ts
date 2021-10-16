@@ -4,7 +4,7 @@ import {
 } from './ocr-file-state.model';
 
 export class OcrModel {
-  id: string;
+  _id: string;
   folders: FolderOcrFileStateModel[];
   files: OcrFileStateModel[];
   customerId: string;
@@ -13,7 +13,7 @@ export class OcrModel {
   editedDate: Date;
 
   constructor() {
-    this.id = undefined;
+    this._id = undefined;
     this.createdBy = undefined;
     this.createdDate = new Date();
     this.editedDate = new Date();

@@ -1,35 +1,45 @@
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { EState, OcrTask } from '../../models/ocr-task.model';
+import { OcrMainService } from '../../service/ocr-main.service';
 
 @Component({
   selector: 'ocr-progress-task',
   templateUrl: 'ocr-progress-task.component.html',
   styleUrls: ['ocr-progress-task.component.scss'],
 })
-export class OcrProgressTask implements OnInit, OnChanges {
-  subject = new BehaviorSubject<number>(0);
-  percentage$ = this.subject.asObservable();
-  // @Input('ocrTask')
-  // ocrTask: OcrTask;
-  @Input('state')
-  state: any;
-  @Input('percentage')
+export class OcrProgressTask implements OnInit {
+  state: EState;
+
   percentage: number;
 
   color: string = 'primary';
   isPause: boolean = false;
   clickNhanDang: boolean = false;
 
-  constructor(public cd: ChangeDetectorRef) {}
+  constructor(public cd: ChangeDetectorRef, public service: OcrMainService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.state) {
-      console.log('change.state', this.state);
-    }
+  ngOnInit() {
+    this.service.activeEState$.subscribe((res) => {
+      this.state = res;
+      this.cd.detectChanges();
+    });
+
+    this.service.percentOcr$.subscribe((res) => {
+      this.percentage = res;
+      this.cd.detectChanges();
+    });
   }
-  ngOnInit() {}
+
   clickPause() {}
+
   clickPlay() {}
 
   getState(): string {

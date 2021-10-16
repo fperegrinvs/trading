@@ -1,6 +1,7 @@
 <ng-container *ngIf="file">
   <div
-    class="justify-end items-center px-4 py-3 sm:px-8 sm:flex sm:flex-row p-4 border-solid border-b-2 border-gray-200">
+    class="justify-end items-center px-4 py-3 sm:px-8 sm:flex sm:flex-row-reverse p-4 border-solid border-b-2 border-gray-200">
+
     <button
       (click)="nhanDang()"
       class="
@@ -28,6 +29,7 @@
     >
       Nhận dạng
     </button>
+
     <button
       (click)="trichXuatMetadata()"
       *ngIf="showBtnExtract"
@@ -56,17 +58,44 @@
     >
       Trích xuất Metadata
     </button>
+    <button
+      (click)="Dong()"
+      class="
+        w-full
+        inline-flex
+        justify-center
+        border border-transparent
+        px-4
+        py-2
+        text-base
+        font-medium
+        sm:w-auto sm:text-sm sm:mr-3
+        bg-gray-apple-aqua-500
+        lg:hover:bg-gray-apple-aqua-700
+        rounded-xl
+        text-white
+        shadow-sm
+        lg:hover:shadow-inner
+        transition
+        duration-500
+        ease-in-out
+        transform
+        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-apple-aqua-800
+      "
+    >
+      Đóng
+    </button>
   </div>
   <div *ngIf="taskid" class="px-4 py-3 sm:px-8 p-4">
-    <ocr-progress-task [percentage]="progressOCR | async" [state]="state"></ocr-progress-task>
+    <ocr-progress-task></ocr-progress-task>
   </div>
   <div class="flex overflow-hidden overflow-y-auto flex-col md:flex-row lg:overflow-hidden w-full pt-4 pb-4">
     <div class="flex flex-1 min-h-[50vh]">
-      <div *ngIf="imagePreview" class="flex flex-1">
-        <img *ngIf="!isPdf; else pdf" [src]="imagePreview"/>
+      <div *ngIf="file.fileRawUrl" class="flex flex-1">
+        <img *ngIf="!isPdf; else pdf" [src]="file.fileRawUrl"/>
         <ng-template #pdf>
           <iframe
-            src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/3d764c91-a55a-4b97-992b-fc588302dda0/test3.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211002%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211002T085143Z&X-Amz-Expires=86400&X-Amz-Signature=141d31c0d79d35bc371e93bce80b8b2570f517091f3fba4b2bf35404b06cf11f&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22test3.pdf%22"
+            [src]="file.fileRawUrl"
             style="height: 100%"
             width="100%"
           ></iframe>

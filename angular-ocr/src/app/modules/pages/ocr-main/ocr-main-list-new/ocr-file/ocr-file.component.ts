@@ -22,4 +22,10 @@ export class OcrFileComponent implements OnInit {
     const words = fileName.split('/');
     return words[words.length - 1];
   }
+
+  clickFile(file: OcrFileStateModel) {
+    this.service.activeFile(file);
+    this.service.openShowComponentProgressFile();
+    console.log('file click', file);
+  }
 }
