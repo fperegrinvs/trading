@@ -1,6 +1,11 @@
-import { OcrMainService } from './../../service/ocr-main.service';
-import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { Observer, of, Observable, BehaviorSubject } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { OcrMainService } from '../../service/ocr-main.service';
+import {
+  FolderOcrFileStateModel,
+  OcrFileStateModel,
+} from '../../models/ocr-file-state.model';
+import { AuthStore } from '../../../../auth/auth.store';
 
 @Component({
   selector: 'ocr-upload-task',
@@ -14,30 +19,38 @@ export class OcrUploadTaskComponent implements OnInit {
   color: string = 'primary';
   isPause: boolean = false;
   seconds: number = 10;
+  folderAcive: FolderOcrFileStateModel;
 
-  constructor(public service: OcrMainService) {}
+  constructor(public service: OcrMainService, private auth: AuthStore) {}
 
   ngOnInit() {
     this.startUpload();
     this.subject.subscribe((res) => {
       if (res == 100) this.color = 'warn';
     });
+
+    this.service.folderActive$.subscribe((res) => {
+      this.folderAcive = res;
+    });
   }
 
   async startUpload() {
-    let min = 0;
-    let max = 99;
-    for (let index = 1; index <= 10; index++) {
-      this.seconds = this.seconds - 1;
-      await this.delay(1000);
-      if (index == 10) {
-        this.subject.next(100);
-        return;
-      }
-      let ramdonInterger = this.randomInteger(min, max);
-      min = ramdonInterger + 1;
-      this.subject.next(ramdonInterger);
-    }
+    this.service.uploadFileDocument(this.file).subscribe((res) => {
+      this.subject.next(100);
+      const ocrFile = new OcrFileStateModel();
+      ocrFile.documentFileRawUrlId = res.id;
+      ocrFile.name = this.getFileName();
+      ocrFile.createdBy = this.auth.getUsername();
+      ocrFile.editedBy = this.auth.getUsername();
+      this.service.getDocument(res.id).subscribe((data) => {
+        ocrFile.taskId = data.task_id;
+        ocrFile.fileRawUrl = data.pages[0].image;
+        this.service.findAndUpateFileIntoOcrModel(
+          ocrFile,
+          this.folderAcive._id
+        );
+      });
+    });
   }
 
   randomInteger(min: number, max: number): number {

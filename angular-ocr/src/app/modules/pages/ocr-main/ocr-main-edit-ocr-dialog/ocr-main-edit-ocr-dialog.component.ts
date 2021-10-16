@@ -1,7 +1,13 @@
-import {OcrModel} from './../models/ocr-model';
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { OcrModel } from './../models/ocr-model';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { OcrMainService } from '../service/ocr-main.service';
+import {
+  FolderOcrFileStateModel,
+  OcrFileStateModel,
+} from '../models/ocr-file-state.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-ocr-main-edit-ocr-dialog',
@@ -9,14 +15,16 @@ import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
   styleUrls: ['./ocr-main-edit-ocr-dialog.component.scss'],
 })
 export class OcrMainEditOcrDialogComponent implements OnInit {
-  tabIndex: number = 0;
   files: File[] = [];
   ocrModel: OcrModel;
-  showTrichXuatMetadata: boolean = false;
-  selected = new FormControl(0);
 
-  constructor(public dialogRef: MatDialogRef<OcrMainEditOcrDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: OcrModel) {
-  }
+  activeFolder$: Observable<FolderOcrFileStateModel>;
+
+  constructor(
+    public dialogRef: MatDialogRef<OcrMainEditOcrDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: OcrModel,
+    public ocrService: OcrMainService
+  ) {}
 
   ngOnInit() {
     //create new data
@@ -25,31 +33,8 @@ export class OcrMainEditOcrDialogComponent implements OnInit {
     } else {
       this.ocrModel = this.data;
     }
-  }
 
-  getIndexTab(tabIndex: number) {
-    this.tabIndex = tabIndex;
-  }
-
-  getFiles(files: File[]) {
-    this.files = files;
-  }
-
-  addTab(selectAfterAdding: boolean, file: File) {
-    this.files.push(file);
-
-    if (selectAfterAdding) {
-      this.selected.setValue(this.files.length - 1);
-    }
-  }
-
-  removeTab(index: number) {
-    this.files.splice(index, 1);
-  }
-
-  getOrcModel($event: OcrModel) {
-    this.ocrModel = $event;
-    this.showTrichXuatMetadata = true;
+    this.activeFolder$ = this.ocrService.folderActive$;
   }
 
   close() {

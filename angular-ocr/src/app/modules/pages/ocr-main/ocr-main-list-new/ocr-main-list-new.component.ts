@@ -44,7 +44,6 @@ export class OcrMainListNewComponent
   data$: Observable<OcrModel[]> = this.service.lstOcrModel$;
   isLoading = false;
 
-  selectedRowIndex: any = '';
   lengthMetadata: number = 5;
   lengthColTable: number = 9;
   private subs: Subscription[] = [];
@@ -75,118 +74,6 @@ export class OcrMainListNewComponent
 
   ngAfterViewInit(): void {}
 
-  isExpansionDetailRow = (index: any, row: any) =>
-    row.hasOwnProperty('detailRow');
-
-  getNameFile(fileName: string): string {
-    const words = fileName.split('/');
-    return words[words.length - 1];
-  }
-
-  getStateOCR(model: FolderOcrFileStateModel): string {
-    let index = 0;
-    if (model.files.length > 0) {
-      model.files?.forEach((file) => {
-        if (file.isRecognition) {
-          index = index + 1;
-        }
-      });
-    }
-    if (model.folders.length > 0) {
-      model.folders?.forEach((folder) => {
-        index = this.getIndexOcr(index, folder);
-      });
-
-      if (index != 0) {
-        return 'Đang nhận dạng ' + index + ' tập tin';
-      }
-      return '';
-    }
-  }
-
-  getIndexOcr(
-    index: number,
-    folderOcrFileStateModel: FolderOcrFileStateModel
-  ): number {
-    if (folderOcrFileStateModel.files.length > 0) {
-      folderOcrFileStateModel.files?.forEach((file) => {
-        if (file.isRecognition) index = index + 1;
-      });
-      index = this.getIndexOcr(index, folderOcrFileStateModel);
-    }
-    return index;
-  }
-
-  getStateExtract(model: FolderOcrFileStateModel): string {
-    let index = 0;
-    if (model.files.length > 0) {
-      model.files?.forEach((file) => {
-        if (file.isRecognition) {
-          index = index + 1;
-        }
-      });
-    }
-    if (model.folders.length > 0) {
-      model.folders?.forEach((folder) => {
-        index = this.getIndexExtract(index, folder);
-      });
-    }
-    if (index != 0) {
-      return 'Đang trích xuất ' + index + ' tập tin';
-    }
-    return '';
-  }
-
-  getIndexExtract(
-    index: number,
-    folderOcrFileStateModel: FolderOcrFileStateModel
-  ): number {
-    if (folderOcrFileStateModel.files.length > 0) {
-      folderOcrFileStateModel.files?.forEach((file) => {
-        if (file.isExtractingMetadata) index = index + 1;
-      });
-      index = this.getIndexExtract(index, folderOcrFileStateModel);
-      return index;
-    }
-  }
-
-  getStateNormal(model: FolderOcrFileStateModel): string {
-    let index = 0;
-    if (model.files.length > 0) {
-      model.files?.forEach((file) => {
-        if (!file.taskId) {
-          index = index + 1;
-        }
-      });
-    }
-    if (model.folders.length > 0) {
-      model.folders?.forEach((folder) => {
-        index = this.getIndexExtract(index, folder);
-      });
-    }
-    if (index != 0) {
-      return index + ' tập tin mới';
-    }
-    return '';
-  }
-
-  getIndexStateNormal(
-    index: number,
-    folderOcrFileStateModel: FolderOcrFileStateModel
-  ): number {
-    if (folderOcrFileStateModel.files.length > 0) {
-      folderOcrFileStateModel.files?.forEach((file) => {
-        if (!file.taskId) index = index + 1;
-      });
-      index = this.getIndexStateNormal(index, folderOcrFileStateModel);
-      return index;
-    }
-  }
-
-  isActive(index: any) {
-    this.selectedRowIndex = index.name;
-  }
-
   addNew() {
     const dialogRef = this.dialog.open(OcrMainEditOcrDialogComponent, {
       width: 'auto',
@@ -203,5 +90,9 @@ export class OcrMainListNewComponent
       height: 'auto',
       data: data,
     });
+  }
+
+  activeOcrModel(ocr: OcrModel) {
+    this.service.activeOcrModel(ocr);
   }
 }

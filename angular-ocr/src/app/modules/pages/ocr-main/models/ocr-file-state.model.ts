@@ -1,5 +1,6 @@
 import { MetaDataModel } from './ocr-metadata.model';
 import { OcrTask } from './ocr-task.model';
+import ObjectID from 'bson-objectid';
 
 export class OcrFileStateModel {
   _id: string;
@@ -14,7 +15,9 @@ export class OcrFileStateModel {
   metadata: MetaDataModel;
   documentFileRawUrlId: string;
   fileRawUrl: string;
+  documentRecognitionUrlId: string;
   fileRecognitionUrl: string;
+  documentExtractMetadataUrlId: string;
   fileExtractMetadataUrl: string;
   name: string;
   createdBy: string;
@@ -23,6 +26,7 @@ export class OcrFileStateModel {
   editedDate: Date;
 
   constructor() {
+    this._id = new ObjectID().toString();
     this.taskId = undefined;
     this.acceptRecognition = false;
     this.isRecognition = false;
@@ -52,7 +56,7 @@ export class FolderOcrFileStateModel {
   isOpen: boolean;
 
   constructor() {
-    this._id = undefined;
+    this._id = new ObjectID().toString();
     this.name = '';
     this.folders = [];
     this.files = [];

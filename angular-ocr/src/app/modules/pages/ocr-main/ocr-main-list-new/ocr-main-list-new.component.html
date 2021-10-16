@@ -147,7 +147,7 @@
         <table class="w-full table-auto">
           <thead>
           <tr
-            class="h-[50px] items-center bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">
+            class="h-[50px] items-center bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border-solid border-b-2 border-gray-apple-aqua-500">
             <th class="px-4 py-3 align-middle">TÊN</th>
             <th class="px-4 py-3 align-middle">TRẠNG THÁI</th>
             <th class="px-4 py-3 align-middle">NGƯỜI TẠO</th>
@@ -159,70 +159,17 @@
             <th class="px-4 py-3 align-middle">NGƯỜI KÝ</th>
           </tr>
           </thead>
-          <tbody class="bg-white">
           <ng-container *ngIf="(data$ | async) as datasoucre">
             <ng-container *ngFor="let element of datasoucre">
               <ng-container *ngFor="let item of element.folders">
-                <tr (click)="item.isOpen = !item.isOpen" class="text-gray-700">
-                  <td
-                    class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                  <span class="pr-2 ">
-                    <ng-container *ngIf="!item.isOpen; else closeFolderSvg">
-                       <svg class="relative inline-block" height="24" viewBox="0 0 24 24" width="24"
-                            xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M20 5h-9.586L8.707 3.293A.997.997 0 0 0 8 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2z"
-                      ></path>
-                    </svg>
-                    </ng-container>
-                    <ng-template #closeFolderSvg>
-                      <svg class="relative inline-block" height="24" viewBox="0 0 24 24" width="24"
-                           xmlns="http://www.w3.org/2000/svg"><path
-                        d="M2.165 19.551c.186.28.499.449.835.449h15c.4 0 .762-.238.919-.606l3-7A.998.998 0 0 0 21 11h-1V8c0-1.103-.897-2-2-2h-6.655L8.789 4H4c-1.103 0-2 .897-2 2v13h.007a1 1 0 0 0 .158.551zM18 8v3H6c-.4 0-.762.238-.919.606L4 14.129V8h14z"></path></svg>
-                    </ng-template>
-                  </span>
-                    {{ item.name }}
-                  </td>
-                  <!-- trạng thái-->
-                  <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                    <ng-container *ngIf="getStateOCR(item) != ''">
-                      <div class="font-bold">
-                        {{ getStateOCR(item)}}
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="getStateExtract(item) != ''">
-                      <div class="font-bold">
-                        {{ getStateExtract(item)}}
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="getStateNormal(item) != ''">
-                      <div class="font-bold">
-                        {{ getStateNormal(item)}}
-                      </div>
-                    </ng-container>
-                  </td>
-                  <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                    <span>{{item.createdBy}}</span>
-                  </td>
-                  <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                    <span>{{item.createdDate | date : 'dd/MM/yyyy'}}</span>
-                  </td>
-                  <td [attr.colspan]="lengthMetadata" class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                  </td>
-                </tr>
-                <ng-container *ngIf="item.isOpen">
-                  <ng-container *ngFor="let file of element.folders">
-                    <tr class="text-gray-700">
-                      <td [attr.colspan]="lengthColTable" class="px-4 py-4 h-full whitespace-nowrap align-middle">
-                        open folder, close folder
-                      </td>
-                    </tr>
-                  </ng-container>
-                </ng-container>
+                <tbody (click)="activeOcrModel(element)" [folder]="item" [lengthColTable]="lengthColTable"
+                       [lengthMetadata]="lengthColTable"
+                       class="bg-white"
+                       table-ocr-folder>
+                </tbody>
               </ng-container>
             </ng-container>
           </ng-container>
-          </tbody>
         </table>
       </div>
     </div>

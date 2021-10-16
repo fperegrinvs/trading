@@ -1,0 +1,61 @@
+<ng-container *ngIf="folder">
+  <tr (click)="activeFolder()"
+      [ngClass]="[folder.isOpen ? 'bg-teal-apple-aqua-100 border-gray-apple-200 border-b' : '',
+      isActive ? ' bg-teal-apple-aqua-200' : '']"
+      class="cursor-pointer border-solid  border-b-2 border-gray-apple-aqua-300">
+    <td
+      class="px-4 py-4 h-full whitespace-nowrap align-middle font-extrabold">
+                  <span class="pr-2 ">
+                    <ng-container *ngIf="!folder.isOpen; else closeFolderSvg">
+                       <svg class="relative inline-block" height="24" viewBox="0 0 24 24" width="24"
+                            xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M20 5h-9.586L8.707 3.293A.997.997 0 0 0 8 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2z"
+                      ></path>
+                    </svg>
+                    </ng-container>
+                    <ng-template #closeFolderSvg>
+                      <svg class="relative inline-block" height="24" viewBox="0 0 24 24" width="24"
+                           xmlns="http://www.w3.org/2000/svg"><path
+                        d="M2.165 19.551c.186.28.499.449.835.449h15c.4 0 .762-.238.919-.606l3-7A.998.998 0 0 0 21 11h-1V8c0-1.103-.897-2-2-2h-6.655L8.789 4H4c-1.103 0-2 .897-2 2v13h.007a1 1 0 0 0 .158.551zM18 8v3H6c-.4 0-.762.238-.919.606L4 14.129V8h14z"></path></svg>
+                    </ng-template>
+                  </span>
+      {{ folder.name }}
+    </td>
+    <!-- trạng thái-->
+    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+      <ng-container *ngIf="getStateOCR(folder) != ''">
+        <div class="font-bold">
+          {{ getStateOCR(folder)}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="getStateExtract(folder) != ''">
+        <div class="font-bold">
+          {{ getStateExtract(folder)}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="getStateNormal(folder) != ''">
+        <div class="font-bold">
+          {{ getStateNormal(folder)}}
+        </div>
+      </ng-container>
+    </td>
+    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+      <span>{{folder.createdBy}}</span>
+    </td>
+    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+      <span>{{folder.createdDate | date : 'dd/MM/yyyy'}}</span>
+    </td>
+    <td [attr.colspan]="lengthMetadata" class="px-4 py-4 h-full whitespace-nowrap align-middle">
+    </td>
+  </tr>
+  <ng-container *ngIf="folder.files.length ">
+    <ng-container *ngIf="folder.isOpen">
+      <tr (click)="clickInsideFolder(folder)" [files]="folder.files"
+          [lengthColTable]="lengthColTable"
+          [ngClass]="[folder.isOpen ? '' : '',isActive ? 'bg-teal-apple-aqua-200 ' : '']"
+          class="border-solid bg-teal-apple-aqua-100  border-b-2 border-gray-apple-aqua-300 " table-ocr-file>
+      </tr>
+    </ng-container>
+  </ng-container>
+</ng-container>

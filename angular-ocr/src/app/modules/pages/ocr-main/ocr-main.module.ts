@@ -11,6 +11,8 @@ import { OcrProgressTask } from './share/ocr-progress-task/ocr-progress-task.com
 import { OcrMainListNewComponent } from './ocr-main-list-new/ocr-main-list-new.component';
 import { OcrMainAddfolderDialogComponent } from './ocr-main-add-folder-dialog/ocr-main-add-folder-dialog.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { OcrFolderComponent } from './ocr-main-list-new/ocr-folder/ocr-folder.component';
+import { OcrFileComponent } from './ocr-main-list-new/ocr-file/ocr-file.component';
 
 @NgModule({
   imports: [
@@ -24,7 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     GeneralModule,
     MatExpansionModule,
   ],
-  exports: [],
+  exports: [OcrFolderComponent, OcrFileComponent],
   entryComponents: [
     OcrMainEditOcrDialogComponent,
     OcrUploadTaskComponent,
@@ -42,6 +44,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     OcrProgressTask,
     OcrMainListNewComponent,
     OcrMainAddfolderDialogComponent,
+    OcrFolderComponent,
+    OcrFileComponent,
   ],
   providers: [OcrMainService],
 })
