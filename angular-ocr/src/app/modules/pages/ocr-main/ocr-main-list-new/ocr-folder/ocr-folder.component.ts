@@ -27,11 +27,15 @@ export class OcrFolderComponent implements OnInit {
 
   ngOnInit() {
     this.service.folderActive$.subscribe((res: FolderOcrFileStateModel) => {
-      if (res._id === this.folder._id && this.folder._id && res._id) {
-        this.isActive = true;
-      } else {
+      if (res._id === undefined) {
         this.isActive = false;
+      } else if (res._id !== this.folder._id) {
+        this.isActive = false;
+      } else {
+        this.isActive = true;
       }
+
+      console.log('this.isActive', this.isActive);
     });
   }
 

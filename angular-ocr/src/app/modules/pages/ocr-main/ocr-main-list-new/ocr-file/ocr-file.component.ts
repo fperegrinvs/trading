@@ -1,6 +1,14 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { OcrMainService } from '../../service/ocr-main.service';
 import { OcrFileStateModel } from '../../models/ocr-file-state.model';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'table-ocr-file, [table-ocr-file]',
@@ -14,18 +22,21 @@ export class OcrFileComponent implements OnInit {
   @Input('files')
   files?: OcrFileStateModel[];
 
-  constructor(public service: OcrMainService) {}
+  constructor(public service: OcrMainService, public cd: ChangeDetectorRef) {}
 
-  ngOnInit() {}
-
-  getNameFile(fileName: string): string {
-    const words = fileName.split('/');
-    return words[words.length - 1];
+  ngOnInit() {
+    this.service.fileActive$
+      .pipe(tap((res) => this.cd.detectChanges()))
+      .subscribe();
   }
 
   clickFile(file: OcrFileStateModel) {
     this.service.activeFile(file);
     this.service.openShowComponentProgressFile();
     console.log('file click', file);
+  }
+
+  roudPercent(percent: number) {
+    return Math.round(percent);
   }
 }

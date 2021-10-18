@@ -91,4 +91,8 @@ export class OcrMainListNewComponent
       this.service.closeShowComponentProgressFile();
     }
   }
+
+  clickOutsideListFolder(event: any) {
+    this.service.activeRootFolder();
+  }
 }

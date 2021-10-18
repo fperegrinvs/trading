@@ -86,7 +86,7 @@
       Đóng
     </button>
   </div>
-  <div *ngIf="taskid" class="px-4 py-3 sm:px-8 p-4">
+  <div *ngIf="file.isRecognition" class="px-4 py-3 sm:px-8 p-4">
     <ocr-progress-task></ocr-progress-task>
   </div>
   <div class="flex overflow-hidden overflow-y-auto flex-col md:flex-row lg:overflow-hidden w-full pt-4 pb-4">
@@ -102,10 +102,10 @@
         </ng-template>
       </div>
 
-      <div class="flex flex-1">
+      <div *ngIf="file.completeRecognition" class="flex flex-1">
         <textarea [(ngModel)]="ocrtext" class="w-full h-full resize-none border rounded-md" name="textarea"></textarea>
       </div>
-      <div class="flex flex-1"></div>
+      <div *ngIf="file.completeExtractMetadata" class="flex flex-1"></div>
     </div>
   </div>
 </ng-container>

@@ -35,6 +35,7 @@ import { ClickOutsideDirective } from './material/directives/click-outside.direc
     FormsModule,
     ShareMessagesComponent,
     MatIconModule,
+    ClickOutsideDirective,
   ],
   declarations: [
     TooltipDirective,

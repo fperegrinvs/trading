@@ -1,13 +1,5 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { EState, OcrTask } from '../../models/ocr-task.model';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { EState } from '../../models/ocr-task.model';
 import { OcrMainService } from '../../service/ocr-main.service';
 
 @Component({
@@ -17,23 +9,18 @@ import { OcrMainService } from '../../service/ocr-main.service';
 })
 export class OcrProgressTask implements OnInit {
   state: EState;
-
   percentage: number;
-
   color: string = 'primary';
   isPause: boolean = false;
-  clickNhanDang: boolean = false;
 
   constructor(public cd: ChangeDetectorRef, public service: OcrMainService) {}
 
   ngOnInit() {
-    this.service.activeEState$.subscribe((res) => {
-      this.state = res;
+    this.service.fileActive$.subscribe((file) => {
+      this.state = file.progressRecognition.state;
+      this.percentage = file.progressRecognition.result.percent;
       this.cd.detectChanges();
-    });
-
-    this.service.percentOcr$.subscribe((res) => {
-      this.percentage = res;
+      console.log('ki vay ta 2');
       this.cd.detectChanges();
     });
   }

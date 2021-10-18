@@ -11,47 +11,46 @@ import {
 } from '../models/ocr-file-state.model';
 import { AuthStore } from '../../../auth/auth.store';
 import { OcrFolderComponent } from '../ocr-main-list-new/ocr-folder/ocr-folder.component';
-import { EState } from '../models/ocr-task.model';
+import { OcrTask } from '../models/ocr-task.model';
 
 const API_PRODUCT = environment.HOST_LAYOUT_API;
 const API_CHINHTA_OCR = environment.HOST_OCR_API;
 const API_EXTRACT = environment.HOST_EXTRACT_API;
 
+let FolderRoot = new FolderOcrFileStateModel();
+FolderRoot._id = undefined;
+FolderRoot.name = 'Thư mục gốc';
+
 @Injectable({ providedIn: 'root' })
 export class OcrMainService {
-  public subjectEState = new BehaviorSubject<EState>(null);
-  public activeEState$ = this.subjectEState.asObservable();
-  public subjectPercentOcr = new BehaviorSubject<number>(null);
-  public percentOcr$: Observable<number> =
-    this.subjectPercentOcr.asObservable();
+  // Ocr Model
   private subject = new BehaviorSubject<OcrModel[]>([]);
   public lstOcrModel$: Observable<OcrModel[]> = this.subject.asObservable();
-  private subjectActiveFoder = new BehaviorSubject<FolderOcrFileStateModel>(
-    null
-  );
-  public folderActive$: Observable<FolderOcrFileStateModel> =
-    this.subjectActiveFoder.asObservable();
-  private subjectActiveFile = new BehaviorSubject<OcrFileStateModel>(null);
-  public fileActive$: Observable<OcrFileStateModel> =
-    this.subjectActiveFile.asObservable();
   private subjectActiveOrcModel = new BehaviorSubject<OcrModel>(null);
   public ocrModelActive$: Observable<OcrModel> =
     this.subjectActiveOrcModel.asObservable();
+  // ShowComponentProgressFile
   private subjectShowComponentProgressFile = new BehaviorSubject<boolean>(
     false
   );
   public showComponentProgressFile: Observable<boolean> =
     this.subjectShowComponentProgressFile.asObservable();
+  // File
+  private subjectActiveFile = new BehaviorSubject<OcrFileStateModel>(null);
+  public fileActive$: Observable<OcrFileStateModel> =
+    this.subjectActiveFile.asObservable();
+  // folder
+  private subjectActiveFoder = new BehaviorSubject<FolderOcrFileStateModel>(
+    FolderRoot
+  );
+  public folderActive$: Observable<FolderOcrFileStateModel> =
+    this.subjectActiveFoder.asObservable();
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private auth: AuthStore
-  ) {
-    const folderRoot = new FolderOcrFileStateModel();
-    folderRoot.name = 'Thư mục gốc';
-    this.subjectActiveFoder.next(folderRoot);
-  }
+  ) {}
 
   getLstOcrModel() {
     this.http
@@ -77,51 +76,21 @@ export class OcrMainService {
       });
   }
 
-  saveOcModel(id: string, ocrModel: OcrModel): any {
-    const lstOcrModel = this.subject.getValue();
-    // const ocrIndex = lstOcrModel.findIndex((ocrModel) => {
-    //   ocrModel._id === id;
-    // });
-    //
-    // const newLstOcrModel = lstOcrModel.slice(0);
-    // newLstOcrModel[ocrIndex] = {
-    //   ...lstOcrModel[ocrIndex],
-    //   ...ocrModel,
-    // };
-
-    // this.subject.next(newLstOcrModel);
-    //
-    // return fromPromise(
-    //   fetch(`${API_PRODUCT}/api/ocrmodels`, {
-    //     method: 'POST',
-    //     body: JSON.stringify(newLstOcrModel),
-    //     headers: {
-    //       'content-type': 'application/json',
-    //     },
-    //   })
-    // );
-  }
-
   saveSubjectOcrModel(model: OcrModel) {
     const lstOcrModel = this.subject.getValue();
     const ocrIndex = lstOcrModel.findIndex(
       (ocrModel) => ocrModel._id === model._id
     );
     const newLstOcrModel = lstOcrModel.slice(0);
-    console.log('old', newLstOcrModel[ocrIndex]);
-    console.log('new', model);
-
     newLstOcrModel[ocrIndex] = model;
-    console.log('after', newLstOcrModel[ocrIndex]);
-
     this.subject.next(newLstOcrModel);
   }
 
-  createOcrModelRootAndAddCreateFolder(folder: FolderOcrFileStateModel) {
-    if (!folder.createdBy) folder.createdBy = this.auth.getUsername();
-    if (!folder.editedBy) folder.editedBy = this.auth.getUsername();
+  createOcrModelRootAndAddCreateFolder(newfolder: FolderOcrFileStateModel) {
+    if (!newfolder.createdBy) newfolder.createdBy = this.auth.getUsername();
+    if (!newfolder.editedBy) newfolder.editedBy = this.auth.getUsername();
     const ocrModel = new OcrModel();
-    ocrModel.folders.push(folder);
+    ocrModel.folders.push(newfolder);
     const url = `${API_PRODUCT}/api/ocrmodels/createOcrModelRoot`;
     return this.http.post(url, ocrModel).pipe(
       tap((res: any) => {
@@ -196,14 +165,21 @@ export class OcrMainService {
     const url = `${API_CHINHTA_OCR}/api/document/`;
     const postData = new FormData();
     postData.append('file', file);
-    return this.http.post<{ message: string; id: string }>(url, postData);
+    return this.http
+      .post<{ message: string; id: string }>(url, postData)
+      .pipe(shareReplay());
   }
 
   public activeFolder(folder: FolderOcrFileStateModel) {
     this.subjectActiveFoder.next(folder);
   }
 
+  public activeRootFolder() {
+    this.subjectActiveFoder.next(FolderRoot);
+  }
+
   public activeFile(file: OcrFileStateModel) {
+    if (!file.progressRecognition) file.progressRecognition = new OcrTask();
     this.subjectActiveFile.next(file);
   }
 
@@ -237,6 +213,7 @@ export class OcrMainService {
           .post<{ message: string; data: OcrModel }>(url, {
             ocrModel: model,
           })
+          .pipe(shareReplay())
           .subscribe((res) => {
             console.log('findAndUpateFolderOcrModel-', res);
           });
@@ -265,6 +242,7 @@ export class OcrMainService {
     file: OcrFileStateModel,
     folderParentId: string
   ) {
+    console.log('file.progressRecognition', file);
     let model = this.subjectActiveOrcModel.getValue();
 
     if (model !== null && model !== undefined) {
@@ -321,5 +299,10 @@ export class OcrMainService {
   ): Observable<{ message: string; task_id: string }> {
     const url = `${API_CHINHTA_OCR}/api/document/${documentID}/ocr-transformer`;
     return this.http.post<{ message: string; task_id: string }>(url, null);
+  }
+
+  public deleteDocument(documemntId: string): Observable<{ message: string }> {
+    const url = `${API_CHINHTA_OCR}/api/document/${documemntId}/delete`;
+    return this.http.delete<{ message: string }>(url);
   }
 }

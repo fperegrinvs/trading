@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   HOST_OCR_API: 'https://ocr.chinhta123.com',
   HOST_LAYOUT_API: 'http://localhost:3001',
-  HOST_EXTRACT_API: 'https://103.124.95.102:9006'
+  HOST_EXTRACT_API: 'http://103.124.95.102:9006',
 };
 
 /*

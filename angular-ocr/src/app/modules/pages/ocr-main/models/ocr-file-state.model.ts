@@ -16,6 +16,7 @@ export class OcrFileStateModel {
   documentFileRawUrlId: string;
   fileRawUrl: string;
   documentRecognitionUrlId: string;
+  dataRecognition: string;
   fileRecognitionUrl: string;
   documentExtractMetadataUrlId: string;
   fileExtractMetadataUrl: string;
@@ -41,6 +42,8 @@ export class OcrFileStateModel {
     this.createdDate = new Date();
     this.editedDate = new Date();
     this.editedBy = undefined;
+    this.dataRecognition = '';
+    this.progressRecognition = new OcrTask();
   }
 }
 

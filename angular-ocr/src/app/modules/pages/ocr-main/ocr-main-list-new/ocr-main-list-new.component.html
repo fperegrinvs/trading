@@ -163,7 +163,9 @@
             <ng-container *ngIf="(data$ | async) as datasoucre">
               <ng-container *ngFor="let element of datasoucre">
                 <ng-container *ngFor="let item of element.folders">
-                  <tbody (click)="activeOcrModel(element)" [folder]="item" [lengthColTable]="lengthColTable"
+                  <tbody (click)="activeOcrModel(element)"
+                         [folder]="item"
+                         [lengthColTable]="lengthColTable"
                          [lengthMetadata]="lengthColTable"
                          class="bg-white"
                          table-ocr-folder>
@@ -178,9 +180,7 @@
         <div class="col-span-3 bg-white border-solid boder-2 border-gray-300 m-2 ">
           <ocr-progressing></ocr-progressing>
         </div>
-
       </ng-container>
     </div>
-
   </div>
 </div>

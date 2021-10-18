@@ -5,7 +5,7 @@ export enum EState {
   failure = 'FAILURE',
 }
 
-export interface ProgressReslt {
+export class ProgressReslt {
   data: string;
   'dettect-lines-time': number;
   'predict-time': number;
@@ -14,7 +14,12 @@ export interface ProgressReslt {
   percent: number;
 }
 
-export interface OcrTask {
+export class OcrTask {
   state: EState;
   result: ProgressReslt;
+
+  constructor() {
+    this.state = undefined;
+    this.result = new ProgressReslt();
+  }
 }
