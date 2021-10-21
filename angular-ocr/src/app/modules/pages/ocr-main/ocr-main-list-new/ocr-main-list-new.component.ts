@@ -24,6 +24,7 @@ export class OcrMainListNewComponent
   isOpenShowComponentOcr: boolean;
   lengthMetadata: number = 5;
   lengthColTable: number = 9;
+  isFullSreenComponent: boolean = false;
 
   fileClick: OcrFileStateModel;
 
@@ -94,5 +95,9 @@ export class OcrMainListNewComponent
 
   clickOutsideListFolder(event: any) {
     this.service.activeRootFolder();
+  }
+
+  getisFullSreenComponent(isFullSeen: boolean) {
+    this.isFullSreenComponent = isFullSeen;
   }
 }

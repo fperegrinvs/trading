@@ -177,9 +177,12 @@
         </div>
       </div>
       <ng-container *ngIf="isOpenShowComponentOcr">
-        <div class="col-span-3 bg-white border-solid boder-2 border-gray-300 m-2 ">
-          <ocr-progressing></ocr-progressing>
+        <div [ngClass]="isFullSreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
+             class="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white h-full col-span-3">
+          <div (isFullSreen)="getisFullSreenComponent($event)" class="w-full h-full" ocr-progressing>
+          </div>
         </div>
+
       </ng-container>
     </div>
   </div>

@@ -12,6 +12,7 @@ import {
 import { AuthStore } from '../../../auth/auth.store';
 import { OcrFolderComponent } from '../ocr-main-list-new/ocr-folder/ocr-folder.component';
 import { OcrTask } from '../models/ocr-task.model';
+import { forEach } from 'lodash';
 
 const API_PRODUCT = environment.HOST_LAYOUT_API;
 const API_CHINHTA_OCR = environment.HOST_OCR_API;
@@ -221,6 +222,59 @@ export class OcrMainService {
     }
   }
 
+  public findFileAndSaveOcrModel(
+    file: OcrFileStateModel,
+    folderParentID: string,
+    ocrModelId: string
+  ) {
+    let model = this.subjectActiveOrcModel.getValue();
+
+    this.getOcrModel(ocrModelId).subscribe((res) => {
+      model = res.data;
+      model.folders = this.replaceFileToOcrModel(
+        model.folders,
+        file,
+        folderParentID
+      );
+
+      //this.saveSubjectOcrModel(model);
+      const url = `${API_PRODUCT}/api/ocrmodels/findAndUpateFolderOcrModel`;
+      return this.http
+        .post<{ message: string; data: OcrModel }>(url, {
+          ocrModel: model,
+        })
+        .pipe(shareReplay())
+        .subscribe((res) => {});
+    });
+  }
+
+  public replaceFileToOcrModel(
+    folders: FolderOcrFileStateModel[],
+    file: OcrFileStateModel,
+    folderParentId: string
+  ): FolderOcrFileStateModel[] {
+    debugger;
+    for (let pos = 0; pos < folders.length; pos++) {
+      debugger;
+      if (folders[pos]._id === folderParentId) {
+        for (let index = 0; index < folders[pos].files.length; index++) {
+          if (folders[pos].files[index]._id === file._id) {
+            folders[pos].files[index] = file;
+          }
+        }
+      }
+      if (folders[pos].folders?.length > 0) {
+        debugger;
+        folders[pos].folders = this.replaceFileToOcrModel(
+          folders[pos].folders,
+          file,
+          folderParentId
+        );
+      }
+    }
+    return folders;
+  }
+
   public pushFolderToOcrModel(
     model: OcrModel,
     folder: FolderOcrFileStateModel,
@@ -242,7 +296,6 @@ export class OcrMainService {
     file: OcrFileStateModel,
     folderParentId: string
   ) {
-    console.log('file.progressRecognition', file);
     let model = this.subjectActiveOrcModel.getValue();
 
     if (model !== null && model !== undefined) {

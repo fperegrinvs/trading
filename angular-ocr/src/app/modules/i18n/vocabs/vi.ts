@@ -7,7 +7,7 @@ export const locale = {
     },
     LOGIN: {
       DANGNHAP: 'Đăng nhập',
-      DANGXUAT: 'Đăng xuất'
+      DANGXUAT: 'Đăng xuất',
     },
     OCR: {
       THEMMOI: 'Thêm mới',
@@ -23,7 +23,8 @@ export const locale = {
       SOVANBAN: 'Số văn bản',
       NGUOIKY: 'Người ký',
       TAOFOLDER: 'Tạo thư mục',
-      THEMTHUMUCMOI: 'Thêm thư mục mới'
+      THEMTHUMUCMOI: 'Thêm thư mục mới',
+      TOANMANHINH: 'Toàn màn hình',
     },
   },
 };

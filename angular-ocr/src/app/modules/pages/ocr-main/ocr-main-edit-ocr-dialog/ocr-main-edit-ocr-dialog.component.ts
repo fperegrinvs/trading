@@ -1,13 +1,9 @@
-import { OcrModel } from './../models/ocr-model';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OcrMainService } from '../service/ocr-main.service';
-import {
-  FolderOcrFileStateModel,
-  OcrFileStateModel,
-} from '../models/ocr-file-state.model';
+import { FolderOcrFileStateModel } from '../models/ocr-file-state.model';
 import { Observable } from 'rxjs';
+import { OcrModel } from '../models/ocr-model';
 
 @Component({
   selector: 'app-ocr-main-edit-ocr-dialog',

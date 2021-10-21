@@ -13,6 +13,7 @@ import { OcrMainAddfolderDialogComponent } from './ocr-main-add-folder-dialog/oc
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OcrFolderComponent } from './ocr-main-list-new/ocr-folder/ocr-folder.component';
 import { OcrFileComponent } from './ocr-main-list-new/ocr-file/ocr-file.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { OcrFileComponent } from './ocr-main-list-new/ocr-file/ocr-file.componen
     ]),
     GeneralModule,
     MatExpansionModule,
+    DragDropModule,
   ],
   exports: [OcrFolderComponent, OcrFileComponent],
   entryComponents: [
