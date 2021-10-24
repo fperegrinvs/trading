@@ -276,8 +276,6 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
       this.ocr.pages.length >= this.page
     ) {
       this.ocrtext = this.ocr.pages[this.page - 1];
-    } else {
-      this.ocrtext = this.ocr.pages[0];
     }
     this.initFileRawUrl(this.file.id);
     this.cd.detectChanges();

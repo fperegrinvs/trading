@@ -75,4 +75,8 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   }
 
   deleteFolder() {}
+
+  move() {}
+
+  rename() {}
 }

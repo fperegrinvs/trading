@@ -61,7 +61,7 @@ export class FolderUserService implements OnDestroy {
   }
 
   loadOcrFileProgressById(fileId: string) {
-    const time = timer(0, 1000);
+    const time = timer(0, 2000);
     const sb = time
       .pipe(
         takeUntil(this._subjectDestroy),
@@ -69,6 +69,10 @@ export class FolderUserService implements OnDestroy {
         tap((val) => {
           this.getInfoFileById(fileId).subscribe(
             (res) => {
+              if (res.ocr?.error) {
+                console.log(res.ocr.error);
+                sb.unsubscribe();
+              }
               if (res.item.state === 1) {
                 let notFound = true;
                 this._lstOcrFileProgress.forEach((item, index) => {
@@ -159,6 +163,9 @@ export class FolderUserService implements OnDestroy {
       .pipe(takeUntil(this._subjectDestroy), shareReplay())
       .subscribe(
         (res) => {
+          if (res.ocr?.error) {
+            console.log(res.ocr.error);
+          }
           const index = this._lstOcrNode.findIndex(
             (item) => item.id === res.item.id
           );
@@ -192,10 +199,12 @@ export class FolderUserService implements OnDestroy {
       });
   }
 
-  getInfoById(id: string): Observable<ApiResponseModel<OcrNodeModel>> {
+  getInfoById(
+    id: string
+  ): Observable<{ isvalid: boolean; item: any; ocr: any }> {
     const url = `${API_PRODUCT}/files/${id}`;
     return this.http
-      .get<ApiResponseModel<OcrNodeModel>>(url)
+      .get<{ isvalid: boolean; item: any; ocr: any }>(url)
       .pipe(shareReplay());
   }
 
@@ -205,7 +214,12 @@ export class FolderUserService implements OnDestroy {
     const url = `${API_PRODUCT}/files/${id}`;
     return this.http
       .get<{ isvalid: boolean; item: FileModel; ocr: any }>(url)
-      .pipe(shareReplay());
+      .pipe(
+        tap((res) => {
+          if (res.ocr?.error) console.log(res.ocr.error);
+        }),
+        shareReplay()
+      );
   }
 
   // create

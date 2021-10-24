@@ -59,7 +59,8 @@ export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this.subjectDestroy), shareReplay())
       .subscribe((files) => {
         files.forEach((file, index) => {
-          if (file.state === 1) this.service.loadOcrFileProgressById(file.id);
+          if (file.state === 1 || file.state === 2)
+            this.service.loadOcrFileProgressById(file.id);
         });
       });
 

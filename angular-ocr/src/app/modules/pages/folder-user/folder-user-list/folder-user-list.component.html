@@ -3,6 +3,61 @@
     <!-- filter top -->
     <div class="flex justify-end bg-gray-500 h-20">
       <ng-container *ngIf="(service.activeFolder$ | async) as folder; else addnew">
+        <!-- move  -->
+        <div (click)="move()" class="flex m-4" delay="500" placement="bottom" tooltip="{{ 'OCR.MOVE' | translate }}">
+          <button
+            class="
+            px-4
+            py-3
+            flex
+            bg-gray-200
+            justify-center
+            items-center
+            w-full
+            rounded-md
+            focus:text-gray-900 focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105
+          "
+          >
+            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 11h-5V6h3l-4-4-4 4h3v5H6V8l-4 4 4 4v-3h5v5H8l4 4 4-4h-3v-5h5v3l4-4-4-4z"></path>
+            </svg>
+          </button>
+        </div>
+        <!-- rename  -->
+        <div (click)="rename()" class="flex m-4" delay="500" placement="bottom"
+             tooltip="{{ 'OCR.RENAME' | translate }}">
+          <button
+            class="
+            px-4
+            py-3
+            flex
+            bg-gray-200
+            justify-center
+            items-center
+            w-full
+            rounded-md
+            focus:text-gray-900 focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105
+          "
+          >
+            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20.005 5.995h-1v2h1v8h-1v2h1c1.103 0 2-.897 2-2v-8c0-1.102-.898-2-2-2zm-14 4H15v4H6.005z"></path>
+              <path
+                d="M17.005 17.995V4H20V2h-8v2h3.005v1.995h-11c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h11V20H12v2h8v-2h-2.995v-2.005zm-13-2v-8h11v8h-11z"></path>
+            </svg>
+          </button>
+        </div>
         <!--  delete folder -->
         <div (click)="deleteFolder()" class="flex m-4" delay="500" placement="bottom"
              tooltip="{{ 'OCR.XOATHUMUC' | translate }}">

@@ -254,7 +254,6 @@ export class OcrMainService {
     folderParentId: string
   ): FolderOcrFileStateModel[] {
     for (let pos = 0; pos < folders.length; pos++) {
-      debugger;
       if (folders[pos]._id === folderParentId) {
         for (let index = 0; index < folders[pos].files.length; index++) {
           if (folders[pos].files[index]._id === file._id) {

@@ -27,6 +27,8 @@ export const locale = {
       TOANMANHINH: 'Toàn màn hình',
       THUMUCGOC: 'Thư mục gốc',
       XOATHUMUC: 'Xoá thư mục',
+      RENAME: 'Đổi tên',
+      MOVE: 'Di chuyển',
     },
   },
 };
