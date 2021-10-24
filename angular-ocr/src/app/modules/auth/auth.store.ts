@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { User, UserAuth } from '../model/user.model';
+import { UserAuth } from '../model/user.model';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 
-const API_PRODUCT = environment.HOST_LAYOUT_API;
+const API_PRODUCT = environment.HOST_CORE_CHINHTA_API;
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +14,10 @@ const API_PRODUCT = environment.HOST_LAYOUT_API;
 export class AuthStore {
   isLoggedIn$: Observable<boolean>;
   isLoggedOut$: Observable<boolean>;
-  private subject = new BehaviorSubject<User>(null);
-  user$: Observable<User> = this.subject.asObservable();
+  private subject = new BehaviorSubject<UserAuth>(null);
+  user$: Observable<UserAuth> = this.subject.asObservable();
   private _token: string;
   private _tokenTimer: any;
-  private _userId: string;
   private _username: string;
 
   constructor(private http: HttpClient, private router: Router) {
@@ -26,46 +25,38 @@ export class AuthStore {
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
   }
 
-  getToken() {
-    return this._token;
-  }
-
-  getUserID() {
-    return this._userId;
-  }
-
   getUsername() {
     return this._username;
   }
 
-  getUserCustomData() {
-    return this.subject.getValue().customData;
+  getToken() {
+    return this._token;
   }
 
   login(username: string, password: string) {
-    const url = `${API_PRODUCT}/api/user/login`;
+    const url = `${API_PRODUCT}/api-token-auth`;
     return this.http
       .post<UserAuth>(url, { username: username, password: password })
       .pipe(
         tap((res: UserAuth) => {
-          const token = res.token;
-          this._token = token;
-          if (token) {
-            this._userId = res.userId;
-            this._username = res.username;
-            this.getUserMe(token);
-            const expiresInDuration = res.expiresIn;
-            this.setAuthTimer(expiresInDuration);
-            const now = new Date();
-            const expirationDate = new Date(
-              now.getTime() + expiresInDuration * 1000
-            );
-            this.saveAuthData(
-              token,
-              expirationDate,
-              this._userId,
-              this._username
-            );
+          if (res.isvalid) {
+            const token = res.token;
+            res.username = username;
+            this._token = token;
+            if (token) {
+              const expiresInDuration = res.timeout;
+              let dateExpiresInDuration: Date = null;
+              if (expiresInDuration) {
+                this.setAuthTimer(expiresInDuration);
+                const now = new Date();
+                const expirationDate = new Date(
+                  now.getTime() + expiresInDuration * 1000
+                );
+                dateExpiresInDuration = expirationDate;
+              }
+              this.saveAuthData(token, dateExpiresInDuration, res);
+              this.subject.next(res);
+            }
           }
         })
       );
@@ -76,75 +67,52 @@ export class AuthStore {
     if (!authInformation) {
       return;
     }
-    const now = new Date();
-    const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
-    if (expiresIn > 0) {
-      this._token = authInformation.token;
-      this._userId = authInformation.userId;
-      this._username = authInformation.username;
-      this.setAuthTimer(expiresIn / 1000);
-      this.getUserMe(this._token);
+    if (authInformation.expirationDate) {
+      const now = new Date();
+      const expiresIn =
+        authInformation.expirationDate.getTime() - now.getTime();
+      if (expiresIn > 0) {
+        this.setAuthTimer(expiresIn / 1000);
+      }
     }
+    this.subject.next(authInformation.user);
+    this._token = authInformation.token;
+    this._username = authInformation.user?.username;
   }
 
   logout() {
     this.subject.next(null);
     this.clearAuthData();
     this._token = null;
-    this._userId = null;
-    this._username = null;
     clearTimeout(this._tokenTimer);
     this.clearAuthData();
     this.router.navigate(['/login']);
   }
 
-  createUser(user: User) {
-    const url = `${API_PRODUCT}/api/user/login`;
-  }
-
-  getUserMe(token: string) {
-    const url = `${API_PRODUCT}/api/user/me`;
-    return this.http
-      .get<{ message: string; data: { user: User } }>(url)
-      .subscribe((res) => {
-        this.subject.next(res.data.user);
-        this.router.navigate(['/']);
-      });
-  }
-
   private getAuthData() {
     const token = localStorage.getItem('token');
     const expirationDate = localStorage.getItem('expiration');
-    const userId = localStorage.getItem('userId');
-    const username = localStorage.getItem('username');
-    if (!token || !expirationDate) {
+    const user: UserAuth = JSON.parse(localStorage.getItem('user'));
+    if (!token) {
       return;
     }
     return {
       token: token,
-      expirationDate: new Date(expirationDate),
-      userId: userId,
-      username: username,
+      expirationDate: expirationDate ? new Date(expirationDate) : null,
+      user: user,
     };
   }
 
-  private saveAuthData(
-    token: string,
-    expirationDate: Date,
-    userId: string,
-    username: string
-  ) {
+  private saveAuthData(token: string, expirationDate: Date, user: UserAuth) {
     localStorage.setItem('token', token);
-    localStorage.setItem('expiration', expirationDate.toISOString());
-    localStorage.setItem('userId', userId);
-    localStorage.setItem('username', username);
+    localStorage.setItem('expiration', expirationDate?.toISOString());
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiration');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('username');
+    localStorage.removeItem('user');
   }
 
   private setAuthTimer(duration: number) {

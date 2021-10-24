@@ -14,11 +14,17 @@ const routes: Routes = [
       },
       {
         path: 'app',
-        loadChildren: () => import('./pages/ocr-main/ocr-main.module').then((m) => m.OcrMainModule),
+        loadChildren: () =>
+          import('./pages/folder-user/folder-user.module').then(
+            (m) => m.FolderUserModule
+          ),
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./pages/dashboard/dashboard.module').then((m) => m.DashBoardModule),
+        loadChildren: () =>
+          import('./pages/dashboard/dashboard.module').then(
+            (m) => m.DashBoardModule
+          ),
       },
       {
         path: '**',
@@ -27,6 +33,7 @@ const routes: Routes = [
     ],
   },
 ];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

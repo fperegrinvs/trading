@@ -1,0 +1,40 @@
+<td [attr.colspan]="service.lengthColTable$ | async" class="h-full whitespace-nowrap align-middle">
+  <ng-container *ngIf="childs">
+    <ng-container *ngFor="let file of files$ | async">
+      <div (click)="clickFile(file)" class="flex cell-expand">
+        <ng-container *ngFor="let ocrFile of service.lstOcrFileProgress$ | async">
+          <span *ngIf="ocrFile.fileId === file.id"
+                class="relative px-4 py-2 text-center whitespace-nowrap align-middle min-w-[70px]">
+              <div class="relative ocr-progress-spinner text-orange-600">
+                  <mat-progress-spinner [value]="ocrFile.ocr.percent" diameter="30"
+                                        mode="determinate"></mat-progress-spinner>
+                  <span class="text-sm"
+                        style="position: absolute; left: 7px; top: 6px">{{roudPercent(ocrFile.ocr.percent)}}</span>
+              </div>
+          </span>
+        </ng-container>
+        <span [ngClass]="file.state != 1 ? 'px-4' :''" class="min-w-xl relative py-2 whitespace-nowrap align-middle">
+            <ng-container>
+              <div class="cursor-pointer">
+                {{ file.name }}
+              </div>
+            </ng-container>
+          <!--            <ng-container *ngIf="file.fileRecognitionUrl">-->
+          <!--              <div class="text-orange-600 cursor-pointer">-->
+          <!--                {{ file.name }}-->
+          <!--              </div>-->
+          <!--            </ng-container>-->
+          <!--            <ng-container *ngIf="file.fileExtractMetadataUrl">-->
+          <!--              <div class="text-purple-600 cursor-pointer">-->
+          <!--                {{ file.name }}-->
+          <!--              </div>-->
+          <!--            </ng-container>-->
+          </span>
+      </div>
+    </ng-container>
+    <ng-container *ngFor="let folder of folders$ | async">
+      <tr [folder]="folder" app-folder-node-list>
+      </tr>
+    </ng-container>
+  </ng-container>
+</td>

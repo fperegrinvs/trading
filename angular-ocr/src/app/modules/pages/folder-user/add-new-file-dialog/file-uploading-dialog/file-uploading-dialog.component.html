@@ -1,0 +1,69 @@
+<div class="flex overflow-hidden overflow-y-auto flex-col md:flex-row lg:overflow-hidden w-full h-full">
+  <div
+    (filesDropped)="handleDrop($event)"
+    (filesHovered)="dropzoneState($event)"
+    [class.hovering]="isHovering"
+    class="
+      relative
+      flex flex-col
+      justify-center
+      dropzone
+      my-8
+      mx-10
+      text-center
+      border-dashed border-2 border-gray-apple-aqua-500
+      bg-gray-apple-aqua-50
+      p-8
+      min-h-[50vh] min-w-[40%]
+      flex-1
+
+    "
+    fileDrop
+  >
+    <div class="absolute z-0 p-2 self-center opacity-5 lg:w-96 md:w-64 sm:w-52">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M18.944 11.112C18.507 7.67 15.56 5 12 5 9.244 5 6.85 6.611 5.757 9.15 3.609 9.792 2 11.82 2 14c0 2.757 2.243 5 5 5h11c2.206 0 4-1.794 4-4a4.01 4.01 0 0 0-3.056-3.888zM13 14v3h-2v-3H8l4-5 4 5h-3z"
+        ></path>
+      </svg>
+    </div>
+    <div class="block z-10">
+      <input #inputfileDrop (change)="fileBrowserHander($event)" class="hidden" id="fileDrop" multiple type="file"/>
+      <h3 class="text-1xl">Thả tệp tin vào đây hoặc</h3>
+      <div class="mt-6">
+        <button
+          (click)="inputfileDrop.click()"
+          class="
+            cursor-pointer
+            text-white
+            uppercase
+            py-3
+            bg-gray-600
+            lg:hover:bg-gray-900
+            px-6
+            rounded-lg
+            shadow-xl
+            lg:hover:shadow-inner
+            focus:outline-none
+            transition
+            duration-500
+            ease-in-out
+            transform
+            lg:hover:-translate-x lg:hover:scale-105 lg:text-lg
+            sm:text-sm
+          "
+        >
+          Chọn tệp tin
+        </button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="files.length > 0">
+    <div
+      class="flex flex-col flex-[2] m-8 divide-y divide-gray-apple-aqua-300 w-full max-h-[80vh] overflow-hidden overflow-y-auto">
+      <ng-container *ngFor="let file of files; let i = index">
+        <app-upload-file-task [file]="file" class="pt-4 pb-4"></app-upload-file-task>
+      </ng-container>
+    </div>
+  </ng-container>
+</div>

@@ -1,5 +1,4 @@
 import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
-import * as _ from 'lodash';
 
 @Directive({ selector: '[fileDrop]' })
 export class FileDropDirective {
@@ -11,8 +10,6 @@ export class FileDropDirective {
 
   @HostListener('drop', ['$event'])
   onDrop($event: any) {
-    console.log('onDrop');
-
     $event.preventDefault();
 
     let transfer = $event.dataTransfer;

@@ -1,0 +1,11 @@
+:host {
+  .mat-progress-bar {
+    display: block;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 250ms linear;
+    width: 100%;
+    border-radius: 8px;
+  }
+}

@@ -141,7 +141,7 @@
       </div>
     </div>
 
-    <div [ngClass]="isOpenShowComponentOcr? 'grid grid-cols-4 gap-4 body-list-table m-2' : ''">
+    <div [ngClass]="(service.showComponentProgressFile$ | async) ? 'grid grid-cols-4 gap-4 body-list-table m-2' : ''">
       <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white h-full">
         <div class="w-full overflow-x-auto h-full">
           <table class="w-full table-auto ">
@@ -159,15 +159,13 @@
               <th class="px-4 py-3 align-middle min-w-[150px]">NGƯỜI KÝ</th>
             </tr>
             </thead>
-            <ng-container *ngIf="(data$ | async) as datasoucre">
+            <ng-container *ngIf="(service.lstOcrNodel$ | async) as datasoucre">
               <ng-container *ngFor="let element of datasoucre">
-                <ng-container *ngFor="let item of element.folders">
-                  <tbody (click)="activeOcrModel(element)"
-                         [folder]="item"
-                         [lengthColTable]="lengthColTable"
-                         [lengthMetadata]="lengthColTable"
-                         class="bg-white"
-                         table-ocr-folder>
+                <ng-container *ngIf="element.type==='folder'">
+                  <tbody (click)="activeFolder(element)"
+                         [folder]="element"
+                         app-folder-node-list
+                         class="bg-white">
                   </tbody>
                 </ng-container>
               </ng-container>
@@ -175,14 +173,14 @@
           </table>
         </div>
       </div>
-      <ng-container *ngIf="isOpenShowComponentOcr">
+      <ng-container *ngIf="service.showComponentProgressFile$ | async">
         <div [ngClass]="isFullSreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
              class="w-full mb-8 overflow-hidden rounded-lg shadow-lg bg-white h-full col-span-3">
-          <div (isFullSreen)="getisFullSreenComponent($event)" class="w-full h-full" ocr-progressing>
+          <div (isFullSreen)="getisFullSreenComponent($event)" app-file-orc-extract-progressing class="w-full h-full">
           </div>
         </div>
-
       </ng-container>
     </div>
+
   </div>
 </div>

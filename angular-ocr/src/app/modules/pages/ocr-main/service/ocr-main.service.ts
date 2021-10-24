@@ -253,7 +253,6 @@ export class OcrMainService {
     file: OcrFileStateModel,
     folderParentId: string
   ): FolderOcrFileStateModel[] {
-    debugger;
     for (let pos = 0; pos < folders.length; pos++) {
       debugger;
       if (folders[pos]._id === folderParentId) {
@@ -264,7 +263,6 @@ export class OcrMainService {
         }
       }
       if (folders[pos].folders?.length > 0) {
-        debugger;
         folders[pos].folders = this.replaceFileToOcrModel(
           folders[pos].folders,
           file,

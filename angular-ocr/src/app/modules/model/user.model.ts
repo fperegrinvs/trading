@@ -1,25 +1,16 @@
 export class UserAuth {
-  token: string;
-  expiresIn: number;
-  userId: string;
-  username: string;
-}
-
-export class CustomData {
+  isvalid: boolean;
+  canchange: boolean;
+  candelete: boolean;
+  canadd: boolean;
+  cantk: boolean;
+  cantkmeta: boolean;
+  cantkcate: boolean;
+  cantkname: boolean;
+  ismanager: boolean;
   name: string;
-  fullName: string;
-  avatarUrl: string;
-  email: string;
-  customerID: string;
-  jobTitle: string;
-  roles: string[];
-}
-
-export class User {
-  userId: string;
+  isnew: boolean;
+  timeout: number;
+  token: string;
   username: string;
-  password: string;
-  customData: CustomData;
-  createdBy: string;
 }
-

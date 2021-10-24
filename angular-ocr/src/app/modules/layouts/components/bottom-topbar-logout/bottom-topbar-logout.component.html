@@ -3,12 +3,10 @@
     class="w-[340px] bg-gray-50 border-[1px] rounded-lg border-solid shadow-2xl border-gray-300 mt-2 drop-shadow-lg">
     <div class="h-[200px] relative flex flex-col items-center   p-[20px]">
       <div>
-        <ng-container *ngIf="user.customData.avatarUrl as avatarUrl">
-          <ngx-avatar [src]="avatarUrl" size="80"></ngx-avatar>
-        </ng-container>
-        <ng-container *ngIf="!user.customData.avatarUrl">
+
+        <ng-container>
           <ngx-avatar
-            [name]="(auth.user$ | async).customData.name.slice(0, 1)"
+            [name]="user.name[user.name.length-1].slice(0, 1)"
             [textSizeRatio]="2.5"
             bgColor="#000"
             initialsSize="2"
@@ -18,13 +16,7 @@
       </div>
       <div class=" mt-2 text-center">
         <div class="text-base font-normal">
-          {{user?.customData.fullName}}
-        </div>
-        <div class="text-1 font-light">
-          {{user?.customData.email}}
-        </div>
-        <div class="text-1 font-light">
-          {{user?.customData.jobTitle}}
+          {{user?.name}}
         </div>
       </div>
     </div>

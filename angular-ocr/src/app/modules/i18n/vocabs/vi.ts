@@ -25,6 +25,7 @@ export const locale = {
       TAOFOLDER: 'Tạo thư mục',
       THEMTHUMUCMOI: 'Thêm thư mục mới',
       TOANMANHINH: 'Toàn màn hình',
+      THUMUCGOC: 'Thư mục gốc',
     },
   },
 };
