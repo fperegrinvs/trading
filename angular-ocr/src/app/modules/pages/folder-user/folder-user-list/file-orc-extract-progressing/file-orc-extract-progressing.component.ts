@@ -28,7 +28,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
 
   file: FileModel;
   ocrtext: string;
-  page = 1;
+  page: number;
   subjectDestroy = new Subject();
   numberCol: number;
   isShowImg: boolean;
@@ -88,6 +88,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.page = 1;
     this.service.activeFile$.pipe(takeUntil(this.subjectDestroy)).subscribe(
       (file) => {
         this.loadingFirstTimeSubject.next(true);
@@ -136,7 +137,6 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
       this.isShowOcrtext = false;
       this.isShowMetadata = false;
     }
-
     this.cd.detectChanges();
   }
 
@@ -161,6 +161,10 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
       } else {
         this.ocrtext = this.ocr.pages[0];
       }
+      this.numberCol = 3;
+      this.isShowImg = true;
+      this.isShowOcrtext = true;
+      this.isShowMetadata = true;
       console.log('res-ocr', res.ocr);
       this.cd.detectChanges();
     }
@@ -274,7 +278,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
     } else {
       this.ocrtext = this.ocr.pages[0];
     }
-    this.cd.detectChanges();
     this.initFileRawUrl(this.file.id);
+    this.cd.detectChanges();
   }
 }
