@@ -26,7 +26,7 @@ export class UploadFileTaskComponent
   isPause: boolean = false;
   seconds: number = 10;
   folderAcive: OcrNodeModel;
-  isRootFolder: boolean = false;
+  isRootFolder: boolean = true;
 
   subjectDestroy = new Subject();
 
@@ -46,12 +46,14 @@ export class UploadFileTaskComponent
       .pipe(takeUntil(this.subjectDestroy))
       .subscribe((res) => {
         this.folderAcive = res;
+        this.isRootFolder = false;
       });
 
     this.service.isRootFolder$
       .pipe(takeUntil(this.subjectDestroy))
       .subscribe((res) => {
         this.isRootFolder = res;
+        console.log('this.isRootFolder', this.isRootFolder);
       });
   }
 
@@ -60,7 +62,11 @@ export class UploadFileTaskComponent
   }
 
   startUpload() {
-    this.service.uploadFile(this.folderAcive.id, this.file).subscribe(
+    let id = '';
+    if (!this.isRootFolder) {
+      id = this.folderAcive.id;
+    }
+    this.service.uploadFile(id, this.file).subscribe(
       (res) => {
         this.subject.next(100);
       },

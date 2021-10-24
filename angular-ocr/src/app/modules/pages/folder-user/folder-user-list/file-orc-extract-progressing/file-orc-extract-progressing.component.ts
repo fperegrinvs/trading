@@ -88,20 +88,21 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.page = 1;
     this.service.activeFile$.pipe(takeUntil(this.subjectDestroy)).subscribe(
       (file) => {
         this.loadingFirstTimeSubject.next(true);
+        this.page = 1;
         this.service.getInfoFileById(file.id).subscribe((res) => {
           this.file = res.item;
           this.initOcrFile(res);
           this.initFirstGiaoDien(res.item);
+          this.initFileRawUrl(file.id);
           this.loadingFirstTimeSubject.next(false);
         });
-        this.initFileRawUrl(file.id);
       },
       (error) => {
         console.log(error);
+        this.loadingFirstTimeSubject.next(false);
       },
       () => this.loadingFirstTimeSubject.next(false)
     );
@@ -141,6 +142,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   }
 
   initFileRawUrl(fileId: string) {
+    if (this.file.page_count < this.page) this.page = 1;
     this.service.getFileRawUrl(fileId, this.page).subscribe(
       (data) => {
         this.createImageFromBlob(data);
@@ -156,7 +158,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   initOcrFile(res: { isvalid: boolean; item: FileModel; ocr: any }) {
     if (res.item.state === -1) {
       this.ocr = res.ocr;
-      if (this.page - 1 > 0 && this.ocr.content.length >= this.page) {
+      if (this.page - 1 > 0 && this.ocr.pages.length >= this.page) {
         this.ocrtext = this.ocr.pages[this.page - 1];
       } else {
         this.ocrtext = this.ocr.pages[0];
@@ -165,7 +167,6 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
       this.isShowImg = true;
       this.isShowOcrtext = true;
       this.isShowMetadata = true;
-      console.log('res-ocr', res.ocr);
       this.cd.detectChanges();
     }
   }
@@ -272,7 +273,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
     if (
       this.page - 1 > 0 &&
       this.file.state === -1 &&
-      this.ocr.content.length >= this.page
+      this.ocr.pages.length >= this.page
     ) {
       this.ocrtext = this.ocr.pages[this.page - 1];
     } else {

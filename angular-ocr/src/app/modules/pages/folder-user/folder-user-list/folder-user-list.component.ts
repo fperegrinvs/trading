@@ -5,6 +5,9 @@ import { AddNewFolderUserDialogComponent } from '../add-new-folder-user-dialog/a
 import { FolderUserService } from '../services/folder-user.service';
 import { OcrNodeModel } from '../models/ocr-node.model';
 import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-dialog.component';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { FileModel } from '../models/file.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-folder-user-list',
@@ -13,12 +16,33 @@ import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-d
 })
 export class FolderUserListComponent implements OnInit, OnDestroy {
   isFullSreenComponent: boolean = false;
+  subjectDestroy = new Subject();
+  private subjectFiles = new BehaviorSubject<FileModel[]>([]);
+  files$: Observable<FileModel[]> = this.subjectFiles.asObservable();
+  private subjectFoldes = new BehaviorSubject<OcrNodeModel[]>([]);
+  folders$: Observable<OcrNodeModel[]> = this.subjectFoldes.asObservable();
 
   constructor(public dialog: MatDialog, public service: FolderUserService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.service.lstOcrNodel$
+      .pipe(takeUntil(this.subjectDestroy))
+      .subscribe((res) => {
+        this.initFilesFolders(res);
+      });
+  }
 
-  ngOnDestroy(): void {}
+  initFilesFolders(lst: any[]) {
+    const lstFile = lst.filter((item) => item.type !== 'folder');
+    this.subjectFiles.next(lstFile);
+    const lstFolder = lst.filter((item) => item.type === 'folder');
+    this.subjectFoldes.next(lstFolder);
+  }
+
+  ngOnDestroy(): void {
+    this.subjectDestroy.next();
+    this.subjectDestroy.complete();
+  }
 
   addNew() {
     const dialogRef = this.dialog.open(AddNewFileDialogComponent, {
@@ -49,4 +73,6 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   getisFullSreenComponent(isFullSeen: boolean) {
     this.isFullSreenComponent = isFullSeen;
   }
+
+  deleteFolder() {}
 }

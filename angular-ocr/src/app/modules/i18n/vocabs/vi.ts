@@ -26,6 +26,7 @@ export const locale = {
       THEMTHUMUCMOI: 'Thêm thư mục mới',
       TOANMANHINH: 'Toàn màn hình',
       THUMUCGOC: 'Thư mục gốc',
+      XOATHUMUC: 'Xoá thư mục',
     },
   },
 };

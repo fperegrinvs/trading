@@ -13,22 +13,13 @@
               </div>
           </span>
         </ng-container>
-        <span [ngClass]="file.state != 1 ? 'px-4' :''" class="min-w-xl relative py-2 whitespace-nowrap align-middle">
+        <span [ngClass]="file.state !== 1 ? 'px-4' :'px-2'"
+              class="min-w-xl relative py-2 whitespace-nowrap align-middle">
             <ng-container>
               <div class="cursor-pointer">
                 {{ file.name }}
               </div>
             </ng-container>
-          <!--            <ng-container *ngIf="file.fileRecognitionUrl">-->
-          <!--              <div class="text-orange-600 cursor-pointer">-->
-          <!--                {{ file.name }}-->
-          <!--              </div>-->
-          <!--            </ng-container>-->
-          <!--            <ng-container *ngIf="file.fileExtractMetadataUrl">-->
-          <!--              <div class="text-purple-600 cursor-pointer">-->
-          <!--                {{ file.name }}-->
-          <!--              </div>-->
-          <!--            </ng-container>-->
           </span>
       </div>
     </ng-container>

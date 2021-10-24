@@ -67,7 +67,6 @@ export class FolderUserService implements OnDestroy {
         takeUntil(this._subjectDestroy),
         shareReplay(),
         tap((val) => {
-          console.log('timer', val);
           this.getInfoFileById(fileId).subscribe(
             (res) => {
               if (res.item.state === 1) {
@@ -89,7 +88,7 @@ export class FolderUserService implements OnDestroy {
                 } else {
                   this.updateOcrFileProgress(ocrFile);
                 }
-              } else {
+              } else if (res.item.state === -1) {
                 const ocrFile = new OcrFileProgressingModel();
                 ocrFile.fileId = fileId;
                 ocrFile.done = true;
