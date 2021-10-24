@@ -1,7 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FolderUserService } from '../../../services/folder-user.service';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { shareReplay, takeUntil } from 'rxjs/operators';
 import { OcrFileProgressingModel } from '../../../models/ocr-file-progressing.model';
 
 @Component({
@@ -16,6 +23,7 @@ export class OcrProgressingComponent implements OnInit, OnDestroy {
   private ocrFileProgressSubject = new BehaviorSubject<OcrFileProgressingModel>(
     null
   );
+
   public ocrFileProgress$ = this.ocrFileProgressSubject.asObservable();
 
   constructor(public service: FolderUserService) {}
@@ -27,13 +35,16 @@ export class OcrProgressingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.service.lstOcrFileProgress$
-      .pipe(takeUntil(this.subjectDestroy))
+      .pipe(takeUntil(this.subjectDestroy), shareReplay())
       .subscribe((res) =>
         res.forEach((item) => {
           if (item.fileId === this.fileId) {
             this.ocrFileProgressSubject.next(item);
+            if (item.done) {
+              this.ocrFileProgressSubject.next(null);
+              this.ngOnDestroy();
+            }
           }
-          if (item.done) this.ocrFileProgressSubject.next(null);
         })
       );
 

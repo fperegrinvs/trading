@@ -14,6 +14,7 @@ import { UploadFileTaskComponent } from './shares/upload-file-task/upload-file-t
 import { FileUploadingDialogComponent } from './add-new-file-dialog/file-uploading-dialog/file-uploading-dialog.component';
 import { OcrProgressingComponent } from './folder-user-list/file-orc-extract-progressing/ocr-progressing/ocr-progressing.component';
 import { OcrFilePageComponent } from './folder-user-list/file-orc-extract-progressing/ocr-file-page/ocr-file-page.component';
+import { OcrTableMetadataComponent } from './folder-user-list/file-orc-extract-progressing/ocr-table-metadata/ocr-table-metadata.component';
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { OcrFilePageComponent } from './folder-user-list/file-orc-extract-progre
     FileUploadingDialogComponent,
     OcrProgressingComponent,
     OcrFilePageComponent,
+    OcrTableMetadataComponent,
   ],
   providers: [FolderUserService],
 })

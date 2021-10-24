@@ -11,10 +11,10 @@ import {
 } from '@angular/core';
 import { FolderUserService } from '../../services/folder-user.service';
 import { FileModel } from '../../models/file.model';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { shareReplay, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
-import { Ocr } from '../../models/ocr-file-progressing.model';
+import { OcrFileModel } from '../../models/ocr-file.model';
 
 @Component({
   selector:
@@ -27,44 +27,14 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   showBtnExtract: boolean = false;
 
   file: FileModel;
-  ocrtext: string =
-    '                                                                                                                                                                                                                                                                                                                                                                                    03800000099                                                             1\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    '\n' +
-    'Nơi nhân:Trên tống tốngBan Bí thư Trung ương Đảng;\n' +
-    '- Thủ tướng, các phó thủ tướng chính phủ;\n' +
-    '- Các Bộ, cơ quan ngang bộ, cơ quan thuộc chính phủ;\n' +
-    '\n' +
-    '\n' +
-    '- Văn phòng trung ương và các ban của Đảng,\n' +
-    '- Văn phỏng tổng bí thư;- Văn phòng chủ tịch nước;                                                      MNG                                                                                                                                                                                                                                                                             03100000099\n' +
-    'Hội đồng Dân tộc và các Ủy ban của Quốc hội\n' +
-    '- Văn phòng quốc hội;\n' +
-    '- Toả án nhân dân tối cao;\n' +
-    '\n' +
-    'Kiểm toán nhà nước- Viện Kiểm sát nhân dân tối cao;                               Nguyễn Tấn Dũng                                                                                                                             03100000009903100000029                                             03100000099\n' +
-    'Uy ban giám sát tài chính quốc gia;\n' +
-    'Ngân hàng chính sách xã hội\n' +
-    '- Ngân hàng phát triển việt nam;\n' +
-    'Uy ban trung ương mặt trận tổ quốc việt nam\n' +
-    'Cơ quan trung ương của các đoàn thể\n' +
-    '\n' +
-    'Hội đông canh tranhne\n' +
-    'VPCP: BTCN, Các PCN, Trợ lý TTg, TGĐ Cổng TTĐT, TGĐ NGHI                                                                                                                r\n' +
-    '\n' +
-    'Các Vu, Cục, đơn vị trực thuộc;\n' +
-    'Lưu: VT, TCCV (3b)..H 240                               1';
+  ocrtext: string;
   page = 1;
   subjectDestroy = new Subject();
-  ocr: Ocr;
-  numberCol: number = 3;
-  isShowImg: boolean = true;
-  isShowOcrtext: boolean = true;
-  isShowMetadata: boolean = true;
+  numberCol: number;
+  isShowImg: boolean;
+  isShowOcrtext: boolean;
+  isShowMetadata: boolean;
+  ocr: OcrFileModel;
 
   @Output('isFullSreen') eventFullSreen = new EventEmitter(false);
   @ViewChild('imgBox') imgBox: ElementRef;
@@ -72,7 +42,11 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   @ViewChild('textareaEle') textareaEle: ElementRef;
 
   imageToShow: any;
-  isImageLoading: boolean = true;
+  isImageLoading = new BehaviorSubject<boolean>(true);
+
+  loadingFirstTimeSubject = new BehaviorSubject<boolean>(true);
+
+  public loadingFirstTime$ = this.loadingFirstTimeSubject.asObservable();
 
   constructor(
     public service: FolderUserService,
@@ -114,28 +88,82 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.service.activeFile$
-      .pipe(takeUntil(this.subjectDestroy))
-      .subscribe((file) => {
+    this.service.activeFile$.pipe(takeUntil(this.subjectDestroy)).subscribe(
+      (file) => {
+        this.loadingFirstTimeSubject.next(true);
         this.service.getInfoFileById(file.id).subscribe((res) => {
           this.file = res.item;
-          this.ocr = res.ocr;
+          this.initOcrFile(res);
+          this.initFirstGiaoDien(res.item);
+          this.loadingFirstTimeSubject.next(false);
         });
         this.initFileRawUrl(file.id);
-      });
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => this.loadingFirstTimeSubject.next(false)
+    );
+
+    this.service.lstOcrFileProgress$
+      .pipe(takeUntil(this.subjectDestroy), shareReplay())
+      .subscribe((res) =>
+        res.forEach((item) => {
+          if (item.fileId === this.file.id) {
+            if (item.done) {
+              this.service.getInfoFileById(this.file.id).subscribe((res) => {
+                this.file = res.item;
+                if (res.ocr.error) {
+                  alert(res.ocr.error);
+                }
+                this.initOcrFile(res);
+              });
+            }
+          }
+        })
+      );
+  }
+
+  initFirstGiaoDien(file: FileModel) {
+    if (file.state === -1) {
+      this.numberCol = 3;
+      this.isShowImg = true;
+      this.isShowOcrtext = true;
+      this.isShowMetadata = true;
+    } else {
+      this.numberCol = 1;
+      this.isShowImg = true;
+      this.isShowOcrtext = false;
+      this.isShowMetadata = false;
+    }
+
+    this.cd.detectChanges();
   }
 
   initFileRawUrl(fileId: string) {
     this.service.getFileRawUrl(fileId, this.page).subscribe(
       (data) => {
         this.createImageFromBlob(data);
-        this.isImageLoading = false;
+        this.isImageLoading.next(false);
       },
       (error) => {
-        this.isImageLoading = false;
+        this.isImageLoading.next(false);
         console.log(error);
       }
     );
+  }
+
+  initOcrFile(res: { isvalid: boolean; item: FileModel; ocr: any }) {
+    if (res.item.state === -1) {
+      this.ocr = res.ocr;
+      if (this.page - 1 > 0 && this.ocr.content.length >= this.page) {
+        this.ocrtext = this.ocr.pages[this.page - 1];
+      } else {
+        this.ocrtext = this.ocr.pages[0];
+      }
+      console.log('res-ocr', res.ocr);
+      this.cd.detectChanges();
+    }
   }
 
   Dong() {
@@ -162,7 +190,7 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               this.file = res.item;
-              this.ocr = res.ocr;
+              this.initOcrFile(res);
               this.service.loadOcrFileProgressById(this.file.id);
             },
             (error) => {
@@ -237,6 +265,16 @@ export class FileOrcExtractProgressingComponent implements OnInit, OnDestroy {
 
   getCurrentPage(event: number) {
     this.page = event;
+    if (
+      this.page - 1 > 0 &&
+      this.file.state === -1 &&
+      this.ocr.content.length >= this.page
+    ) {
+      this.ocrtext = this.ocr.pages[this.page - 1];
+    } else {
+      this.ocrtext = this.ocr.pages[0];
+    }
+    this.cd.detectChanges();
     this.initFileRawUrl(this.file.id);
   }
 }

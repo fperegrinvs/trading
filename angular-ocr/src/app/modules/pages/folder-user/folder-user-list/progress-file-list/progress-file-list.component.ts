@@ -7,7 +7,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { takeUntil, tap } from 'rxjs/operators';
+import { shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { FolderUserService } from '../../services/folder-user.service';
 import { OcrNodeModel } from '../../models/ocr-node.model';
 import { FileModel } from '../../models/file.model';
@@ -56,7 +56,7 @@ export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
     this.initFilesFolders();
     this.subjectFiles
       .asObservable()
-      .pipe(takeUntil(this.subjectDestroy))
+      .pipe(takeUntil(this.subjectDestroy), shareReplay())
       .subscribe((files) => {
         files.forEach((file, index) => {
           if (file.state === 1) this.service.loadOcrFileProgressById(file.id);
@@ -66,6 +66,7 @@ export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
     this.service.activeFile$
       .pipe(
         takeUntil(this.subjectDestroy),
+        shareReplay(),
         tap((res) => this.cd.detectChanges())
       )
       .subscribe((res) => {});
@@ -73,6 +74,7 @@ export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
     this.service.lstOcrFileProgress$
       .pipe(
         takeUntil(this.subjectDestroy),
+        shareReplay(),
         tap((res) => this.cd.detectChanges())
       )
       .subscribe();

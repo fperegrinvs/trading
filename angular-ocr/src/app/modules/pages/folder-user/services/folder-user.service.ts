@@ -51,8 +51,8 @@ export class FolderUserService implements OnDestroy {
   private _lstOcrFileProgress: OcrFileProgressingModel[] = [];
 
   constructor(private http: HttpClient) {
-    this.lengthColTableSubject.next(9);
-    this.lengthMetadataSubject.next(5);
+    this.lengthColTableSubject.next(10);
+    this.lengthMetadataSubject.next(6);
   }
 
   ngOnDestroy(): void {
@@ -90,6 +90,11 @@ export class FolderUserService implements OnDestroy {
                   this.updateOcrFileProgress(ocrFile);
                 }
               } else {
+                const ocrFile = new OcrFileProgressingModel();
+                ocrFile.fileId = fileId;
+                ocrFile.done = true;
+                ocrFile.ocr = res.ocr;
+                this.updateOcrFileProgress(ocrFile);
                 this.removeOcrFileProgressById(res.item.id);
                 sb.unsubscribe();
               }
@@ -105,7 +110,7 @@ export class FolderUserService implements OnDestroy {
 
   updateOcrFileProgress(ocrFile: OcrFileProgressingModel) {
     this._lstOcrFileProgress.forEach((item, index) => {
-      if (item.fileId == ocrFile.fileId) {
+      if (item.fileId === ocrFile.fileId) {
         this._lstOcrFileProgress[index] = ocrFile;
         this.lstOcrFileProgressSubject.next(this._lstOcrFileProgress);
       }
