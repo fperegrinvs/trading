@@ -24,6 +24,8 @@ export class FolderNodeListComponent implements OnInit, OnDestroy, OnChanges {
   isOpen: boolean = false;
   isActive: boolean = false;
   subjectDestroy = new Subject();
+  clickCount: number = 0;
+  clickInFolder: boolean;
 
   constructor(
     public service: FolderUserService,
@@ -57,12 +59,25 @@ export class FolderNodeListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   clickInsideFolder(folder: OcrNodeModel) {
-    this.isOpen = !this.isOpen;
+    this.isOpen = true;
+    this.clickInFolder = true;
+
     this.service.activeFolder(folder);
   }
 
   @HostListener('click', ['$event']) clickEvent(event: any) {
-    this.isOpen = !this.isOpen;
-    if (this.isOpen) this.service.openFolder(this.folder);
+    this.clickCount++;
+    if (this.clickCount === 1) {
+      if (this.isOpen && !this.clickInFolder) this.isOpen = false;
+    }
+    setTimeout(() => {
+      if (this.clickCount === 2) {
+        this.isOpen = !this.isOpen;
+      }
+      this.clickCount = 0;
+      if (this.isOpen) this.service.openFolder(this.folder);
+      this.cd.detectChanges();
+    }, 250);
+    //this.isOpen = !this.isOpen;
   }
 }

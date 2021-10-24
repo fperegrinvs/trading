@@ -22,7 +22,9 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
   @Input('childs')
   childs?: any[];
+
   subjectDestroy = new Subject();
+  clickCount = 0;
   private subjectFiles = new BehaviorSubject<FileModel[]>([]);
   files$: Observable<FileModel[]> = this.subjectFiles.asObservable();
   private subjectFoldes = new BehaviorSubject<OcrNodeModel[]>([]);
@@ -80,6 +82,18 @@ export class ProgressFileListComponent implements OnInit, OnChanges, OnDestroy {
       )
       .subscribe();
   }
+
+  // clickFile(file: FileModel) {
+  //   this.clickCount++;
+  //   this.service.activeFile(file);
+  //
+  //   setTimeout(() => {
+  //     if (this.clickCount === 2) {
+  //       this.service.openShowComponentProgressFile();
+  //     }
+  //     this.clickCount = 0;
+  //   }, 250);
+  // }
 
   clickFile(file: FileModel) {
     this.service.activeFile(file);
