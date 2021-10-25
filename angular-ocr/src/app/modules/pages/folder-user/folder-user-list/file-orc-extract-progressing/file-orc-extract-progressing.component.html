@@ -8,7 +8,7 @@
   </div>
 </ng-container>
 <ng-template #loadingDone>
-  <div class="flex justify-between rounded-lg rounded-b-none border-solid border border-gray-300 h-[56px] z-10">
+  <div class="flex justify-between border-solid border border-gray-300 h-[56px] z-10">
     <div
       class="justify-end items-center px-2 py-2 sm:px-8 sm:flex sm:flex-row-reverse p-4">
       <button
@@ -152,7 +152,7 @@
       </button>
     </div>
   </div>
-  <div class="overflow-y-auto w-full h-full-56 bg-gray-200 relative">
+  <div class="overflow-y-auto w-full h-full-56 bg-gray-100 opacity-75 relative border-l-2 border-solid border-gray-300">
     <div *ngIf="file.state == 1" class="px-4 py-3 sm:px-8 p-4 h-[60px]">
       <ocr-progressing [fileId]="file.id"></ocr-progressing>
     </div>

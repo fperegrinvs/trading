@@ -12,11 +12,7 @@ export class BottomTopbarLogoutComponent implements OnInit {
 
   ngOnInit() {}
 
-  clickLogin() {
-    this.router.navigateByUrl('/login');
-  }
-
-  logout() {
-    this.auth.logout();
+   async logout() {
+     await this.auth.logout();
   }
 }

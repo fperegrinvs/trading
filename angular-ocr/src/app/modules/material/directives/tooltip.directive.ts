@@ -31,7 +31,7 @@ export class TooltipDirective {
   }
 
   hide() {
-    this.renderer.removeClass(this.tooltip, 'ng-tooltip-show');
+    this.renderer?.removeClass(this.tooltip, 'ng-tooltip-show');
     setTimeout(() => {
       this.renderer.removeChild(document.body, this.tooltip);
       this.tooltip = null;

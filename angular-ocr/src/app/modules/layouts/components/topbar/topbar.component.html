@@ -29,11 +29,11 @@
     <div class="block ">
       <ng-container *ngIf="(auth.user$ | async) as user">
         <ngx-avatar
-          [name]="user.name[user.name.length-1].slice(0, 1)"
           [textSizeRatio]="2.5"
           bgColor="#000"
-          initialsSize="2"
-          size="40"
+          initialsSize="1"
+          size="32"
+          src="assets/images/48/avatar/default.png"
         ></ngx-avatar>
       </ng-container>
     </div>

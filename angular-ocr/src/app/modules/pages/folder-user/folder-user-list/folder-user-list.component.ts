@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FolderOcrFileStateModel } from '../../ocr-main/models/ocr-file-state.model';
 import { AddNewFolderUserDialogComponent } from '../add-new-folder-user-dialog/add-new-folder-user-dialog.component';
 import { FolderUserService } from '../services/folder-user.service';
 import { OcrNodeModel } from '../models/ocr-node.model';
@@ -54,11 +53,9 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   }
 
   addNewFoler() {
-    const data = new FolderOcrFileStateModel();
     const dialogRef = this.dialog.open(AddNewFolderUserDialogComponent, {
       minWidth: '30vw',
       height: 'auto',
-      data: data,
     });
   }
 

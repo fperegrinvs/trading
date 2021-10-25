@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import {catchError, map, tap, window} from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserAuth } from '../model/user.model';
 import { environment } from '../../../environments/environment';
@@ -80,13 +80,11 @@ export class AuthStore {
     this._username = authInformation.user?.username;
   }
 
-  logout() {
-    this.subject.next(null);
+  async logout() {
     this.clearAuthData();
     this._token = null;
     clearTimeout(this._tokenTimer);
-    this.clearAuthData();
-    this.router.navigate(['/login']);
+    this.subject.next(null);
   }
 
   private getAuthData() {

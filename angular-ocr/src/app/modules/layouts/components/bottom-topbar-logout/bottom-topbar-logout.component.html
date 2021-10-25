@@ -1,16 +1,17 @@
 <ng-container *ngIf="(auth.user$ | async) as user">
   <div
     class="w-[340px] bg-gray-50 border-[1px] rounded-lg border-solid shadow-2xl border-gray-300 mt-2 drop-shadow-lg">
-    <div class="h-[200px] relative flex flex-col items-center   p-[20px]">
-      <div>
+      <div>    <div class="relative flex flex-col items-center p-[20px]">
 
-        <ng-container>
+
+      <ng-container>
           <ngx-avatar
             [name]="user.name[user.name.length-1].slice(0, 1)"
             [textSizeRatio]="2.5"
             bgColor="#000"
             initialsSize="2"
-            size="80"
+            size="64"
+            src="assets/images/128/avatar/default.png"
           ></ngx-avatar>
         </ng-container>
       </div>

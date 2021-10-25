@@ -66,5 +66,13 @@ $hover-active: #eef9fe; //cyan-apple-aqua-100
 }
 
 .body-list-table {
-  height: calc(100vh - 176px);
+  height: calc(100vh - 116px);
+}
+.action-filter {
+  @apply flex mx-2 my-2
+}
+
+.btn-action-filter {
+  @apply px-3 py-2 flex bg-gray-200 justify-center items-center w-full rounded-md focus:text-gray-900 focus:outline-none;
+  @layer  transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105;
 }

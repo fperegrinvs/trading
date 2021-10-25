@@ -4,7 +4,6 @@ import {
   Observable,
   of,
   Subject,
-  throwError,
   timer,
 } from 'rxjs';
 import { OcrNodeModel } from '../models/ocr-node.model';
