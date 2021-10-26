@@ -75,7 +75,11 @@ export class FolderUserService implements OnDestroy {
                 const ocrFile = new OcrFileProgressingModel();
                 ocrFile.fileId = fileId;
                 ocrFile.done = false;
-                ocrFile.ocr = res.ocr;
+                if (!res.ocr) {
+                  ocrFile.ocr = new Ocr();
+                } else {
+                  ocrFile.ocr = res.ocr;
+                }
                 if (notFound) {
                   this._lstOcrFileProgress.push(ocrFile);
                   this.lstOcrFileProgressSubject.next(
@@ -235,18 +239,14 @@ export class FolderUserService implements OnDestroy {
     this.lstOcrNodeSubject.next(this._lstOcrNode);
   }
 
-  pushFileForFromRoot(lst: OcrNodeModel[], file: FileModel) {
+  pushFileFromRoot(file: FileModel) {
     if (file.type === 'folder') return;
     this._lstOcrNode.forEach((item, index) => {
       if (item.id === file.folderid) {
-        if (file.deleted) {
-          lst.splice(index, 1);
-        }
-        lst[index].childs.push(file);
+        item.childs.push(file);
         this.lstOcrNodeSubject.next(this._lstOcrNode);
-        return;
       } else if (item.id === file.folderid) {
-        this.pushFileForFromRoot(item.childs, file);
+        this.pushFileFromRoot(file);
       }
     });
   }
@@ -322,9 +322,13 @@ export class FolderUserService implements OnDestroy {
     const url = `${API_PRODUCT}/files/upload/${folderParrentID}`;
     const data = new FormData();
     data.set('file', file);
-    return this.http
-      .post<ApiResponseModel<FileModel>>(url, data)
-      .pipe(shareReplay());
+    return this.http.post<ApiResponseModel<FileModel>>(url, data).pipe(
+      tap((res) => {
+        debugger;
+        this.pushFileFromRoot(res.item);
+      }),
+      shareReplay()
+    );
   }
 
   public uploadFileRoot(file: File) {
@@ -341,7 +345,7 @@ export class FolderUserService implements OnDestroy {
     idFile: string,
     isForce: boolean = false
   ): Observable<{ isvalid: boolean; item: FileModel; ocr: Ocr }> {
-    let url = `${API_PRODUCT}/files/ocr-attention/${idFile}`;
+    let url = `${API_PRODUCT}/files/ocr-transformer/${idFile}`;
     if (isForce) url = `${url}/force`;
     return this.http.get<any>(url).pipe(shareReplay());
   }
@@ -377,7 +381,7 @@ export class FolderUserService implements OnDestroy {
     );
   }
 
-  public xoaFolder(
+  public deleteFolder(
     folder: OcrNodeModel
   ): Observable<ApiResponseModel<OcrNodeModel>> {
     const url = `${API_PRODUCT}/files/${folder.id}`;
@@ -389,7 +393,7 @@ export class FolderUserService implements OnDestroy {
     );
   }
 
-  public xoaFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
+  public deleteFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
     const url = `${API_PRODUCT}/files/${file.id}`;
     return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(
       tap((data) => {

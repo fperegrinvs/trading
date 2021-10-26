@@ -27,6 +27,8 @@ export class DeleteDialogComponent implements OnInit, OnDestroy {
   nameBtnOk: string;
 
   info: string;
+  luuy: string;
+  deleteAll: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -75,11 +77,19 @@ export class DeleteDialogComponent implements OnInit, OnDestroy {
     } else {
       this.info = this.translate.instant('ACTIONDIALOG.INFODELETE');
     }
+
+    if (this.data?.luuy) {
+      this.luuy = this.data.luuy;
+    } else {
+      this.luuy = this.translate.instant('ACTIONDIALOG.LUUYDELETE');
+    }
   }
 
   close() {
     this.dialogRef.close();
   }
 
-  createFolder() {}
+  ok() {
+    this.dialogRef.close({ deleteAll: this.deleteAll });
+  }
 }

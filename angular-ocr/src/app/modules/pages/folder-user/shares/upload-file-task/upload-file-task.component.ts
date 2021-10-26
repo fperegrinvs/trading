@@ -53,7 +53,6 @@ export class UploadFileTaskComponent
       .pipe(takeUntil(this.subjectDestroy))
       .subscribe((res) => {
         this.isRootFolder = res;
-        console.log('this.isRootFolder', this.isRootFolder);
       });
   }
 

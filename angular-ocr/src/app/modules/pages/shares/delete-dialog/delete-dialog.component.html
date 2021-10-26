@@ -28,15 +28,25 @@
       </h3>
       <div class="mt-2 w-full">
         <app-share-messages-error></app-share-messages-error>
-
         {{info}}
+      </div>
+      <div class="mt-2 w-full p-4 bg-mint-apple-aqua-100 rounded-lg">
+        <div class="text-base leading-6 font-medium text-gray-600">{{luuy}}</div>
+        <div class="flex items-center inline-block">
+          <input [(ngModel)]="deleteAll"
+                 class="h-4 w-4 border-gray-300 rounded text-orange-apple-aqua-600 focus:ring-orange-500"
+                 type="checkbox">
+          <label translate="ACTIONDIALOG.LUUYXOASACH" class="ml-3 min-w-0 flex-1 text-gray-500">
+
+          </label>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-  <button (click)="createFolder()"
+  <button (click)="ok()"
           class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2
           bg-red-apple-aqua-600 text-base font-medium text-white hover:bg-red-apple-aqua-700
           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-apple-aqua-500 sm:ml-3 sm:w-auto sm:text-sm"

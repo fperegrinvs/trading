@@ -7,7 +7,8 @@ import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-d
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FileModel } from '../models/file.model';
 import { takeUntil } from 'rxjs/operators';
-import {DeleteDialogComponent} from "../../shares/delete-dialog/delete-dialog.component";
+import { DeleteDialogComponent } from '../../shares/delete-dialog/delete-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-folder-user-list',
@@ -22,7 +23,11 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   private subjectFoldes = new BehaviorSubject<OcrNodeModel[]>([]);
   folders$: Observable<OcrNodeModel[]> = this.subjectFoldes.asObservable();
 
-  constructor(public dialog: MatDialog, public service: FolderUserService) {}
+  constructor(
+    public dialog: MatDialog,
+    public service: FolderUserService,
+    public translate: TranslateService
+  ) {}
 
   ngOnInit() {
     this.service.lstOcrNodel$
@@ -33,9 +38,13 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   }
 
   initFilesFolders(lst: any[]) {
-    const lstFile = lst.filter((item) => item.type !== 'folder' && !item.deleted);
+    const lstFile = lst.filter(
+      (item) => item.type !== 'folder' && !item.deleted
+    );
     this.subjectFiles.next(lstFile);
-    const lstFolder = lst.filter((item) => item.type === 'folder' && !item.deleted);
+    const lstFolder = lst.filter(
+      (item) => item.type === 'folder' && !item.deleted
+    );
     this.subjectFoldes.next(lstFolder);
   }
 
@@ -73,10 +82,47 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   }
 
   deleteFolder() {
+    let folderActive: OcrNodeModel;
+    const sb = this.service.activeFolder$.subscribe((res) => {
+      folderActive = res;
+    });
+    sb.unsubscribe();
+    const titile = this.translate.instant('OCR.XOAFOLDER');
+    const nameObject = folderActive.name;
+    const typeSvg = 'folder';
+    const info = this.translate.instant('OCR.INFODELETEFOLDER');
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       minWidth: '30vw',
       height: 'auto',
+      data: {
+        title: titile,
+        nameObject: nameObject,
+        typeSvg: typeSvg,
+        info: info,
+      },
     });
+
+    const sb2 = dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.subjectDestroy))
+      .subscribe((dataDialog) => {
+        if (dataDialog) {
+          this.service.deleteFolder(folderActive).subscribe((res) => {
+            console.log('xoá lần 1 thành công', res);
+            if (res.isvalid && dataDialog.deleteAll) {
+              this.service.deleteFolder(folderActive).subscribe((res2) => {
+                if (res2.isvalid) {
+                  console.log('xoá lần 2 thành công', res2);
+                } else {
+                  console.log('lỗi 2 lần', res2);
+                }
+              });
+            } else {
+              console.log('lỗi 1 lần', res);
+            }
+          });
+        }
+      });
   }
 
   move() {}

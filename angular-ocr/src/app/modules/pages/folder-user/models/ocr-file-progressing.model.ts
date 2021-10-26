@@ -17,4 +17,13 @@ export class Ocr {
   percent: number;
   total: number;
   error: string;
+
+  constructor() {
+    this.current = 0;
+    this.data = [];
+    this['detect-lines-time'] = 0;
+    this.percent = 0;
+    this.total = 0;
+    this.error = '';
+  }
 }

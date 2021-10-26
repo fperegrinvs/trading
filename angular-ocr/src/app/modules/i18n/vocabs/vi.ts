@@ -29,12 +29,18 @@ export const locale = {
       XOATHUMUC: 'Xoá thư mục',
       RENAME: 'Đổi tên',
       MOVE: 'Di chuyển',
+      XOAFOLDER: 'Xoá thư mục',
+      INFODELETEFOLDER:
+        'Xác nhận xác thư mục. Trong quá trình xoá không thể hoàn tác',
     },
     ACTIONDIALOG: {
       XOADOITUONG: 'Xoá đối tượng',
       HUY: 'Huỷ',
       XACNHAN: 'Xác nhận',
-      INFODELETE: 'Quá trình xoá không thể hoàn tác',
+      INFODELETE: 'Xác nhận xoá đối tượng',
+      LUUYDELETE:
+        'Lưu ý: Sau khi xoá đối tượng sẽ được di chuyển vào thùng rác',
+      LUUYXOASACH: 'Xoá sạch và không lưu vào thùng rác',
     },
   },
 };
