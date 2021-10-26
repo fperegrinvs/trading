@@ -1,11 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  of,
-  Subject,
-  timer,
-} from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, timer } from 'rxjs';
 import { OcrNodeModel } from '../models/ocr-node.model';
 import { catchError, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -59,7 +53,7 @@ export class FolderUserService implements OnDestroy {
   }
 
   loadOcrFileProgressById(fileId: string) {
-    const time = timer(0, 1500);
+    const time = timer(0, 1000);
     const sb = time
       .pipe(
         takeUntil(this._subjectDestroy),
@@ -204,8 +198,8 @@ export class FolderUserService implements OnDestroy {
     if (folder.type !== 'folder') return;
     this._lstOcrNode.forEach((item, index) => {
       if (item.id === folder.parentid) {
-        if (folder.deleted)  {
-          lst.splice(index,1);
+        if (folder.deleted) {
+          lst.splice(index, 1);
         }
         lst[index].childs.push(folder);
         this.lstOcrNodeSubject.next(this._lstOcrNode);
@@ -239,15 +233,14 @@ export class FolderUserService implements OnDestroy {
     file.size = fileNew.size;
     file.taskid = fileNew.taskid;
     this.lstOcrNodeSubject.next(this._lstOcrNode);
-
   }
 
   pushFileForFromRoot(lst: OcrNodeModel[], file: FileModel) {
     if (file.type === 'folder') return;
     this._lstOcrNode.forEach((item, index) => {
       if (item.id === file.folderid) {
-        if (file.deleted)  {
-          lst.splice(index,1);
+        if (file.deleted) {
+          lst.splice(index, 1);
         }
         lst[index].childs.push(file);
         this.lstOcrNodeSubject.next(this._lstOcrNode);
@@ -358,34 +351,74 @@ export class FolderUserService implements OnDestroy {
     return this.http.get(url, { responseType: 'blob' }).pipe(shareReplay());
   }
 
-  public renameFile(file: FileModel , newName: string): Observable<ApiResponseModel<FileModel>> {
+  public renameFile(
+    file: FileModel,
+    newName: string
+  ): Observable<ApiResponseModel<FileModel>> {
     const url = `${API_PRODUCT}/files/${file.id}/${newName}`;
-    return this.http.post<ApiResponseModel<FileModel>>(url, null).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+    return this.http.post<ApiResponseModel<FileModel>>(url, null).pipe(
+      tap((data) => {
+        this.updateActiveFile(file, data.item);
+      }),
+      shareReplay()
+    );
   }
 
-  public renameFolder(folder: OcrNodeModel , newName: string): Observable<ApiResponseModel<OcrNodeModel>> {
+  public renameFolder(
+    folder: OcrNodeModel,
+    newName: string
+  ): Observable<ApiResponseModel<OcrNodeModel>> {
     const url = `${API_PRODUCT}/files/${folder.id}/${newName}`;
-    return this.http.post<ApiResponseModel<OcrNodeModel>>(url, null).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+    return this.http.post<ApiResponseModel<OcrNodeModel>>(url, null).pipe(
+      tap((data) => {
+        this.updateActiveFolder(folder, data.item);
+      }),
+      shareReplay()
+    );
   }
 
-  public xoaFolder(folder: OcrNodeModel): Observable<ApiResponseModel<OcrNodeModel>> {
+  public xoaFolder(
+    folder: OcrNodeModel
+  ): Observable<ApiResponseModel<OcrNodeModel>> {
     const url = `${API_PRODUCT}/files/${folder.id}`;
-    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(
+      tap((data) => {
+        this.updateActiveFolder(folder, data.item);
+      }),
+      shareReplay()
+    );
   }
 
   public xoaFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
     const url = `${API_PRODUCT}/files/${file.id}`;
-    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(
+      tap((data) => {
+        this.updateActiveFile(file, data.item);
+      }),
+      shareReplay()
+    );
   }
 
   public phucHoiFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
     const url = `${API_PRODUCT}/files/restore/${file.id}`;
-    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(
+      tap((data) => {
+        this.updateActiveFile(file, data.item);
+      }),
+      shareReplay()
+    );
   }
 
-  public phucHoiFolder(folder: OcrNodeModel): Observable<ApiResponseModel<OcrNodeModel>> {
+  public phucHoiFolder(
+    folder: OcrNodeModel
+  ): Observable<ApiResponseModel<OcrNodeModel>> {
     const url = `${API_PRODUCT}/files/restore/${folder.id}`;
-    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(
+      tap((data) => {
+        this.updateActiveFolder(folder, data.item);
+      }),
+      shareReplay()
+    );
   }
 
   // public moveFile(file: FileModel, fileNew: FileModel): Observable<ApiResponseModel<FileModel>> {
