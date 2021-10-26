@@ -30,5 +30,11 @@ export const locale = {
       RENAME: 'Đổi tên',
       MOVE: 'Di chuyển',
     },
+    ACTIONDIALOG: {
+      XOADOITUONG: 'Xoá đối tượng',
+      HUY: 'Huỷ',
+      XACNHAN: 'Xác nhận',
+      INFODELETE: 'Quá trình xoá không thể hoàn tác',
+    },
   },
 };

@@ -11,7 +11,7 @@ export class FileModel {
   taskid: string;
   ocrdate: Date;
   ocrtime: number;
-  deleted: false;
+  deleted: boolean;
   page_count: number;
   folder: string;
   folderid: string;

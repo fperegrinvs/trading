@@ -22,7 +22,6 @@ const API_PRODUCT = environment.HOST_CORE_CHINHTA_API;
 @Injectable({ providedIn: 'root' })
 export class FolderUserService implements OnDestroy {
   private _subjectDestroy = new Subject();
-
   private lstOcrNodeSubject = new BehaviorSubject<OcrNodeModel[]>([]);
   public lstOcrNodel$ = this.lstOcrNodeSubject.asObservable();
   private _lstOcrNode: OcrNodeModel[] = [];
@@ -60,7 +59,7 @@ export class FolderUserService implements OnDestroy {
   }
 
   loadOcrFileProgressById(fileId: string) {
-    const time = timer(0, 2000);
+    const time = timer(0, 1500);
     const sb = time
       .pipe(
         takeUntil(this._subjectDestroy),
@@ -72,7 +71,7 @@ export class FolderUserService implements OnDestroy {
                 console.log(res.ocr.error);
                 sb.unsubscribe();
               }
-              if (res.item.state === 1) {
+              if (res.item.state === 1 || res.item.state === 2) {
                 let notFound = true;
                 this._lstOcrFileProgress.forEach((item, index) => {
                   if (item.fileId === fileId) {
@@ -187,6 +186,84 @@ export class FolderUserService implements OnDestroy {
       );
   }
 
+  updateActiveFolder(folder: OcrNodeModel, folderNew: OcrNodeModel) {
+    if (folder.type !== 'folder') return;
+    folder.modify = folderNew.modify;
+    folder.deleted = folderNew.deleted;
+    folder.name = folderNew.name;
+    folder.note = folderNew.note;
+    folder.parent = folderNew.parent;
+    folder.parentid = folderNew.parentid;
+    folder.childs = folderNew.childs;
+    folder.addtime = folderNew.addtime;
+    folder.size = folderNew.size;
+    this.lstOcrNodeSubject.next(this._lstOcrNode);
+  }
+
+  pushNodeFolderForFromRoot(lst: OcrNodeModel[], folder: OcrNodeModel) {
+    if (folder.type !== 'folder') return;
+    this._lstOcrNode.forEach((item, index) => {
+      if (item.id === folder.parentid) {
+        if (folder.deleted)  {
+          lst.splice(index,1);
+        }
+        lst[index].childs.push(folder);
+        this.lstOcrNodeSubject.next(this._lstOcrNode);
+        return;
+      } else if (item.id === folder.parentid) {
+        this.pushNodeFolderForFromRoot(item.childs, folder);
+      }
+    });
+  }
+
+  pushNodeFolder(folderParrent: OcrNodeModel, folder: OcrNodeModel) {
+    if (folder.type !== 'folder') return;
+    folderParrent.childs.push(folder);
+    this.lstOcrNodeSubject.next(this._lstOcrNode);
+  }
+
+  updateActiveFile(file: FileModel, fileNew: FileModel) {
+    if (file.type === 'folder') return;
+    file.modify = fileNew.modify;
+    file.deleted = fileNew.deleted;
+    file.name = fileNew.name;
+    file.note = fileNew.note;
+    file.addtime = fileNew.addtime;
+    file.folderid = fileNew.folderid;
+    file.note = fileNew.note;
+    file.ocrdate = fileNew.ocrdate;
+    file.ocrtime = fileNew.ocrtime;
+    file.docid = fileNew.docid;
+    file.page_count = fileNew.page_count;
+    file.state = fileNew.state;
+    file.size = fileNew.size;
+    file.taskid = fileNew.taskid;
+    this.lstOcrNodeSubject.next(this._lstOcrNode);
+
+  }
+
+  pushFileForFromRoot(lst: OcrNodeModel[], file: FileModel) {
+    if (file.type === 'folder') return;
+    this._lstOcrNode.forEach((item, index) => {
+      if (item.id === file.folderid) {
+        if (file.deleted)  {
+          lst.splice(index,1);
+        }
+        lst[index].childs.push(file);
+        this.lstOcrNodeSubject.next(this._lstOcrNode);
+        return;
+      } else if (item.id === file.folderid) {
+        this.pushFileForFromRoot(item.childs, file);
+      }
+    });
+  }
+
+  pushFile(folder: OcrNodeModel, file: FileModel) {
+    if (file.type !== 'folder') return;
+    folder.childs.push(file);
+    this.lstOcrNodeSubject.next(this._lstOcrNode);
+  }
+
   //get
   getDSFile() {
     this.http
@@ -280,4 +357,44 @@ export class FolderUserService implements OnDestroy {
     const url = `${API_PRODUCT}/files/image/${id}/download`;
     return this.http.get(url, { responseType: 'blob' }).pipe(shareReplay());
   }
+
+  public renameFile(file: FileModel , newName: string): Observable<ApiResponseModel<FileModel>> {
+    const url = `${API_PRODUCT}/files/${file.id}/${newName}`;
+    return this.http.post<ApiResponseModel<FileModel>>(url, null).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+  }
+
+  public renameFolder(folder: OcrNodeModel , newName: string): Observable<ApiResponseModel<OcrNodeModel>> {
+    const url = `${API_PRODUCT}/files/${folder.id}/${newName}`;
+    return this.http.post<ApiResponseModel<OcrNodeModel>>(url, null).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+  }
+
+  public xoaFolder(folder: OcrNodeModel): Observable<ApiResponseModel<OcrNodeModel>> {
+    const url = `${API_PRODUCT}/files/${folder.id}`;
+    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+  }
+
+  public xoaFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
+    const url = `${API_PRODUCT}/files/${file.id}`;
+    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+  }
+
+  public phucHoiFile(file: FileModel): Observable<ApiResponseModel<FileModel>> {
+    const url = `${API_PRODUCT}/files/restore/${file.id}`;
+    return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(tap(data => {this.updateActiveFile(file, data.item)}),shareReplay());
+  }
+
+  public phucHoiFolder(folder: OcrNodeModel): Observable<ApiResponseModel<OcrNodeModel>> {
+    const url = `${API_PRODUCT}/files/restore/${folder.id}`;
+    return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+  }
+
+  // public moveFile(file: FileModel, fileNew: FileModel): Observable<ApiResponseModel<FileModel>> {
+  //   const url = `${API_PRODUCT}/files/restore/${folder.id}`;
+  //   return this.http.delete<ApiResponseModel<FileModel>>(url).pipe(tap(data => {this.update(folder, data.item)}),shareReplay());
+  // }
+  //
+  // public moveFolder(file: FileModel, fileNew: FileModel): Observable<ApiResponseModel<OcrNodeModel>> {
+  //   const url = `${API_PRODUCT}/files/restore/${folder.id}`;
+  //   return this.http.delete<ApiResponseModel<OcrNodeModel>>(url).pipe(tap(data => {this.updateActiveFolder(folder, data.item)}),shareReplay());
+  // }
 }

@@ -1,4 +1,10 @@
-import { Directive, Input, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  Input,
+  ElementRef,
+  HostListener,
+  Renderer2,
+} from '@angular/core';
 
 @Directive({
   selector: '[tooltip]',
@@ -33,7 +39,8 @@ export class TooltipDirective {
   hide() {
     this.renderer?.removeClass(this.tooltip, 'ng-tooltip-show');
     setTimeout(() => {
-      this.renderer.removeChild(document.body, this.tooltip);
+      if (this.renderer && document.body && this.tooltip)
+        this.renderer.removeChild(document.body, this.tooltip);
       this.tooltip = null;
     }, +this.delay);
   }
@@ -53,10 +60,26 @@ export class TooltipDirective {
     this.renderer.addClass(this.tooltip, `ng-tooltip-${this.placement}`);
 
     // delay
-    this.renderer.setStyle(this.tooltip, '-webkit-transition', `opacity ${this.delay}ms`);
-    this.renderer.setStyle(this.tooltip, '-moz-transition', `opacity ${this.delay}ms`);
-    this.renderer.setStyle(this.tooltip, '-o-transition', `opacity ${this.delay}ms`);
-    this.renderer.setStyle(this.tooltip, 'transition', `opacity ${this.delay}ms`);
+    this.renderer.setStyle(
+      this.tooltip,
+      '-webkit-transition',
+      `opacity ${this.delay}ms`
+    );
+    this.renderer.setStyle(
+      this.tooltip,
+      '-moz-transition',
+      `opacity ${this.delay}ms`
+    );
+    this.renderer.setStyle(
+      this.tooltip,
+      '-o-transition',
+      `opacity ${this.delay}ms`
+    );
+    this.renderer.setStyle(
+      this.tooltip,
+      'transition',
+      `opacity ${this.delay}ms`
+    );
   }
 
   setPosition() {
@@ -64,7 +87,11 @@ export class TooltipDirective {
 
     const tooltipPos = this.tooltip.getBoundingClientRect();
 
-    const scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const scrollPos =
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0;
 
     let top, left;
 

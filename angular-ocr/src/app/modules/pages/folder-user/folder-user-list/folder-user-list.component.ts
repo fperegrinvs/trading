@@ -7,6 +7,7 @@ import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-d
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { FileModel } from '../models/file.model';
 import { takeUntil } from 'rxjs/operators';
+import {DeleteDialogComponent} from "../../shares/delete-dialog/delete-dialog.component";
 
 @Component({
   selector: 'app-folder-user-list',
@@ -32,9 +33,9 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
   }
 
   initFilesFolders(lst: any[]) {
-    const lstFile = lst.filter((item) => item.type !== 'folder');
+    const lstFile = lst.filter((item) => item.type !== 'folder' && !item.deleted);
     this.subjectFiles.next(lstFile);
-    const lstFolder = lst.filter((item) => item.type === 'folder');
+    const lstFolder = lst.filter((item) => item.type === 'folder' && !item.deleted);
     this.subjectFoldes.next(lstFolder);
   }
 
@@ -71,7 +72,12 @@ export class FolderUserListComponent implements OnInit, OnDestroy {
     this.isFullSreenComponent = isFullSeen;
   }
 
-  deleteFolder() {}
+  deleteFolder() {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      minWidth: '30vw',
+      height: 'auto',
+    });
+  }
 
   move() {}
 

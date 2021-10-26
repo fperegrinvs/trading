@@ -16,9 +16,10 @@ import { ShareMessagesComponent } from './pages/shares/error-messages/share-mess
 import { MatIconModule } from '@angular/material/icon';
 import { ShareMessagesService } from './pages/shares/error-messages/share-messages.service';
 import { ClickOutsideDirective } from './material/directives/click-outside.directive';
+import { DeleteDialogComponent } from './pages/shares/delete-dialog/delete-dialog.component';
 
 @NgModule({
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, TranslateModule, FormsModule],
   exports: [
     TooltipDirective,
     CdkDetailRowDirective,
@@ -37,12 +38,14 @@ import { ClickOutsideDirective } from './material/directives/click-outside.direc
     MatIconModule,
     ClickOutsideDirective,
   ],
+  entryComponents: [DeleteDialogComponent],
   declarations: [
     TooltipDirective,
     CdkDetailRowDirective,
     FileDropDirective,
     ClickOutsideDirective,
     ShareMessagesComponent,
+    DeleteDialogComponent,
   ],
   providers: [ShareMessagesService],
 })

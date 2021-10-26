@@ -10,7 +10,7 @@ export class OcrNodeModel {
   type: string;
   owner: number;
   childs: any[];
-
+  size: number;
   constructor() {
     this.id = '';
     this.name = '';
@@ -23,5 +23,6 @@ export class OcrNodeModel {
     this.type = '';
     this.owner = 0;
     this.childs = [];
+    this.size = 0;
   }
 }

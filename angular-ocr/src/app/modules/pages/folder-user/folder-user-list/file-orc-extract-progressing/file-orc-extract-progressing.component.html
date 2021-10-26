@@ -153,7 +153,7 @@
     </div>
   </div>
   <div class="overflow-y-auto w-full h-full-56 bg-gray-100 opacity-75 relative border-l-2 border-solid border-gray-300">
-    <div *ngIf="file.state == 1" class="px-4 py-3 sm:px-8 p-4 h-[60px]">
+    <div *ngIf="(file.state == 1 || file.state == 2)" class="px-4 py-3 sm:px-8 p-4 h-[60px]">
       <ocr-progressing [fileId]="file.id"></ocr-progressing>
     </div>
     <div *ngIf="file.page_count > 1" class="border-b border-solid border-gray-300">
@@ -161,7 +161,7 @@
     </div>
     <ng-container>
       <div
-        [ngClass]="[file.state === 1 ? 'h-[calc(100%-60px)]' : 'h-full',
+        [ngClass]="[(file.state === 1 || file.size === 2) ? 'h-[calc(100%-60px)]' : 'h-full',
         file.page_count > 1 && file.state == 1 ? 'h-[calc(100%-120px)]' : '',
         file.page_count > 1 && file.state != 1 ? 'h-[calc(100%-60px)]' : '',
         numberCol === 1 ? 'grid-cols-1' : '',

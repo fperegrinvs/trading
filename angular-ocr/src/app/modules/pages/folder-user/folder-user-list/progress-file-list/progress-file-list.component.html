@@ -13,7 +13,7 @@
               </div>
           </span>
         </ng-container>
-        <span [ngClass]="file.state != 1 ? 'px-4' :''" class="min-w-xl relative py-2 whitespace-nowrap align-middle">
+        <span [ngClass]="(file.state != 1 && file.state != 2) ? 'px-4' :''" class="min-w-xl relative py-2 whitespace-nowrap align-middle">
               <span class=" mr-1">
                  <ng-container *ngIf="file.type === 'pdf'; else image">
                 <svg class="text-orange-apple-aqua-500 inline-block" fill="currentColor" height="24" viewBox="0 0 24 24"
