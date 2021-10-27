@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FolderUserService } from './services/folder-user.service';
+import { FolderUserStore } from './services/folder-user-store.store';
 
 @Component({
   selector: 'app-folder-user',
   templateUrl: 'folder-user.component.html',
 })
 export class FolderUserComponent implements OnInit {
-  constructor(public service: FolderUserService) {}
+  constructor(public serviceStore: FolderUserStore) {}
 
-  ngOnInit() {
-    this.service.getDSFile();
-  }
+  ngOnInit() {}
 }

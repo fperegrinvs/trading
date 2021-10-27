@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import {catchError, map, tap, window} from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserAuth } from '../model/user.model';
 import { environment } from '../../../environments/environment';
@@ -49,7 +49,7 @@ export class AuthStore {
               if (expiresInDuration) {
                 this.setAuthTimer(expiresInDuration);
                 const now = new Date();
-                const expirationDate = new Date(
+                let expirationDate = new Date(
                   now.getTime() + expiresInDuration * 1000
                 );
                 dateExpiresInDuration = expirationDate;

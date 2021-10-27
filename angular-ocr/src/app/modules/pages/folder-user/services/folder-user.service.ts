@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject, timer } from 'rxjs';
 import { OcrNodeModel } from '../models/ocr-node.model';
-import { catchError, map, shareReplay, takeUntil, tap } from 'rxjs/operators';
+import { catchError, shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { ApiResponseModel } from '../../../model/api-response.model';
@@ -324,7 +324,6 @@ export class FolderUserService implements OnDestroy {
     data.set('file', file);
     return this.http.post<ApiResponseModel<FileModel>>(url, data).pipe(
       tap((res) => {
-        debugger;
         this.pushFileFromRoot(res.item);
       }),
       shareReplay()

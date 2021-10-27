@@ -15,6 +15,11 @@ import { FileUploadingDialogComponent } from './add-new-file-dialog/file-uploadi
 import { OcrProgressingComponent } from './folder-user-list/file-orc-extract-progressing/ocr-progressing/ocr-progressing.component';
 import { OcrFilePageComponent } from './folder-user-list/file-orc-extract-progressing/ocr-file-page/ocr-file-page.component';
 import { OcrTableMetadataComponent } from './folder-user-list/file-orc-extract-progressing/ocr-table-metadata/ocr-table-metadata.component';
+import { FolderUserStore } from './services/folder-user-store.store';
+import { OcrNodeService } from './services/ocr-node.service';
+import { TreeOcrListComponent } from './tree-ocr-list/tree-ocr-list.component';
+import { OcrNodeRowFolderComponent } from './tree-ocr-list/ocr-node-row-folder/ocr-node-row-folder.component';
+import { OcrNodeRowFileComponent } from './tree-ocr-list/ocr-node-row-file/ocr-node-row-file.component';
 
 @NgModule({
   imports: [
@@ -25,7 +30,7 @@ import { OcrTableMetadataComponent } from './folder-user-list/file-orc-extract-p
         children: [
           {
             path: '',
-            component: FolderUserListComponent,
+            component: TreeOcrListComponent,
           },
         ],
       },
@@ -52,7 +57,10 @@ import { OcrTableMetadataComponent } from './folder-user-list/file-orc-extract-p
     OcrProgressingComponent,
     OcrFilePageComponent,
     OcrTableMetadataComponent,
+    TreeOcrListComponent,
+    OcrNodeRowFolderComponent,
+    OcrNodeRowFileComponent,
   ],
-  providers: [FolderUserService],
+  providers: [FolderUserService, FolderUserStore, OcrNodeService],
 })
 export class FolderUserModule {}
