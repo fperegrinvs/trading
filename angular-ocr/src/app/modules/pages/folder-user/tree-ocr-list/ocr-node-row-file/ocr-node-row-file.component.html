@@ -1,0 +1,57 @@
+<ng-container *ngIf="ocrNode">
+  <td class="ocr-col-file">
+    <span class="flex pl-2">
+      <span *ngFor="let space of spaces" class="pl-5"></span>
+      <ng-container *ngIf="ocrNode.state === 1 || ocrNode.state === 2">
+        <span class="relative text-center whitespace-nowrap align-middle pr-2">
+        <ng-container *ngIf="showDoneOcr$ | async">
+          <div class="relative">
+          </div>
+        </ng-container>
+        <div *ngIf="!showDoneOcr" class="relative ocr-progress-spinner text-orange-600">
+          <ng-container *ngIf="ocrNode.ocring?.percent > 0; else zero">
+                 <mat-progress-spinner [value]="ocrNode.ocring?.percent" diameter="25"  mode="determinate"></mat-progress-spinner>
+                 <span class="text-xs" style="position: absolute; left: 6px; top: 6px">{{getRoundPercent(ocrNode.ocring?.percent)}}</span>
+          </ng-container>
+          <ng-template #zero>
+                  <mat-progress-spinner diameter="25" mode="indeterminate"></mat-progress-spinner>
+          </ng-template>
+        </div>
+        </span>
+      </ng-container>
+         <span class=" mr-1">
+           <ng-container *ngIf="ocrNode.type === 'pdf'; else image">
+          <svg class="text-orange-apple-aqua-500 inline-block" fill="currentColor" height="24"  viewBox="0 0 24 24"
+               width="24"
+               xmlns="http://www.w3.org/2000/svg"><path
+            d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z"></path><path
+            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.498 16.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 0 1-.308-.018v1.426H7v-3.936A7.558 7.558 0 0 1 8.219 14c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0 1 11.66 14c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 14.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V14.03H17v.74zM14 9h-1V4l5 5h-4z"></path></svg>
+           </ng-container>
+          <ng-template #image>
+            <svg class="text-mint-apple-aqua-500 inline-block" fill="currentColor"
+                 height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path
+              d="M6 22h12a2 2 0 0 0 2-2V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2zm7-18 5 5h-5V4zm-4.5 7a1.5 1.5 0 1 1-.001 3.001A1.5 1.5 0 0 1 8.5 11zm.5 5 1.597 1.363L13 13l4 6H7l2-3z"></path></svg>
+          </ng-template>
+        </span>
+      <span> {{ocrNode.name}}</span>
+    </span>
+  </td>
+  <!-- trạng thái-->
+  <td class="ocr-col-file"></td>
+  <td class="ocr-col-file text-right">
+    {{getTitleSize(ocrNode.size)}}
+  </td>
+  <td class="ocr-col-file">{{ocrNode.owner}}</td>
+  <td class="ocr-col-file"> {{ocrNode.addtime | date: 'dd/MM/yyyy'}}</td>
+  <ng-container *ngIf="ocrNode.ocr; else nonOcr">
+    <ng-container *ngFor="let prop of serviceStore.props$ | async">
+      <ng-container *ngIf="!prop.isHide">
+        <td [ngClass]="prop.name === 'content'? 'overflow-ellipsis overflow-hidden max-w-[300px]':''"
+            class="ocr-col-file">{{ocrNode.ocr[prop.name]}}</td>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-template #nonOcr>
+    <td [colSpan]="(serviceStore.props$ | async)?.length"></td>
+  </ng-template>
+</ng-container>

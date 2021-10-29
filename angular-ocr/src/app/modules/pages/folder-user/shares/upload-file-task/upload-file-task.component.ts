@@ -6,9 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { AuthStore } from '../../../../auth/auth.store';
 import { FolderUserService } from '../../services/folder-user.service';
-import { OcrNodeModel } from '../../models/ocr-node.model';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -25,12 +23,10 @@ export class UploadFileTaskComponent
   color: string = 'primary';
   isPause: boolean = false;
   seconds: number = 10;
-  folderAcive: OcrNodeModel;
   isRootFolder: boolean = true;
-
   subjectDestroy = new Subject();
 
-  constructor(public service: FolderUserService, private auth: AuthStore) {}
+  constructor(public service: FolderUserService) {}
 
   ngOnDestroy(): void {
     this.subjectDestroy.next();
@@ -39,21 +35,10 @@ export class UploadFileTaskComponent
 
   ngOnInit() {
     this.subject.pipe(takeUntil(this.subjectDestroy)).subscribe((res) => {
-      if (res == 100) this.color = 'warn';
+      setTimeout(() => {
+        if (res == 100) this.color = 'warn';
+      }, 500);
     });
-
-    this.service.activeFolder$
-      .pipe(takeUntil(this.subjectDestroy))
-      .subscribe((res) => {
-        this.folderAcive = res;
-        this.isRootFolder = false;
-      });
-
-    this.service.isRootFolder$
-      .pipe(takeUntil(this.subjectDestroy))
-      .subscribe((res) => {
-        this.isRootFolder = res;
-      });
   }
 
   ngAfterViewInit(): void {
@@ -61,26 +46,14 @@ export class UploadFileTaskComponent
   }
 
   startUpload() {
-    let id = '';
-    if (!this.isRootFolder) {
-      id = this.folderAcive.id;
-    }
-    this.service.uploadFile(id, this.file).subscribe(
-      (res) => {
-        this.subject.next(100);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
-
-  randomInteger(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    // this.service.uploadFile(id, this.file).subscribe(
+    //   (res) => {
+    //     this.subject.next(100);
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // );
   }
 
   getFileName() {

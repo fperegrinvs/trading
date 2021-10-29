@@ -74,5 +74,25 @@ $hover-active: #eef9fe; //cyan-apple-aqua-100
 
 .btn-action-filter {
   @apply px-3 py-2 flex bg-gray-200 justify-center items-center w-full rounded-md focus:text-gray-900 focus:outline-none;
-  @layer  transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105;
+  @layer transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105;
 }
+
+.user-folder-header {
+  @apply px-2 py-2 align-middle font-normal text-left;
+}
+
+
+tbody {
+  tr:nth-child(odd) {
+  }
+  tr:nth-child(even) {
+    @apply bg-gray-apple-aqua-100;
+  }
+}
+
+
+.active-color {
+  background-color: #54a9ff !important;
+}
+
+

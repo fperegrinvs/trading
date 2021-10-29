@@ -10,6 +10,8 @@ export const locale = {
       DANGXUAT: 'Đăng xuất',
     },
     OCR: {
+      CHONTEPTIN: 'Chọn tệp tin',
+      THATEPTIN: 'Thả tệp tin vào đây hoặc',
       THEMMOI: 'Thêm mới',
       LOC: 'Lọc',
       TIMKIEM: 'Tìm kiếm',
@@ -29,7 +31,7 @@ export const locale = {
       XOATHUMUC: 'Xoá thư mục',
       RENAME: 'Đổi tên',
       MOVE: 'Di chuyển',
-      XOAFOLDER: 'Xoá thư mục',
+      XOA: 'Xoá',
       INFODELETEFOLDER:
         'Xác nhận xác thư mục. Trong quá trình xoá không thể hoàn tác',
     },

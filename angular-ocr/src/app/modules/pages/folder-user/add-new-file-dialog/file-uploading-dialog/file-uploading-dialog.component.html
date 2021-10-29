@@ -29,7 +29,7 @@
     </div>
     <div class="block z-10">
       <input #inputfileDrop (change)="fileBrowserHander($event)" class="hidden" id="fileDrop" multiple type="file"/>
-      <h3 class="text-1xl">Thả tệp tin vào đây hoặc</h3>
+      <h3 class="text-1xl">{{'OCR.THATEPTIN' | translate}}</h3>
       <div class="mt-6">
         <button
           (click)="inputfileDrop.click()"
@@ -53,7 +53,7 @@
             sm:text-sm
           "
         >
-          Chọn tệp tin
+          {{'OCR.CHONTEPTIN' | translate}}
         </button>
       </div>
     </div>

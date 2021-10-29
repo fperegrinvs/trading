@@ -1,19 +1,11 @@
 <div
   class="justify-start items-center px-4 py-3 sm:px-8 sm:flex sm:flex-row p-4 border-solid border-b-2 border-gray-200">
-  <ng-container *ngIf="activeFolder$ | async as folder">
+  <ng-container *ngIf="(serviceStore.activeOcrNode$ | async) as folder">
     <span class="text-lg leading-6 font-medium">
       Thêm tệp tin vào thư mục:
     </span>&nbsp;
     <span class="text-lg leading-6 font-medium text-orange-apple-aqua-500">
         {{folder.name}}
-      </span>
-  </ng-container>
-  <ng-container *ngIf="ocrService.isRootFolder$ | async">
-    <span class="text-lg leading-6 font-medium">
-      Thêm tệp tin vào thư mục:
-    </span>&nbsp;
-    <span class="text-lg leading-6 font-medium text-orange-apple-aqua-500">
-        Thư mục gốc
       </span>
   </ng-container>
 </div>

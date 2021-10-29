@@ -1,8 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FolderUserService } from '../services/folder-user.service';
-import { Observable, Subject } from 'rxjs';
-import { OcrNodeModel } from '../models/ocr-node.model';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { FolderUserStore } from '../services/folder-user-store.store';
 
 @Component({
   selector: 'add-new-file-dialog',
@@ -11,17 +9,13 @@ import { OcrNodeModel } from '../models/ocr-node.model';
 })
 export class AddNewFileDialogComponent implements OnInit {
   files: File[] = [];
-  subjectDestroy = new Subject();
-  activeFolder$: Observable<OcrNodeModel>;
 
   constructor(
     public dialogRef: MatDialogRef<AddNewFileDialogComponent>,
-    public ocrService: FolderUserService
+    public serviceStore: FolderUserStore
   ) {}
 
-  ngOnInit() {
-    this.activeFolder$ = this.ocrService.activeFolder$;
-  }
+  ngOnInit() {}
 
   close() {
     this.dialogRef.close();

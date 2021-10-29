@@ -1,16 +1,16 @@
 <ng-container *ngIf="ocrNode">
     <td
-      class="px-4 py-4 h-full whitespace-nowrap align-middle font-extrabold">
-      <span class="pr-2 ">
+      class="ocr-col">
+      <span *ngFor="let space of spaces" class="pl-5"></span>
+      <span>
         <ng-container *ngIf="!ocrNode.isOpen; else closeFolderSvg">
           <!-- icon right arrow -->
-            <svg (click)="ocrNode.isOpen = !ocrNode.isOpen" class="relative inline-block text-mint-apple-aqua-500" fill="currentColor" height="16"
-                 viewBox="0 0 24 24"
-                 width="16"
-                 xmlns="http://www.w3.org/2000/svg"><path
-              d="M5.536 21.886a1.004 1.004 0 0 0 1.033-.064l13-9a1 1 0 0 0 0-1.644l-13-9A1 1 0 0 0 5 3v18a1 1 0 0 0 .536.886z"></path></svg>
+            <svg (click)="clickOpenFolder()" class="relative inline-block text-gray-apple-aqua-700" fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z">
+              </path>
+            </svg>
           <!-- icon folder close-->
-           <svg class="relative inline-block text-teal-apple-aqua-400" fill="currentColor" height="24"
+           <svg class="relative inline-block text-blue-apple-aqua-300" fill="currentColor" height="24"
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg">
@@ -21,17 +21,12 @@
         </ng-container>
         <ng-template #closeFolderSvg>
           <!-- icon down arrow-->
-          <svg (click)="ocrNode.isOpen = !ocrNode.isOpen" class="relative inline-block text-teal-apple-aqua-500" fill="currentColor" height="16"
-               viewBox="0 0 24 24"
-               width="16"
-               xmlns="http://www.w3.org/2000/svg"><path
-            d="M11.178 19.569a.998.998 0 0 0 1.644 0l9-13A.999.999 0 0 0 21 5H3a1.002 1.002 0 0 0-.822 1.569l9 13z"></path></svg>
-          <!-- icon folder open-->
-          <!--          <svg class="relative inline-block" height="24" viewBox="0 0 24 24" width="24"-->
-          <!--               xmlns="http://www.w3.org/2000/svg"><path-->
-          <!--            d="M2.165 19.551c.186.28.499.449.835.449h15c.4 0 .762-.238.919-.606l3-7A.998.998 0 0 0 21 11h-1V8c0-1.103-.897-2-2-2h-6.655L8.789 4H4c-1.103 0-2 .897-2 2v13h.007a1 1 0 0 0 .158.551zM18 8v3H6c-.4 0-.762.238-.919.606L4 14.129V8h14z">-->
-          <!--          </path></svg>-->
-          <svg class="relative inline-block text-teal-apple-aqua-400" fill="currentColor" height="24"
+          <svg  (click)="clickOpenFolder()" class="relative inline-block text-gray-apple-aqua-600" fill="currentColor"
+                height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z">
+            </path>
+          </svg>
+          <svg class="relative inline-block text-blue-apple-aqua-300" fill="currentColor" height="24"
                viewBox="0 0 24 24" width="24"
                xmlns="http://www.w3.org/2000/svg">
           <path
@@ -43,7 +38,7 @@
       {{ ocrNode.name }}
     </td>
     <!-- trạng thái-->
-    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+    <td class="ocr-col">
       <!--      <ng-container *ngIf="getStateOCR(folder) != ''">-->
       <!--        <div class="font-bold">-->
       <!--          {{ getStateOCR(folder)}}-->
@@ -60,12 +55,20 @@
       <!--        </div>-->
       <!--      </ng-container>-->
     </td>
-    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+    <!-- Kích cỡ tệp-->
+    <td class="ocr-col" >
+      <span class="float-right">
+        <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M5 11h14v2H5z"></path></svg>
+      </span>
+    </td>
+    <!-- chủ sỡ hữu-->
+    <td class="ocr-col">
       <span>{{ocrNode.owner}}</span>
     </td>
-    <td class="px-4 py-4 h-full whitespace-nowrap align-middle">
+    <!-- Ngày tạo -->
+    <td class="ocr-col">
       <span>{{ocrNode.addtime | date : 'dd/MM/yyyy'}}</span>
     </td>
-    <!--    <td [attr.colspan]="service.lengthColTable$ | async" class="px-4 py-4 h-full whitespace-nowrap align-middle">-->
-    <!--    </td>-->
+    <td [attr.colspan]="spanCol">
+    </td>
 </ng-container>
