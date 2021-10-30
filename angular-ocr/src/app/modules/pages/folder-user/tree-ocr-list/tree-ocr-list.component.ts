@@ -86,7 +86,6 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subjectDestroy.next();
     this.subjectDestroy.complete();
-    console.log('destroy');
   }
 
   addNew() {

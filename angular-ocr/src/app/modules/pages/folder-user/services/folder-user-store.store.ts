@@ -350,7 +350,7 @@ export class FolderUserStore {
   }
 
   public fechStateFileTimer(ocrModel: OcrNodeModel) {
-    const time = timer(3000);
+    const time = timer(1000);
     const sb = time
       .pipe(
         shareReplay(),

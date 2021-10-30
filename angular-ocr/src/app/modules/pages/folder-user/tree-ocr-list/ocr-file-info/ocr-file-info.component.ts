@@ -90,7 +90,8 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
             this.initFirstGiaoDien(file);
             this.initFirstGiaoDien(file);
             this.initFileRawUrl(file);
-            if (file.ocr) this.ocrtext = file.ocr.content;
+            if (file.ocr) this.ocrtext = file.ocr.pages[0];
+            this.page = 1;
             this.loadingFirstTime = false;
           }
         })
@@ -261,10 +262,8 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   getCurrentPage(event: number) {
     this.page = event;
     this.ocrNode$.pipe(take(1)).subscribe((file) => {
-      if (this.page - 1 > 0 && file.state === -1 && file.ocr) {
+      if (file.state === -1 && file.ocr) {
         this.ocrtext = file.ocr.pages[this.page - 1];
-      } else {
-        if (file.ocr.content) this.ocrtext = file.ocr.content;
       }
       this.initFileRawUrl(file);
       this.cd.detectChanges();
