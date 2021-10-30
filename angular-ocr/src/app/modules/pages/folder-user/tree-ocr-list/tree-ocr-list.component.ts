@@ -29,7 +29,7 @@ import { DeleteDialogComponent } from '../../shares/delete-dialog/delete-dialog.
 })
 export class TreeOcrListComponent implements OnInit, OnDestroy {
   isOpenDialog = false;
-  isFullSreenComponent: boolean = false;
+  isFullSreenComponent: boolean;
   subjectDestroy = new Subject();
   numberCol = 4;
   showComponentFile: boolean;
@@ -45,10 +45,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     public serviceStore: FolderUserStore,
     public translate: TranslateService,
     public cd: ChangeDetectorRef
-  ) {
-    this.serviceStore.fectAll();
-    this.serviceStore.fetchProps();
-  }
+  ) {}
 
   get isLoading() {
     return this._isLoading.getValue();
@@ -59,7 +56,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let index = 0;
+    this.isFullSreenComponent = false;
+    this.showComponentFile = false;
     this.serviceStore.isLoading$
       .pipe(
         shareReplay(),
@@ -85,6 +83,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subjectDestroy.next();
     this.subjectDestroy.complete();
+    console.log('destroy');
   }
 
   addNew() {
@@ -176,7 +175,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     this.activeNode(ocr);
     setTimeout(() => {
       if (this.clickCountFile === 2) {
-        this.serviceStore.showComponentFile = true;
+        this.showComponentFile = true;
         this.fileIdShowInfo = ocr.id;
       }
       this.clickCountFile = 0;
@@ -185,8 +184,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   clickOutSide() {
-    if (!this.isOpenDialog && !this.serviceStore.showComponentFile) {
-      debugger;
+    if (!this.isOpenDialog && !this.showComponentFile) {
       this.activeNode(this.serviceStore.ROOT_OcrNode);
     }
   }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layouts/layout.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
           import('./pages/folder-user/folder-user.module').then(
             (m) => m.FolderUserModule
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: 'dashboard',
@@ -25,6 +27,7 @@ const routes: Routes = [
           import('./pages/dashboard/dashboard.module').then(
             (m) => m.DashBoardModule
           ),
+        canActivate: [AuthGuard],
       },
       {
         path: '**',

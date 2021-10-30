@@ -36,8 +36,6 @@ export class FolderUserStore {
   readonly activeOcrNode$ = this._activeOcrNode.asObservable();
   private readonly _props = new BehaviorSubject<DocumentProps[]>([]);
   readonly props$ = this._props.asObservable();
-  private readonly _showCompoentFile = new BehaviorSubject<boolean>(false);
-  readonly showComponentFile$ = this._showCompoentFile.asObservable();
 
   constructor(private service: OcrNodeService) {}
 
@@ -68,14 +66,6 @@ export class FolderUserStore {
 
   set activeOcrNode(val: OcrNodeModel) {
     this._activeOcrNode.next(val);
-  }
-
-  get showComponentFile(): boolean {
-    return this._showCompoentFile.getValue();
-  }
-
-  set showComponentFile(val) {
-    this._showCompoentFile.next(val);
   }
 
   getOcrNodeById(id: string): Observable<OcrNodeModel> {
@@ -306,8 +296,6 @@ export class FolderUserStore {
                 }
                 if (res.item.state === -1) {
                   this.updateFileOrcMode(res.item, res.ocr);
-                  if (this.showComponentFile) this.activeOcrNode = res.item;
-                  debugger;
                   sb.unsubscribe();
                 }
               })

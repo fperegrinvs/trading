@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   NgZone,
   OnChanges,
@@ -14,7 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FileModel } from '../../models/file.model';
-import { take, takeUntil, tap } from 'rxjs/operators';
+import { shareReplay, take, takeUntil, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { OcrNodeModel } from '../../models/ocr-node.model';
@@ -39,9 +38,9 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input('fileId')
   fileId: string;
-  activeorcNode: OcrNodeModel;
   ocrNode$: Observable<OcrNodeModel>;
 
+  @Output('close') eventClose = new EventEmitter(false);
   @Output('isFullSreen') eventFullSreen = new EventEmitter(false);
   @ViewChild('imgBox') imgBox: ElementRef;
   @ViewChild('dragHover') dragHover: ElementRef;
@@ -79,10 +78,9 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   init() {
     this.ocrNode$
       .pipe(
-        take(1),
+        shareReplay(),
         tap((file) => {
-          if (file.type !== 'folder') {
-            this.activeorcNode = file;
+          if (file?.type !== 'folder') {
             this.initFirstGiaoDien(file);
             this.initFirstGiaoDien(file);
             this.initFileRawUrl(file);
@@ -170,10 +168,7 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     // }
   }
 
-  Dong() {
-    this.serviceStore.showComponentFile = false;
-    this.ngOnDestroy();
-  }
+  Dong() {}
 
   ClickFullSreen() {
     this.isFullSreen = !this.isFullSreen;
@@ -262,9 +257,5 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       this.initFileRawUrl(file);
       this.cd.detectChanges();
     });
-  }
-
-  @HostListener('click', ['$event']) clickEvent(event: any) {
-    this.serviceStore.activeOcrNode = this.activeorcNode;
   }
 }
