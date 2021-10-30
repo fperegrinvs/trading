@@ -1,4 +1,4 @@
-<ng-container *ngIf="ocrNode.ocring">
+<ng-container *ngIf="ocrNode.ocring; else dangxuly">
     <div class="flex flex-1 justify-between bg-white">
       <ng-container>
         <div>
@@ -32,5 +32,27 @@
           ></ng-template>
       </div>
     </div>
+    <ng-container *ngIf="ocrNode.ocring?.percent === 0; else progressPercent">
+      <mat-progress-bar color="accent" mode="indeterminate" ></mat-progress-bar>
+    </ng-container>
+    <ng-template #progressPercent>
       <mat-progress-bar [value]="ocrNode.ocring?.percent" color="{{ color }}" max="100" mode="determinate"></mat-progress-bar>
+    </ng-template>
 </ng-container>
+<ng-template #dangxuly>
+  <div class="flex flex-1 justify-between bg-white">
+    <ng-container>
+      <div>
+    <span
+      class="xl:text-base lg:text-base md:text-sm font-extrabold overflow-ellipsis whitespace-nowrap overflow-hidden fadeInOutAnimation"
+    >
+      Đang khởi tạo ...
+    </span>
+      </div>
+    </ng-container
+    >
+    <div>
+    </div>
+  </div>
+  <mat-progress-bar color="accent" mode="indeterminate" ></mat-progress-bar>
+</ng-template>

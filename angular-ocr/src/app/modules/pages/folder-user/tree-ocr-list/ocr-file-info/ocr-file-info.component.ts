@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   NgZone,
   OnChanges,
@@ -13,7 +12,6 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { FileModel } from '../../models/file.model';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
@@ -39,7 +37,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input('ocrNode')
   ocrNode: OcrNodeModel;
-  activeorcNode: OcrNodeModel;
   ocrNode$: Observable<OcrNodeModel>;
 
   @Output('isFullSreen') eventFullSreen = new EventEmitter(false);
@@ -53,10 +50,9 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   imageToShow: any;
   isImageLoading = new BehaviorSubject<boolean>(true);
-
   loadingFirstTimeSubject = new BehaviorSubject<boolean>(true);
-
   public loadingFirstTime$ = this.loadingFirstTimeSubject.asObservable();
+  pageOcr: any;
 
   constructor(
     public serviceStore: FolderUserStore,
@@ -86,13 +82,10 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
         take(1),
         tap((file) => {
           if (file.type !== 'folder') {
-            this.activeorcNode = file;
-            this.initFirstGiaoDien(file);
-            this.initFirstGiaoDien(file);
-            this.initFileRawUrl(file);
-            if (file.ocr) this.ocrtext = file.ocr.pages[0];
             this.page = 1;
-            this.loadingFirstTime = false;
+            this.initFirstGiaoDien(file);
+            this.initFirstOcrFile(file);
+            this.initFileRawUrl(file);
           }
         })
       )
@@ -100,13 +93,14 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.ocrNode) {
+      debugger;
       console.log('----------');
       console.log(this.ocrNode);
       console.log('----------');
       this.loadingFirstTime = true;
-      this.page = 1;
       this.ocrNode$ = this.serviceStore.getOcrNodeById(this.ocrNode.id);
       this.init();
+      this.loadingFirstTime = false;
     }
   }
 
@@ -131,7 +125,22 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     this.subjectDestroy.complete();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const done: boolean = false;
+    const sb = this.ocrNode$
+      .pipe(takeUntil(this.subjectDestroy))
+      .subscribe((res) => {
+        if (res.state === -1) {
+          this.initFirstGiaoDien(res);
+          this.pageOcr = res.ocr.pages;
+          console.log('=================');
+          console.log(res);
+          console.log('=================');
+          debugger;
+          sb.unsubscribe();
+        }
+      });
+  }
 
   initFirstGiaoDien(ocrNode: OcrNodeModel) {
     if (ocrNode.state === -1) {
@@ -139,6 +148,7 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       this.isShowImg = true;
       this.isShowOcrtext = true;
       this.isShowMetadata = true;
+      this.ocrtext = ocrNode.ocr.pages[this.page - 1];
     } else {
       this.numberCol = 1;
       this.isShowImg = true;
@@ -162,20 +172,15 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  initOcrFile(res: { isvalid: boolean; item: FileModel; ocr: any }) {
-    // if (res.item.state === -1) {
-    //   this.ocr = res.ocr;
-    //   if (this.page - 1 > 0 && this.ocr.pages.length >= this.page) {
-    //     this.ocrtext = this.ocr.pages[this.page - 1];
-    //   } else {
-    //     this.ocrtext = this.ocr.pages[0];
-    //   }
-    //   this.numberCol = 3;
-    //   this.isShowImg = true;
-    //   this.isShowOcrtext = true;
-    //   this.isShowMetadata = true;
-    //   this.cd.detectChanges();
-    // }
+  initFirstOcrFile(file: OcrNodeModel) {
+    if (file.state === -1) {
+      this.ocrtext = file.ocr.pages[this.page - 1];
+      this.numberCol = 3;
+      this.isShowImg = true;
+      this.isShowOcrtext = true;
+      this.isShowMetadata = true;
+      this.cd.detectChanges();
+    }
   }
 
   Dong() {
@@ -263,14 +268,15 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     this.page = event;
     this.ocrNode$.pipe(take(1)).subscribe((file) => {
       if (file.state === -1 && file.ocr) {
+        debugger;
         this.ocrtext = file.ocr.pages[this.page - 1];
+      } else if (file.state === -1 && this.pageOcr) {
+        this.ocrtext = this.pageOcr[this.page - 1];
+      } else if (this.pageOcr) {
+        this.ocrtext = this.pageOcr[this.page - 1];
       }
       this.initFileRawUrl(file);
       this.cd.detectChanges();
     });
-  }
-
-  @HostListener('click', ['$event']) clickEvent(event: any) {
-    this.serviceStore.activeOcrNode = this.activeorcNode;
   }
 }

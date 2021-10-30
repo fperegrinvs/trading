@@ -166,6 +166,8 @@ export class FolderUserStore {
   }
 
   updateTreeOcr(ocrNodeModel: OcrNodeModel, parentId: string) {
+    if (ocrNodeModel.state === -1)
+      console.log('xxxxxxxxx', ocrNodeModel, 'xxxxxxxxx');
     let parentIsOpen_index: { isOpen: boolean; index: number };
     if (ocrNodeModel.level === 0 || ocrNodeModel.folder === 'Root') {
       parentIsOpen_index = { isOpen: true, index: undefined };
@@ -363,12 +365,14 @@ export class FolderUserStore {
                 if (!res.isvalid) {
                   sb.unsubscribe();
                 } else if (res.isvalid) {
+                  res.item.level = ocrModel.level;
                   this.updateFileOrcMode(res.item, res.ocr);
                 }
                 if (res.item.state === -1) {
+                  res.item.level = ocrModel.level;
                   this.updateFileOrcMode(res.item, res.ocr);
+
                   if (this.showComponentFile) this.activeOcrNode = res.item;
-                  sb.unsubscribe();
                 }
               })
             )
