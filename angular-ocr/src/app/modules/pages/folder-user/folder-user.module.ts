@@ -20,6 +20,7 @@ import { OcrNodeService } from './services/ocr-node.service';
 import { TreeOcrListComponent } from './tree-ocr-list/tree-ocr-list.component';
 import { OcrNodeRowFolderComponent } from './tree-ocr-list/ocr-node-row-folder/ocr-node-row-folder.component';
 import { OcrNodeRowFileComponent } from './tree-ocr-list/ocr-node-row-file/ocr-node-row-file.component';
+import { OcrFileInfoComponent } from './tree-ocr-list/ocr-file-info/ocr-file-info.component';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { OcrNodeRowFileComponent } from './tree-ocr-list/ocr-node-row-file/ocr-n
     TreeOcrListComponent,
     OcrNodeRowFolderComponent,
     OcrNodeRowFileComponent,
+    OcrFileInfoComponent,
   ],
   providers: [FolderUserService, FolderUserStore, OcrNodeService],
 })

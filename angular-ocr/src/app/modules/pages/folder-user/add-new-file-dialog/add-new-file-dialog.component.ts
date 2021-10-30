@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FolderUserStore } from '../services/folder-user-store.store';
 
 @Component({
@@ -9,10 +9,10 @@ import { FolderUserStore } from '../services/folder-user-store.store';
 })
 export class AddNewFileDialogComponent implements OnInit {
   files: File[] = [];
-
   constructor(
     public dialogRef: MatDialogRef<AddNewFileDialogComponent>,
-    public serviceStore: FolderUserStore
+    public serviceStore: FolderUserStore,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit() {}

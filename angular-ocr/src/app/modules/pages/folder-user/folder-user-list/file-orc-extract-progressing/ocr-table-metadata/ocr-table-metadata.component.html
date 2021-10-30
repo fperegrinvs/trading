@@ -12,54 +12,16 @@
       </tr>
       </thead>
       <tbody class="bg-white">
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Trích yếu</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.trichyeu}}</div>
-        </td>
-      </tr>
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Loại văn bản</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.loaivanban}}</div>
-        </td>
-      </tr>
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Cơ quan ban hành</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.coquanbanhanh}}</div>
-        </td>
-      </tr>
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Ngày ban hành</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.ngaybanhanh}}</div>
-        </td>
-      </tr>
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Số văn bản</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.sovanban}}</div>
-        </td>
-      </tr>
-      <tr class="border-b-2 border-gray-100 border-solid">
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Người ký</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-500">{{ocrFile.nguoiky}}</div>
-        </td>
-      </tr>
+      <ng-container *ngFor="let prop of serviceStore.props$ | async">
+        <tr class="border-b-2 border-gray-100 border-solid">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">{{getHeaderTitle(prop.note)}}</div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-500">{{ocrFile.ocr[prop.name]}}</div>
+          </td>
+        </tr>
+      </ng-container>
       <tr class="border-b-2 border-gray-100 border-solid"></tr>
       </tbody>
     </table>

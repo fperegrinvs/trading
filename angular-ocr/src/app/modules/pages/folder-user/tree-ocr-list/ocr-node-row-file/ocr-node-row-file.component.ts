@@ -22,7 +22,7 @@ import { takeUntil, tap } from 'rxjs/operators';
 export class OcrNodeRowFileComponent implements OnInit, OnDestroy, OnChanges {
   @Input('ocrNode')
   ocrNode: OcrNodeModel;
-
+  callTimer: boolean = false;
   spaces: number[] = [];
   subjectDestroy = new Subject();
   private readonly _showDoneOcr = new BehaviorSubject<boolean>(false);
@@ -45,11 +45,8 @@ export class OcrNodeRowFileComponent implements OnInit, OnDestroy, OnChanges {
     if (changes.ocrNode) {
       if (this.ocrNode.ocring?.percent === 100) {
         this.showDoneOcr = true;
-        //this.serviceStore.fechStateFileTimer(this.ocrNode);
-        //this.cd.detectChanges();
       }
       if (this.ocrNode.state === 1 || this.ocrNode.state === 2) {
-        console.log('why why why', 1);
         this.serviceStore.fechStateFileTimer(this.ocrNode);
       }
     }
@@ -59,7 +56,6 @@ export class OcrNodeRowFileComponent implements OnInit, OnDestroy, OnChanges {
     for (let index = 0; index < this.ocrNode.level; index++) {
       this.spaces.push(1);
     }
-
     this.serviceStore.activeOcrNode$
       .pipe(takeUntil(this.subjectDestroy))
       .pipe(

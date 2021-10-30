@@ -8,6 +8,7 @@ import { FolderUserStore } from '../services/folder-user-store.store';
 import { OcrNodeModel } from '../models/ocr-node.model';
 import { shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DeleteDialogComponent } from '../../shares/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-tree-ocr-list',
@@ -27,12 +28,15 @@ import { animate, style, transition, trigger } from '@angular/animations';
   styleUrls: ['./tree-ocr-list.component.scss'],
 })
 export class TreeOcrListComponent implements OnInit, OnDestroy {
+  isOpenDialog = false;
   isFullSreenComponent: boolean = false;
   subjectDestroy = new Subject();
   numberCol = 4;
   showComponentFile: boolean;
   rows: any = {};
   clickCountFile: number = 0;
+  fileIdShowInfo: string;
+
   private readonly _isLoading = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this._isLoading.asObservable();
 
@@ -81,18 +85,26 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   addNew() {
+    this.isOpenDialog = true;
     const dialogRef = this.dialog.open(AddNewFileDialogComponent, {
       width: 'auto',
       height: 'auto',
       minWidth: '50vw',
       maxHeight: '100vh',
     });
+    const sb = dialogRef.afterClosed().subscribe((res) => {
+      this.isOpenDialog = false;
+    });
   }
 
   addNewFoler() {
+    this.isOpenDialog = true;
     const dialogRef = this.dialog.open(AddNewFolderUserDialogComponent, {
       minWidth: '30vw',
       height: 'auto',
+    });
+    const sb = dialogRef.afterClosed().subscribe((res) => {
+      this.isOpenDialog = false;
     });
   }
 
@@ -104,7 +116,39 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     this.isFullSreenComponent = isFullSeen;
   }
 
-  deleteFolder() {}
+  delete() {
+    this.isOpenDialog = true;
+    const nameObject = this.serviceStore.activeOcrNode.name;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      minWidth: '30vw',
+      height: 'auto',
+      data: {
+        nameObject: nameObject,
+      },
+    });
+
+    const sb2 = dialogRef
+      .afterClosed()
+      .pipe(takeUntil(this.subjectDestroy))
+      .subscribe((dataDialog) => {
+        if (dataDialog) {
+          this.serviceStore
+            .deleteTreeOcr(this.serviceStore.activeOcrNode)
+            .subscribe((res) => {
+              if (res.isvalid && dataDialog.deleteAll) {
+                this.serviceStore
+                  .deleteTreeOcr(this.serviceStore.activeOcrNode)
+                  .subscribe((res2) => {
+                    if (!res2.isvalid) {
+                      console.log('lỗi 2 lần', res2);
+                    }
+                  });
+              }
+            });
+        }
+        this.isOpenDialog = false;
+      });
+  }
 
   move() {}
 
@@ -129,14 +173,14 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     this.activeNode(ocr);
     setTimeout(() => {
       if (this.clickCountFile === 2) {
-        this.isFullSreenComponent = true;
+        this.serviceStore.showComponentFile = true;
+        this.fileIdShowInfo = ocr.id;
       }
       this.clickCountFile = 0;
       this.cd.detectChanges();
     }, 250);
   }
-
   clickOutSide() {
-    this.activeNode(this.serviceStore.ROOT_OcrNode);
+    if (!this.isOpenDialog) this.activeNode(this.serviceStore.ROOT_OcrNode);
   }
 }

@@ -1,53 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FolderUserService } from '../services/folder-user.service';
+import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ShareMessagesService } from '../../shares/error-messages/share-messages.service';
+import { FolderUserStore } from '../services/folder-user-store.store';
 
 @Component({
   selector: 'app-add-new-folder-user-dialog-component',
   templateUrl: 'add-new-folder-user-dialog.component.html',
   styleUrls: ['add-new-folder-user-dialog.component.scss'],
 })
-export class AddNewFolderUserDialogComponent implements OnInit, OnDestroy {
+export class AddNewFolderUserDialogComponent implements OnInit {
   nameFolder: string;
-  isRootFolder: boolean;
-  subjectDestroy = new Subject();
-
   constructor(
-    public service: FolderUserService,
+    public serivceStore: FolderUserStore,
     public dialogRef: MatDialogRef<AddNewFolderUserDialogComponent>,
     public errorMessage: ShareMessagesService
   ) {}
 
-  ngOnDestroy(): void {
-    this.subjectDestroy.next();
-    this.subjectDestroy.complete();
-  }
-
-  ngOnInit() {
-    this.service.isRootFolder$
-      .pipe(takeUntil(this.subjectDestroy))
-      .subscribe((res) => {
-        this.isRootFolder = res;
-      });
-  }
+  ngOnInit() {}
 
   close() {
     this.dialogRef.close();
   }
 
   createFolder() {
-    let folderId = 'root';
-    if (!this.isRootFolder) {
-      this.service.activeFolder$.subscribe((res) => {
-        folderId = res.id;
-      });
-    }
-    this.service
-      .creatFolder(folderId, this.nameFolder)
-      .pipe(takeUntil(this.subjectDestroy))
+    this.serivceStore
+      .creatFolder(this.serivceStore.activeOcrNode, this.nameFolder)
+      .pipe(take(1))
       .subscribe(
         (res) => {
           if (res.isvalid) {

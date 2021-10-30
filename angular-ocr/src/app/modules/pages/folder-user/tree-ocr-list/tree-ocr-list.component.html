@@ -3,61 +3,61 @@
     <!-- filter top -->
     <div class="flex justify-end bg-gray-500">
       <ng-container *ngIf="(serviceStore.activeOcrNode$ | async) as activeNode">
-
-
-
-      <ng-container *ngIf="(serviceStore.activeOcrNode$ | async) as ocrNode; else addnew">
         <!-- move  -->
-        <div (click)="move()" class="action-filter" delay="500" placement="bottom" tooltip="{{ 'OCR.MOVE' | translate }}">
-          <button
-            class="btn-action-filter">
-            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 11h-5V6h3l-4-4-4 4h3v5H6V8l-4 4 4 4v-3h5v5H8l4 4 4-4h-3v-5h5v3l4-4-4-4z"></path>
-            </svg>
-          </button>
-        </div>
+        <ng-container *ngIf="activeNode.name !== 'Root'">
+          <div (click)="move()" class="action-filter" delay="500" placement="bottom" tooltip="{{ 'OCR.MOVE' | translate }}">
+            <button
+              class="btn-action-filter">
+              <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 11h-5V6h3l-4-4-4 4h3v5H6V8l-4 4 4 4v-3h5v5H8l4 4 4-4h-3v-5h5v3l4-4-4-4z"></path>
+              </svg>
+            </button>
+          </div>
+        </ng-container>
         <!-- rename  -->
-        <div (click)="rename()" class="action-filter" delay="500" placement="bottom"
-             tooltip="{{ 'OCR.RENAME' | translate }}">
-          <button class="btn-action-filter">
-            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20.005 5.995h-1v2h1v8h-1v2h1c1.103 0 2-.897 2-2v-8c0-1.102-.898-2-2-2zm-14 4H15v4H6.005z"></path>
-              <path
-                d="M17.005 17.995V4H20V2h-8v2h3.005v1.995h-11c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h11V20H12v2h8v-2h-2.995v-2.005zm-13-2v-8h11v8h-11z"></path>
-            </svg>
-          </button>
-        </div>
-        <!--  delete folder -->
-        <div (click)="deleteFolder()" class="action-filter" delay="500" placement="bottom"
-             tooltip="{{ 'OCR.XOA' | translate }}">
-          <button class="btn-action-filter">
-            <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm4 12H8v-9h2v9zm6 0h-2v-9h2v9zm.618-15L15 2H9L7.382 4H3v2h18V4z"></path>
-            </svg>
-          </button>
-        </div>
-      </ng-container>
-      <ng-template #addnew>
+        <ng-container *ngIf="activeNode.name !== 'Root'">
+          <div (click)="rename()" class="action-filter" delay="500" placement="bottom"
+               tooltip="{{ 'OCR.RENAME' | translate }}">
+            <button class="btn-action-filter">
+              <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M20.005 5.995h-1v2h1v8h-1v2h1c1.103 0 2-.897 2-2v-8c0-1.102-.898-2-2-2zm-14 4H15v4H6.005z"></path>
+                <path
+                  d="M17.005 17.995V4H20V2h-8v2h3.005v1.995h-11c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h11V20H12v2h8v-2h-2.995v-2.005zm-13-2v-8h11v8h-11z"></path>
+              </svg>
+            </button>
+          </div>
+        </ng-container>
+        <!--  delete -->
+        <ng-container *ngIf="activeNode.name !== 'Root'">
+          <div (click)="delete()" class="action-filter" delay="500" placement="bottom"
+               tooltip="{{ 'OCR.XOA' | translate }}">
+            <button class="btn-action-filter">
+              <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M6 7H5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7H6zm4 12H8v-9h2v9zm6 0h-2v-9h2v9zm.618-15L15 2H9L7.382 4H3v2h18V4z"></path>
+              </svg>
+            </button>
+          </div>
+        </ng-container>
         <!--  add new folder-->
-        <div (click)="addNewFoler()" class="action-filter" delay="500" placement="bottom"
-             tooltip="{{ 'OCR.TAOFOLDER' | translate }}">
-          <button class="btn-action-filter">
-            <svg fill="currentColor"
-                 height="24" viewBox="0 0 24 24" width="24"
-                 xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
-              <path
-                d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path>
-            </svg>
-          </button>
-        </div>
-      </ng-template>
-      <!-- add new -->
-      <ng-container ></ng-container>
+        <ng-container *ngIf="activeNode.type === 'folder'">
+          <div (click)="addNewFoler()" class="action-filter" delay="500" placement="bottom"
+               tooltip="{{ 'OCR.TAOFOLDER' | translate }}">
+            <button class="btn-action-filter">
+              <svg fill="currentColor"
+                   height="24" viewBox="0 0 24 24" width="24"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 9h-2v3H8v2h3v3h2v-3h3v-2h-3z"></path>
+                <path
+                  d="M20 5h-8.586L9.707 3.293A.996.996 0 0 0 9 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2zM4 19V7h16l.002 12H4z"></path>
+              </svg>
+            </button>
+          </div>
+        </ng-container>
+        <!-- add new -->
         <ng-container *ngIf="activeNode.type === 'folder'">
           <div (click)="addNew()" class="action-filter" delay="500" placement="bottom" tooltip="{{ 'OCR.THEMMOI' | translate }}">
             <button
@@ -123,37 +123,7 @@
         </button>
       </div>
     </div>
-
     <div [ngClass]="(serviceStore.showComponentFile$ | async) ? 'grid grid-cols-4 body-list-table' : ''">
-<!--      <div class="w-full overflow-hidden shadow-lg bg-white h-full">-->
-<!--        <div class="w-full overflow-x-auto h-full">-->
-<!--          <table class="w-full table-auto ">-->
-<!--            <thead>-->
-<!--            <tr-->
-<!--              class="h-[50px] items-center bg-gray-200 px-4 py-4 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider border-solid border-b-2 border-gray-apple-aqua-500">-->
-<!--              <th class="px-4 py-3 align-middle min-w-[200px]">TÊN</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[200px]">TRẠNG THÁI</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[150px]">NGƯỜI TẠO</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[100px]">NGÀY TẠO</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[150px]">Trích yếu</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[150px]">LOẠI VĂN BẢN</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[100px]">CƠ QUAN BAN HÀNH</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[100px]">NGÀY BAN HÀNH</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[100px]">SỐ VĂN BẢN</th>-->
-<!--              <th class="px-4 py-3 align-middle min-w-[150px]">NGƯỜI KÝ</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-
-<!--            </tbody>-->
-<!--            <ng-container *ngFor="let ocrNode of serviceStore.treeOcr$ | async">-->
-<!--              <tbody [ocrNode]="ocrNode" app-ocr-node-row-folder>-->
-<!--              </tbody>-->
-<!--            </ng-container>-->
-
-<!--          </table>-->
-<!--        </div>-->
-<!--      </div>-->
       <div class="w-full overflow-hidden shadow-lg bg-white h-full relative">
         <ng-container *ngIf="serviceStore.isLoading$ | async">
         <mat-progress-bar class="z-10 top-0" mode="indeterminate" style="position: absolute" ></mat-progress-bar>
@@ -201,6 +171,13 @@
           </div>
         </ng-container>
       </div>
+      <ng-container *ngIf="serviceStore.showComponentFile$ | async">
+        <div [ngClass]="isFullSreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
+             class="w-full mb-8 overflow-hidden shadow-lg bg-white h-full col-span-3">
+          <div (isFullSreen)="getisFullSreenComponent($event)" [fileId]="fileIdShowInfo" app-ocr-file-info  class="w-full h-full">
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

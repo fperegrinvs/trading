@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FileModel } from '../../../models/file.model';
+import { OcrNodeModel } from '../../../models/ocr-node.model';
 
 @Component({
   selector: 'ocr-file-page',
@@ -20,7 +20,7 @@ export class OcrFilePageComponent implements OnInit, OnChanges {
   currentPageEvent: EventEmitter<number> = new EventEmitter<number>();
 
   @Input('file')
-  file: FileModel;
+  file: OcrNodeModel;
 
   lstCountPages: number[] = [];
   currentPage: number = 1;

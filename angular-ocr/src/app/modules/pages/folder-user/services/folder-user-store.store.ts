@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of, timer } from 'rxjs';
+import { BehaviorSubject, Observable, of, timer } from 'rxjs';
 import { OcrNodeModel } from '../models/ocr-node.model';
 import { OcrNodeService } from './ocr-node.service';
 import { DocumentProps } from '../models/document-props';
-import { catchError, shareReplay, take, tap } from 'rxjs/operators';
+import { catchError, map, shareReplay, take, tap } from 'rxjs/operators';
 
 enum eSTATEFILE {
   'NEW',
@@ -23,7 +23,9 @@ export class FolderUserStore {
     owner: 1,
     type: 'folder',
     level: -1,
+    isOpen: true,
   };
+
   private readonly _isLoading = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this._isLoading.asObservable();
   private readonly _treeOcr = new BehaviorSubject<OcrNodeModel[]>([]);
@@ -79,6 +81,13 @@ export class FolderUserStore {
     this._showCompoentFile.next(val);
   }
 
+  getOcrNodeById(id: string): Observable<OcrNodeModel> {
+    return this.treeOcr$.pipe(
+      shareReplay(),
+      map((items) => items.find((item) => item.id === id))
+    );
+  }
+
   initDefaultValue(
     ocrNodeModel: OcrNodeModel,
     parentOcrNode: OcrNodeModel
@@ -119,11 +128,14 @@ export class FolderUserStore {
           (item) => item.id === parrentId
         );
         this.addTreeOcr(ocrNodeModel, parrentIndex);
+      } else if (parrentId === undefined) {
+        const lstFolderLevel0 = this.treeOcr.filter(
+          (folder) => folder.level === 0 && folder.type === 'folder'
+        );
+        this.addTreeOcr(ocrNodeModel, lstFolderLevel0.length - 1);
       }
     }
   }
-
-  public nhanDang(idFile: string, isForce: boolean = false) {}
 
   async fectAll() {
     this.isLoading = true;
@@ -285,21 +297,95 @@ export class FolderUserStore {
       .pipe(
         shareReplay(),
         tap((val) => {
-          console.log('number', val);
           this.service
             .getInfoById(ocrModel.id)
-            .pipe(take(1))
-            .subscribe((res) => {
-              if (!res.isvalid) {
-                console.log(res.ocr?.error);
-                sb.unsubscribe();
-              } else {
-                this.updateFileOrcMode(res.item, res.ocr);
-              }
-              if (res.item.state === -1) sb.unsubscribe();
-            });
+            .pipe(
+              take(1),
+              tap((res) => {
+                if (!res.isvalid) {
+                  sb.unsubscribe();
+                } else {
+                  this.updateFileOrcMode(res.item, res.ocr);
+                }
+                if (res.item.state === -1) sb.unsubscribe();
+              })
+            )
+            .subscribe();
         })
       )
       .subscribe();
+  }
+
+  public async createNewFile(ocrModel: OcrNodeModel, file: File) {
+    let isRoot = false;
+    if (this.activeOcrNode.name === this.ROOT_OcrNode.name) {
+      isRoot = true;
+    }
+    await this.service
+      .uploadFile(ocrModel.id, file, isRoot)
+      .pipe(
+        tap((res) => {
+          if (isRoot) {
+            res.item = {
+              ...res.item,
+              level: 0,
+              ocr: undefined,
+              ocring: undefined,
+            };
+            this.treeOcr = [...this.treeOcr.concat(res.item)];
+          } else {
+            res.item = this.initDefaultValue(res.item, ocrModel);
+            this.updateTreeOcr(res.item, res.item.folderid);
+          }
+        })
+      )
+      .toPromise();
+  }
+
+  public creatFolder(ocrModel: OcrNodeModel, nameFolder: string) {
+    let id = ocrModel.id;
+    if (ocrModel.name === 'Root') id = 'root';
+    return this.service.creatFolder(id, nameFolder).pipe(
+      tap((res) => {
+        if (ocrModel.isOpen) {
+          if (res.isvalid) {
+            res.item = this.initDefaultValue(res.item, ocrModel);
+            this.updateTreeOcr(res.item, ocrModel.id);
+          }
+        }
+      })
+    );
+  }
+
+  public deleteTreeOcr(ocrModel: OcrNodeModel) {
+    return this.service.deleteTreeOcr(ocrModel.id).pipe(
+      tap((res) => {
+        if (res.isvalid) {
+          this.removeTreeOcr(ocrModel.id);
+        }
+      })
+    );
+  }
+
+  public download(fileId: string) {
+    return this.service.download(fileId);
+  }
+
+  public getFileRawUrl(id: string, page: number) {
+    return this.service.getFileRawUrl(id, page);
+  }
+
+  public nhanDang(ocrNode: OcrNodeModel) {
+    let isForce: boolean = false;
+    if (ocrNode.state === -1) {
+      isForce = true;
+    }
+    return this.service.nhanDang(ocrNode.id, isForce).pipe(
+      tap((res) => {
+        if (res.isvalid) {
+          this.updateTreeOcr(res.item);
+        }
+      })
+    );
   }
 }

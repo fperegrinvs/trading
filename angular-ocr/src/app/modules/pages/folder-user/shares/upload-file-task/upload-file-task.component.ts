@@ -6,8 +6,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FolderUserService } from '../../services/folder-user.service';
 import { takeUntil } from 'rxjs/operators';
+import { FolderUserStore } from '../../services/folder-user-store.store';
 
 @Component({
   selector: 'app-upload-file-task',
@@ -26,7 +26,7 @@ export class UploadFileTaskComponent
   isRootFolder: boolean = true;
   subjectDestroy = new Subject();
 
-  constructor(public service: FolderUserService) {}
+  constructor(public serviceStore: FolderUserStore) {}
 
   ngOnDestroy(): void {
     this.subjectDestroy.next();
@@ -39,21 +39,14 @@ export class UploadFileTaskComponent
         if (res == 100) this.color = 'warn';
       }, 500);
     });
-  }
-
-  ngAfterViewInit(): void {
     this.startUpload();
   }
 
+  ngAfterViewInit(): void {}
+
   startUpload() {
-    // this.service.uploadFile(id, this.file).subscribe(
-    //   (res) => {
-    //     this.subject.next(100);
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // );
+    this.serviceStore.createNewFile(this.serviceStore.activeOcrNode, this.file);
+    this.subject.next(100);
   }
 
   getFileName() {

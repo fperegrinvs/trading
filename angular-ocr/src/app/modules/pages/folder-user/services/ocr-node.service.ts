@@ -41,9 +41,13 @@ export class OcrNodeService {
 
   uploadFile(
     folderParrentID: string,
-    file: File
+    file: File,
+    isRoot: boolean = false
   ): Observable<ApiResponseModel<OcrNodeModel>> {
-    const url = `${API_PRODUCT}/files/upload/${folderParrentID}`;
+    let url = `${API_PRODUCT}/files/upload/`;
+    if (!isRoot) {
+      url = `${url}${folderParrentID}`;
+    }
     const data = new FormData();
     data.set('file', file);
     return this.http
@@ -103,5 +107,13 @@ export class OcrNodeService {
     return this.http
       .get<{ isvalid: boolean; props: DocumentProps[] }>(url)
       .pipe(share());
+  }
+
+  public creatFolder(
+    id: string,
+    nameFolder: string
+  ): Observable<ApiResponseModel<OcrNodeModel>> {
+    const url = `${API_PRODUCT}/files/${id}/${nameFolder}`;
+    return this.http.put<ApiResponseModel<OcrNodeModel>>(url, null);
   }
 }
