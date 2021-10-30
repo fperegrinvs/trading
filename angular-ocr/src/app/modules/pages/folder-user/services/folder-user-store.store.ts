@@ -39,10 +39,7 @@ export class FolderUserStore {
   private readonly _showCompoentFile = new BehaviorSubject<boolean>(false);
   readonly showComponentFile$ = this._showCompoentFile.asObservable();
 
-  constructor(private service: OcrNodeService) {
-    this.fectAll();
-    this.fetchProps();
-  }
+  constructor(private service: OcrNodeService) {}
 
   get isLoading(): boolean {
     return this._isLoading.getValue();
@@ -304,10 +301,15 @@ export class FolderUserStore {
               tap((res) => {
                 if (!res.isvalid) {
                   sb.unsubscribe();
-                } else {
+                } else if (res.isvalid) {
                   this.updateFileOrcMode(res.item, res.ocr);
                 }
-                if (res.item.state === -1) sb.unsubscribe();
+                if (res.item.state === -1) {
+                  this.updateFileOrcMode(res.item, res.ocr);
+                  if (this.showComponentFile) this.activeOcrNode = res.item;
+                  debugger;
+                  sb.unsubscribe();
+                }
               })
             )
             .subscribe();

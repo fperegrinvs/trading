@@ -45,7 +45,10 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     public serviceStore: FolderUserStore,
     public translate: TranslateService,
     public cd: ChangeDetectorRef
-  ) {}
+  ) {
+    this.serviceStore.fectAll();
+    this.serviceStore.fetchProps();
+  }
 
   get isLoading() {
     return this._isLoading.getValue();
@@ -180,7 +183,11 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
       this.cd.detectChanges();
     }, 250);
   }
+
   clickOutSide() {
-    if (!this.isOpenDialog) this.activeNode(this.serviceStore.ROOT_OcrNode);
+    if (!this.isOpenDialog && !this.serviceStore.showComponentFile) {
+      debugger;
+      this.activeNode(this.serviceStore.ROOT_OcrNode);
+    }
   }
 }

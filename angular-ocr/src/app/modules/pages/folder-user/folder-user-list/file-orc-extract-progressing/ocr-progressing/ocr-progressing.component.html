@@ -12,9 +12,9 @@
       >
       <div>
     <span class="text-sm text-gray-400 mr-3">
-      <span class="mr-3"> {{ ocrNode.ocring.percent }}% </span>
+      <span class="mr-3"> {{ ocrNode.ocring?.percent }}% </span>
     </span>
-        <ng-container *ngIf="ocrNode.ocring.percent < 100; else success">
+        <ng-container *ngIf="ocrNode.ocring?.percent < 100; else success">
           <!--        <ng-container *ngIf="!isPause; else play">-->
           <!--        <span (click)="clickPause()" class="cursor-pointer">-->
           <!--          <svg-->

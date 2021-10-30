@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   NgZone,
   OnChanges,
@@ -38,7 +39,7 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input('fileId')
   fileId: string;
-
+  activeorcNode: OcrNodeModel;
   ocrNode$: Observable<OcrNodeModel>;
 
   @Output('isFullSreen') eventFullSreen = new EventEmitter(false);
@@ -80,11 +81,14 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(
         take(1),
         tap((file) => {
-          this.initFirstGiaoDien(file);
-          this.initFirstGiaoDien(file);
-          this.initFileRawUrl(file);
-          if (file.ocr) this.ocrtext = file.ocr.content;
-          this.loadingFirstTime = false;
+          if (file.type !== 'folder') {
+            this.activeorcNode = file;
+            this.initFirstGiaoDien(file);
+            this.initFirstGiaoDien(file);
+            this.initFileRawUrl(file);
+            if (file.ocr) this.ocrtext = file.ocr.content;
+            this.loadingFirstTime = false;
+          }
         })
       )
       .subscribe();
@@ -258,5 +262,9 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       this.initFileRawUrl(file);
       this.cd.detectChanges();
     });
+  }
+
+  @HostListener('click', ['$event']) clickEvent(event: any) {
+    this.serviceStore.activeOcrNode = this.activeorcNode;
   }
 }
