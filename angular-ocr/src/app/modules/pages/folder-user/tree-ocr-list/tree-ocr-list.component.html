@@ -88,6 +88,7 @@
       <!-- filter -->
       <div class="action-filter">
         <button
+          [matMenuTriggerFor]="menu"
           class="btn-action-filter"
           delay="500"
           placement="bottom"
@@ -102,6 +103,23 @@
             ></path>
           </svg>
         </button>
+        <mat-menu #menu="matMenu">
+          <div class="p-4 w-full text-orange-400 font-bold">
+            Loại nhận dạng kí tự
+          </div>
+          <ng-container *ngFor="let item of lstDStypeOcr">
+            <div (click)="updateTypeOcr(item)" class="w-full px-4 py-2">
+              <div class="flex items-center inline-block">
+                <input [(ngModel)]="item.isCheck"
+                       class="h-4 w-4 border-gray-300 rounded text-orange-apple-aqua-600 focus:ring-orange-500"
+                       type="checkbox">
+                <label class="ml-3 min-w-0 flex-1 text-gray-500">
+                  {{item.name}}
+                </label>
+              </div>
+            </div>
+          </ng-container>
+        </mat-menu>
       </div>
       <!-- search -->
       <div class="action-filter">
@@ -170,7 +188,7 @@
       <ng-container *ngIf="showComponentFile">
         <div [ngClass]="isFullSreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
              class="w-full mb-8 overflow-hidden shadow-lg bg-white h-full col-span-3">
-          <div (isFullSreen)="getisFullSreenComponent($event)" [fileId]="fileIdShowInfo" app-ocr-file-info  class="w-full h-full">
+          <div (closeComponentFile)="clickCloseComponentFile($event)" (isFullSreen)="getisFullSreenComponent($event)" [ocrNode]="ocrNodeModelComponent" app-ocr-file-info  class="w-full h-full">
           </div>
         </div>
       </ng-container>

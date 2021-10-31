@@ -9,6 +9,7 @@ import { OcrNodeModel } from '../models/ocr-node.model';
 import { shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DeleteDialogComponent } from '../../shares/delete-dialog/delete-dialog.component';
+import { OcrTypeModel } from '../models/ocr-type.model';
 
 @Component({
   selector: 'app-tree-ocr-list',
@@ -35,7 +36,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   showComponentFile: boolean;
   rows: any = {};
   clickCountFile: number = 0;
-  fileIdShowInfo: string;
+  ocrNodeModelComponent: OcrNodeModel;
+  public lstDStypeOcr: OcrTypeModel[];
 
   private readonly _isLoading = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this._isLoading.asObservable();
@@ -56,6 +58,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.lstDStypeOcr = this.serviceStore.ocrTypeModels;
     this.isFullSreenComponent = false;
     this.showComponentFile = false;
     this.serviceStore.isLoading$
@@ -109,10 +112,6 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
       this.isOpenDialog = false;
     });
   }
-
-  clickShowComponentOcr() {}
-
-  clickOutsideListFolder(event: any) {}
 
   getisFullSreenComponent(isFullSeen: boolean) {
     this.isFullSreenComponent = isFullSeen;
@@ -176,7 +175,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (this.clickCountFile === 2) {
         this.showComponentFile = true;
-        this.fileIdShowInfo = ocr.id;
+        this.ocrNodeModelComponent = ocr;
       }
       this.clickCountFile = 0;
       this.cd.detectChanges();
@@ -187,5 +186,18 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     if (!this.isOpenDialog && !this.showComponentFile) {
       this.activeNode(this.serviceStore.ROOT_OcrNode);
     }
+  }
+
+  updateTypeOcr(val: OcrTypeModel) {
+    this.lstDStypeOcr.forEach((item) => {
+      if (item.name === val.name) {
+        item.isCheck = true;
+      } else item.isCheck = false;
+    });
+    this.serviceStore.ocrTypeModels = this.lstDStypeOcr;
+  }
+
+  clickCloseComponentFile(event: boolean) {
+    this.showComponentFile = false;
   }
 }
