@@ -131,12 +131,14 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(takeUntil(this.subjectDestroy))
       .subscribe((res) => {
         if (res.state === -1) {
-          this.initFirstGiaoDien(res);
           this.pageOcr = res.ocr.pages;
           console.log('=================');
           console.log(res);
           console.log('=================');
-          debugger;
+          this.numberCol = 3;
+          this.isShowImg = true;
+          this.isShowOcrtext = true;
+          this.isShowMetadata = true;
           sb.unsubscribe();
         }
       });
@@ -148,7 +150,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       this.isShowImg = true;
       this.isShowOcrtext = true;
       this.isShowMetadata = true;
-      this.ocrtext = ocrNode.ocr.pages[this.page - 1];
     } else {
       this.numberCol = 1;
       this.isShowImg = true;
