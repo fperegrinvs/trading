@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { take } from 'rxjs/operators';
 import { ShareMessagesService } from '../../shares/error-messages/share-messages.service';
@@ -37,5 +37,10 @@ export class AddNewFolderUserDialogComponent implements OnInit {
           this.errorMessage.showErrors(error.msg);
         }
       );
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownEnterHandler(event: KeyboardEvent) {
+    this.createFolder();
   }
 }

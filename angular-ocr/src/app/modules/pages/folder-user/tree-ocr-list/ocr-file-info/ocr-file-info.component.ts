@@ -93,10 +93,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.ocrNode) {
-      debugger;
-      console.log('----------');
-      console.log(this.ocrNode);
-      console.log('----------');
       this.loadingFirstTime = true;
       this.ocrNode$ = this.serviceStore.getOcrNodeById(this.ocrNode.id);
       this.init();
@@ -132,14 +128,10 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe((res) => {
         if (res.state === -1) {
           this.pageOcr = res.ocr.pages;
-          console.log('=================');
-          console.log(res);
-          console.log('=================');
           this.numberCol = 3;
           this.isShowImg = true;
           this.isShowOcrtext = true;
           this.isShowMetadata = true;
-          sb.unsubscribe();
         }
       });
   }
@@ -269,7 +261,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     this.page = event;
     this.ocrNode$.pipe(take(1)).subscribe((file) => {
       if (file.state === -1 && file.ocr) {
-        debugger;
         this.ocrtext = file.ocr.pages[this.page - 1];
       } else if (file.state === -1 && this.pageOcr) {
         this.ocrtext = this.pageOcr[this.page - 1];

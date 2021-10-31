@@ -33,7 +33,7 @@
       </div>
     </div>
     <ng-container *ngIf="ocrNode.ocring?.percent === 0; else progressPercent">
-      <mat-progress-bar color="accent" mode="indeterminate" ></mat-progress-bar>
+      <mat-progress-bar  mode="indeterminate" ></mat-progress-bar>
     </ng-container>
     <ng-template #progressPercent>
       <mat-progress-bar [value]="ocrNode.ocring?.percent" color="{{ color }}" max="100" mode="determinate"></mat-progress-bar>
@@ -54,5 +54,5 @@
     <div>
     </div>
   </div>
-  <mat-progress-bar color="accent" mode="indeterminate" ></mat-progress-bar>
+  <mat-progress-bar mode="indeterminate" ></mat-progress-bar>
 </ng-template>

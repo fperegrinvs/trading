@@ -1,11 +1,12 @@
 import {
   ChangeDetectorRef,
   Component,
+  HostListener,
   Inject,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { ShareMessagesService } from '../../shares/error-messages/share-messages.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -91,5 +92,10 @@ export class DeleteDialogComponent implements OnInit, OnDestroy {
 
   ok() {
     this.dialogRef.close({ deleteAll: this.deleteAll });
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownEnterHandler(event: KeyboardEvent) {
+    this.ok();
   }
 }
