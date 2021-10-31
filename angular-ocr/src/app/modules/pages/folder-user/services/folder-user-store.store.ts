@@ -428,6 +428,12 @@ export class FolderUserStore {
       tap((res) => {
         if (res.isvalid) {
           this.removeTreeOcr(ocrModel.id);
+          const lstChild = this.treeOcr.filter(
+            (item) =>
+              item.folderid === ocrModel.id || item.parentid == ocrModel.id
+          );
+
+          lstChild.forEach((item) => this.removeTreeOcr(item.id));
         }
       })
     );
