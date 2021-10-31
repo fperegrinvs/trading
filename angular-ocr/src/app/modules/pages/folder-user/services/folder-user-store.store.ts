@@ -100,7 +100,7 @@ export class FolderUserStore {
     let type1 = new OcrTypeModel();
     type1.name = 'transformer';
     type1.value = 'ocr-transformer';
-    type1.isCheck = true;
+    type1.isCheck = false;
     this.typeOcr = type1.value;
     dstype.push(type1);
 
@@ -113,7 +113,7 @@ export class FolderUserStore {
     let type3 = new OcrTypeModel();
     type3.name = 'tesseract';
     type3.value = 'ocr-tesseract';
-    type3.isCheck = false;
+    type3.isCheck = true;
     dstype.push(type3);
 
     this.ocrTypeModels = dstype;
