@@ -13,7 +13,6 @@ export interface OcrNodeModel {
   parentid?: string;
   childs?: any[];
   isOpen?: boolean;
-  haschild?: boolean;
   folderState?: any;
   // type just file
   size?: number;

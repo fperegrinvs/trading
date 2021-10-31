@@ -64,11 +64,10 @@ export class OcrNodeRowFolderComponent
     this.serviceStore.activeOcrNode = this.ocrNode;
   }
 
-  async clickOpenFolder(mustCall: boolean = false) {
+  async clickOpenFolder(mustCall: boolean = true) {
     this.ocrNode.isOpen = !this.ocrNode.isOpen;
-    if ((this.ocrNode.isOpen && this.ocrNode.haschild) || mustCall) {
-      await this.serviceStore.clickFolder(this.ocrNode);
-    }
+    await this.serviceStore.clickFolder(this.ocrNode);
+
     if (!this.ocrNode.isOpen) {
       setTimeout(() => this.serviceStore.closeFolder(this.ocrNode), 250);
     }
