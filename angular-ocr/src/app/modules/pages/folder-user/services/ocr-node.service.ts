@@ -117,4 +117,26 @@ export class OcrNodeService {
     const url = `${API_PRODUCT}/files/${id}/${nameFolder}`;
     return this.http.put<ApiResponseModel<OcrNodeModel>>(url, null);
   }
+
+  /**
+   * Save ocr of File.
+   *
+   * @remarks
+   *
+   * @param fileId
+   * @param ocr of file (when file state === -1 and have ocr)
+   * @returns Observable<ApiResponseModel<OcrNodeModel>
+   *
+   * @beta
+   */
+  public save(
+    fileId: string,
+    ocr: any
+  ): Observable<ApiResponseModel<OcrNodeModel>> {
+    debugger;
+    const url = `${API_PRODUCT}/files/save/${fileId}`;
+    return this.http.post<ApiResponseModel<OcrNodeModel>>(url, {
+      docinfo: ocr,
+    });
+  }
 }

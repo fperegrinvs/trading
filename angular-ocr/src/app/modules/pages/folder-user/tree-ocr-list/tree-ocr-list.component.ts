@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewFolderUserDialogComponent } from '../add-new-folder-user-dialog/add-new-folder-user-dialog.component';
 import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-dialog.component';
@@ -135,7 +135,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
             .subscribe((res) => {
               if (res.isvalid && dataDialog.deleteAll) {
                 this.serviceStore
-                  .deleteTreeOcr(this.serviceStore.activeOcrNode)
+                  .deleteTreeOcr(res.item)
                   .subscribe((res2) => {
                     if (!res2.isvalid) {
                       console.log('lỗi 2 lần', res2);
@@ -196,5 +196,12 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
 
   clickCloseComponentFile(event: boolean) {
     this.serviceStore.showComponentFile = false;
+  }
+
+  @HostListener('document:keydown.delete', ['$event'])
+  onKeydownDeleteHandler(event: KeyboardEvent) {
+    if (this.serviceStore.activeOcrNode.id !== undefined) {
+      this.delete();
+    }
   }
 }

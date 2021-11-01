@@ -5,6 +5,7 @@ import { OcrNodeService } from './ocr-node.service';
 import { DocumentProps } from '../models/document-props';
 import { catchError, map, shareReplay, take, tap } from 'rxjs/operators';
 import { OcrTypeModel } from '../models/ocr-type.model';
+import { ApiResponseModel } from '../../../model/api-response.model';
 
 enum eSTATEFILE {
   'NEW',
@@ -52,6 +53,7 @@ export class FolderUserStore {
   get isLoading(): boolean {
     return this._isLoading.getValue();
   }
+
   set isLoading(val: boolean) {
     this._isLoading.next(val);
   }
@@ -59,6 +61,7 @@ export class FolderUserStore {
   get treeOcr(): OcrNodeModel[] {
     return this._treeOcr.getValue();
   }
+
   set treeOcr(val: OcrNodeModel[]) {
     this._treeOcr.next(val);
   }
@@ -66,6 +69,7 @@ export class FolderUserStore {
   get props(): DocumentProps[] {
     return this._props.getValue();
   }
+
   set props(val: DocumentProps[]) {
     this._props.next(val);
   }
@@ -104,7 +108,6 @@ export class FolderUserStore {
   set focusFileId(fileId: string) {
     this._focusFileId.next(fileId);
   }
-
 
   getDSOcrTypeModel() {
     const dstype = [];
@@ -159,7 +162,39 @@ export class FolderUserStore {
   }
 
   removeTreeOcr(id: string) {
-    this.treeOcr = this.treeOcr.filter((treeOcr) => treeOcr.id !== id);
+    const lstTreeOcr = this.treeOcr;
+    const index = lstTreeOcr.findIndex((item) => item.id === id);
+    let endIndex = 0;
+    if (index > -1) {
+      endIndex = endIndex + 1;
+      const ocrNodel = lstTreeOcr[index];
+      for (let pos = index + 1; pos < lstTreeOcr.length; pos++) {
+        if (lstTreeOcr[pos].level > ocrNodel.level) {
+          endIndex++;
+        } else {
+          break;
+        }
+      }
+      const data = lstTreeOcr.splice(index, endIndex);
+      console.log(data);
+      this.treeOcr = lstTreeOcr;
+
+      if (ocrNodel.level === 0) {
+        this.activeOcrNode = this.ROOT_OcrNode;
+      } else {
+        if (ocrNodel.type === 'folder') {
+          const indexParent = this.treeOcr.findIndex(
+            (item) => ocrNodel.parentid === item.id
+          );
+          if (indexParent > -1) this.activeOcrNode = this.treeOcr[index];
+        } else {
+          const indexParent = this.treeOcr.findIndex(
+            (item) => ocrNodel.folderid === item.id
+          );
+          if (indexParent > -1) this.activeOcrNode = this.treeOcr[index];
+        }
+      }
+    }
   }
 
   checkFolderIsOpen(folderId: string): { isOpen: boolean; index: number } {
@@ -199,7 +234,18 @@ export class FolderUserStore {
           const lstFolderLevel0 = this.treeOcr.filter(
             (folder) => folder.level === 0 && folder.type === 'folder'
           );
-          this.addTreeOcr(ocrNodeModel, lstFolderLevel0.length - 1);
+          let lastAddIndex = lstFolderLevel0.length - 1;
+          const lastFolder = this.treeOcr[lastAddIndex];
+          if (lastFolder.isOpen) {
+            for (let pos = lastAddIndex + 1; pos < this.treeOcr.length; pos++) {
+              if (this.treeOcr[pos].level > lastFolder.level) {
+                lastAddIndex++;
+              } else {
+                break;
+              }
+            }
+          }
+          this.addTreeOcr(ocrNodeModel, lastAddIndex);
         }
       }
     }
@@ -437,12 +483,6 @@ export class FolderUserStore {
       tap((res) => {
         if (res.isvalid) {
           this.removeTreeOcr(ocrModel.id);
-          const lstChild = this.treeOcr.filter(
-            (item) =>
-              item.folderid === ocrModel.id || item.parentid == ocrModel.id
-          );
-
-          lstChild.forEach((item) => this.removeTreeOcr(item.id));
         }
       })
     );
@@ -466,6 +506,16 @@ export class FolderUserStore {
         if (res.isvalid) {
           this.updateTreeOcr(res.item, ocrNode.folderid);
         }
+      })
+    );
+  }
+
+  save(ocrNode: OcrNodeModel): Observable<ApiResponseModel<OcrNodeModel>> {
+    return this.service.save(ocrNode.id, ocrNode.ocr).pipe(
+      tap((res) => {
+        if (res.isvalid) {
+          this.updateTreeOcr(res.item, res.item.folderid);
+        } else console.log(res);
       })
     );
   }
