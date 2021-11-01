@@ -25,6 +25,7 @@ export class AuthStore {
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map((loggedIn) => !loggedIn));
   }
 
+
   getUsername() {
     return this._username;
   }

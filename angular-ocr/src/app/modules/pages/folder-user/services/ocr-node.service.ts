@@ -63,7 +63,7 @@ export class OcrNodeService {
 
   public nhanDang(
     idFile: string,
-    isForce: boolean = false,
+    isForce: boolean,
     typeOcr: string
   ): Observable<{ isvalid: boolean; item: FileModel; ocr: Ocr }> {
     let url = `${API_PRODUCT}/files/${typeOcr}/${idFile}`;

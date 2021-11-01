@@ -23,23 +23,22 @@ import { FolderUserStore } from '../../services/folder-user-store.store';
   templateUrl: 'ocr-file-info.component.html',
   styleUrls: ['ocr-file-info.component.scss'],
 })
-export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
-  isFullSreen: boolean = false;
+export class OcrFileInfoComponent implements OnInit, OnDestroy {
+  isFullScreen: boolean = false;
   showBtnExtract: boolean = false;
 
-  ocrtext: string;
+  fileId: string;
+  lstOcrText: string[];
   page: number;
   subjectDestroy = new Subject();
   numberCol: number;
   isShowImg: boolean;
   isShowOcrtext: boolean;
   isShowMetadata: boolean;
-
-  @Input('ocrNode')
-  ocrNode: OcrNodeModel;
+  showNhanDang: boolean;
   ocrNode$: Observable<OcrNodeModel>;
 
-  @Output('isFullSreen') eventFullSreen = new EventEmitter(false);
+  @Output('isFullScreen') eventFullSreen = new EventEmitter(false);
   @Output('closeComponentFile') eventCloseComponentFile = new EventEmitter(
     false
   );
@@ -76,30 +75,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     return this.textareaEle.nativeElement;
   }
 
-  init() {
-    this.ocrNode$
-      .pipe(
-        take(1),
-        tap((file) => {
-          if (file.type !== 'folder') {
-            this.page = 1;
-            this.initFirstGiaoDien(file);
-            this.initFirstOcrFile(file);
-            this.initFileRawUrl(file);
-          }
-        })
-      )
-      .subscribe();
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.ocrNode) {
-      this.loadingFirstTime = true;
-      this.ocrNode$ = this.serviceStore.getOcrNodeById(this.ocrNode.id);
-      this.init();
-      this.loadingFirstTime = false;
-    }
-  }
-
   createImageFromBlob(image: Blob) {
     let reader = new FileReader();
     reader.addEventListener(
@@ -122,41 +97,62 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    const done: boolean = false;
-    const sb = this.ocrNode$
-      .pipe(takeUntil(this.subjectDestroy))
-      .subscribe((res) => {
-        if (res.state === -1) {
-          this.pageOcr = res.ocr.pages;
-          this.numberCol = 3;
-          this.isShowImg = true;
-          this.isShowOcrtext = true;
-          this.isShowMetadata = true;
+    this.showNhanDang = true;
+    this.lstOcrText = [];
+    this.serviceStore.focusFileId$.pipe(takeUntil(this.subjectDestroy)).subscribe(
+      res => {
+        if (res !== null && res !== undefined) {
+          this.loadingFirstTime = true;
+          this.fileId = res;
+          this.ocrNode$ = this.serviceStore.getOcrNodeById(res);
+          this.ocrNode$.pipe(takeUntil(this.subjectDestroy)).subscribe(res => {
+            if (res !== null && res !== undefined) {
+              console.log('idFile: ', res.id,'state: ', res.state);
+              this.init(res);
+              this.loadingFirstTime = false;
+            } else  {
+              this.Dong();
+            }
+          })
+        } else {
+          this.Dong();
         }
-      });
+      }
+    )
+
+  }
+  init(file: OcrNodeModel) {
+    if (file.type !== 'folder') {
+      this.page = 1;
+      this.initFirstGiaoDien(file);
+      this.initFileRawUrl();
+    }
   }
 
   initFirstGiaoDien(ocrNode: OcrNodeModel) {
-    if (ocrNode.state === -1) {
+    if (ocrNode.state === -1 && ocrNode.ocr !== null && ocrNode.ocr !== undefined)  {
+      if (!this.showNhanDang) this.showNhanDang = true;
       this.numberCol = 3;
       this.isShowImg = true;
       this.isShowOcrtext = true;
       this.isShowMetadata = true;
+      this.lstOcrText = ocrNode.ocr.pages;
     } else {
       this.numberCol = 1;
       this.isShowImg = true;
       this.isShowOcrtext = false;
       this.isShowMetadata = false;
+
     }
     this.cd.detectChanges();
   }
 
-  initFileRawUrl(ocrNode: OcrNodeModel) {
-    if (ocrNode.page_count < this.page) this.page = 1;
-    this.serviceStore.getFileRawUrl(ocrNode.id, this.page).subscribe(
+  initFileRawUrl() {
+    this.serviceStore.getFileRawUrl(this.fileId, this.page).subscribe(
       (data) => {
         this.createImageFromBlob(data);
         this.isImageLoading.next(false);
+        this.cd.detectChanges();
       },
       (error) => {
         this.isImageLoading.next(false);
@@ -165,16 +161,6 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  initFirstOcrFile(file: OcrNodeModel) {
-    if (file.state === -1) {
-      this.ocrtext = file.ocr.pages[this.page - 1];
-      this.numberCol = 3;
-      this.isShowImg = true;
-      this.isShowOcrtext = true;
-      this.isShowMetadata = true;
-      this.cd.detectChanges();
-    }
-  }
 
   Dong() {
     this.eventCloseComponentFile.emit(true);
@@ -182,15 +168,14 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ClickFullSreen() {
-    this.isFullSreen = !this.isFullSreen;
-    this.eventFullSreen.emit(this.isFullSreen);
+    this.isFullScreen = !this.isFullScreen;
+    this.eventFullSreen.emit(this.isFullScreen);
   }
 
   nhanDang() {
+    this.showNhanDang = false;
     this.ocrNode$.pipe(take(1)).subscribe((res) => {
-      this.serviceStore.nhanDang(res).subscribe((res) => {
-        this.init();
-      });
+      this.serviceStore.nhanDang(res).pipe(take(1)).subscribe();
     });
   }
 
@@ -219,7 +204,7 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   downloadFile() {
     this.serviceStore
-      .download(this.ocrNode.id)
+      .download(this.fileId)
       .pipe(takeUntil(this.subjectDestroy))
       .subscribe((data) => {
         const url = window.URL.createObjectURL(data);
@@ -259,16 +244,7 @@ export class OcrFileInfoComponent implements OnInit, OnDestroy, OnChanges {
 
   getCurrentPage(event: number) {
     this.page = event;
-    this.ocrNode$.pipe(take(1)).subscribe((file) => {
-      if (file.state === -1 && file.ocr) {
-        this.ocrtext = file.ocr.pages[this.page - 1];
-      } else if (file.state === -1 && this.pageOcr) {
-        this.ocrtext = this.pageOcr[this.page - 1];
-      } else if (this.pageOcr) {
-        this.ocrtext = this.pageOcr[this.page - 1];
-      }
-      this.initFileRawUrl(file);
-      this.cd.detectChanges();
-    });
+    this.initFileRawUrl();
+
   }
 }

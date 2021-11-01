@@ -30,13 +30,11 @@ import { OcrTypeModel } from '../models/ocr-type.model';
 })
 export class TreeOcrListComponent implements OnInit, OnDestroy {
   isOpenDialog = false;
-  isFullSreenComponent: boolean;
+  isFullScreenComponent: boolean;
   subjectDestroy = new Subject();
   numberCol = 4;
-  showComponentFile: boolean;
   rows: any = {};
   clickCountFile: number = 0;
-  ocrNodeModelComponent: OcrNodeModel;
   public lstDStypeOcr: OcrTypeModel[];
 
   private readonly _isLoading = new BehaviorSubject<boolean>(false);
@@ -59,8 +57,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.lstDStypeOcr = this.serviceStore.ocrTypeModels;
-    this.isFullSreenComponent = false;
-    this.showComponentFile = false;
+    this.isFullScreenComponent = false;
+    this.serviceStore.showComponentFile = false;
     this.serviceStore.isLoading$
       .pipe(
         shareReplay(),
@@ -112,8 +110,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     });
   }
 
-  getisFullSreenComponent(isFullSeen: boolean) {
-    this.isFullSreenComponent = isFullSeen;
+  getisFullScreenComponent(isFullSeen: boolean) {
+    this.isFullScreenComponent = isFullSeen;
   }
 
   delete() {
@@ -173,8 +171,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     this.activeNode(ocr);
     setTimeout(() => {
       if (this.clickCountFile === 2) {
-        this.showComponentFile = true;
-        this.ocrNodeModelComponent = ocr;
+        this.serviceStore.showComponentFile = true;
+        this.serviceStore.focusFileId = ocr.id;
       }
       this.clickCountFile = 0;
       this.cd.detectChanges();
@@ -182,7 +180,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   clickOutSide() {
-    if (!this.isOpenDialog && !this.showComponentFile) {
+    if (!this.isOpenDialog && !this.serviceStore.showComponentFile) {
       this.activeNode(this.serviceStore.ROOT_OcrNode);
     }
   }
@@ -197,6 +195,6 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   clickCloseComponentFile(event: boolean) {
-    this.showComponentFile = false;
+    this.serviceStore.showComponentFile = false;
   }
 }

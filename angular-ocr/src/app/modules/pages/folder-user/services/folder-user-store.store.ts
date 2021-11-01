@@ -21,7 +21,7 @@ export class FolderUserStore {
     modify: new Date(),
     note: '',
     deleted: false,
-    owner: 1,
+    owner: undefined,
     type: 'folder',
     level: -1,
     isOpen: true,
@@ -42,6 +42,8 @@ export class FolderUserStore {
   private readonly _ocrTypeModels = new BehaviorSubject<OcrTypeModel[]>([]);
   readonly ocrTypeModels$ = this._ocrTypeModels.asObservable();
   private typeOcr: string;
+  private _focusFileId = new BehaviorSubject<string>(null);
+  readonly focusFileId$ = this._focusFileId.asObservable();
 
   constructor(private service: OcrNodeService) {
     this.getDSOcrTypeModel();
@@ -94,6 +96,15 @@ export class FolderUserStore {
     });
     this._ocrTypeModels.next(val);
   }
+
+  get focusFileId() {
+    return this._focusFileId.getValue();
+  }
+
+  set focusFileId(fileId: string) {
+    this._focusFileId.next(fileId);
+  }
+
 
   getDSOcrTypeModel() {
     const dstype = [];
@@ -166,8 +177,6 @@ export class FolderUserStore {
   }
 
   updateTreeOcr(ocrNodeModel: OcrNodeModel, parentId: string) {
-    if (ocrNodeModel.state === -1)
-      console.log('xxxxxxxxx', ocrNodeModel, 'xxxxxxxxx');
     let parentIsOpen_index: { isOpen: boolean; index: number };
     if (ocrNodeModel.level === 0 || ocrNodeModel.folder === 'Root') {
       parentIsOpen_index = { isOpen: true, index: undefined };

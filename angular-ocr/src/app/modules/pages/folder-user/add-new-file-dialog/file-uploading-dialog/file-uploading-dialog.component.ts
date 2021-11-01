@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FolderUserService } from '../../services/folder-user.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -13,7 +12,6 @@ export class FileUploadingDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<FileUploadingDialogComponent>,
-    public service: FolderUserService
   ) {}
 
   ngOnInit() {}

@@ -141,7 +141,7 @@
         </button>
       </div>
     </div>
-    <div [ngClass]="showComponentFile ? 'grid grid-cols-4 body-list-table' : ''">
+    <div [ngClass]="serviceStore.showComponentFile ? 'grid grid-cols-4 body-list-table' : ''">
       <div class="w-full overflow-hidden shadow-lg bg-white h-full relative">
         <ng-container *ngIf="serviceStore.isLoading$ | async">
         <mat-progress-bar class="z-10 top-0" mode="indeterminate" style="position: absolute" ></mat-progress-bar>
@@ -185,10 +185,10 @@
             </div>
           </div>
       </div>
-      <ng-container *ngIf="showComponentFile">
-        <div [ngClass]="isFullSreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
+      <ng-container *ngIf="serviceStore.showComponentFile">
+        <div [ngClass]="isFullScreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
              class="w-full mb-8 overflow-hidden shadow-lg bg-white h-full col-span-3">
-          <div (closeComponentFile)="clickCloseComponentFile($event)" (isFullSreen)="getisFullSreenComponent($event)" [ocrNode]="ocrNodeModelComponent" app-ocr-file-info  class="w-full h-full">
+          <div (closeComponentFile)="clickCloseComponentFile($event)" (isFullScreen)="getisFullScreenComponent($event)" app-ocr-file-info  class="w-full h-full">
           </div>
         </div>
       </ng-container>
