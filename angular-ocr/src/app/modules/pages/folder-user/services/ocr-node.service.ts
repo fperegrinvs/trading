@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { OcrNodeModel } from '../models/ocr-node.model';
-import { share, shareReplay } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { ApiResponseModel } from '../../../model/api-response.model';
-import { FileModel } from '../models/file.model';
-import { Ocr } from '../models/ocr-file-progressing.model';
-import { DocumentProps } from '../models/document-props';
+import {Injectable} from '@angular/core';
+import {environment} from '../../../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {OcrNodeModel} from '../models/ocr-node.model';
+import {share, shareReplay} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {ApiResponseModel} from '../../../model/api-response.model';
+import {FileModel} from '../models/file.model';
+import {Ocr} from '../models/ocr-file-progressing.model';
+import {DocumentProps} from '../models/document-props';
 
 const API_PRODUCT = environment.HOST_CORE_CHINHTA_API;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class OcrNodeService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getDSHeadInfo(): Observable<{ isvalid: boolean; items: DocumentProps[] }> {
     const url = `${API_PRODUCT}/import/docprops`;
@@ -58,7 +59,7 @@ export class OcrNodeService {
   public getFileRawUrl(id: string, page: number = 0): Observable<Blob> {
     page = page - 1;
     const url = `${API_PRODUCT}/files/image/${id}/${page}`;
-    return this.http.get(url, { responseType: 'blob' }).pipe(share());
+    return this.http.get(url, {responseType: 'blob'}).pipe(share());
   }
 
   public nhanDang(
@@ -73,7 +74,7 @@ export class OcrNodeService {
 
   public download(id: string): Observable<Blob> {
     const url = `${API_PRODUCT}/files/image/${id}/download`;
-    return this.http.get(url, { responseType: 'blob' }).pipe(shareReplay());
+    return this.http.get(url, {responseType: 'blob'}).pipe(shareReplay());
   }
 
   public renameTreeOcr(
@@ -132,7 +133,7 @@ export class OcrNodeService {
     fileId: string,
     ocr: any
   ): Observable<ApiResponseModel<OcrNodeModel>> {
-    debugger;
+
     const url = `${API_PRODUCT}/files/save/${fileId}`;
     return this.http.post<ApiResponseModel<OcrNodeModel>>(url, {
       docinfo: ocr,

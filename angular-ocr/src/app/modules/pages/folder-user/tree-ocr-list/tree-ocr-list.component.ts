@@ -71,7 +71,7 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     this.serviceStore.props$.subscribe((res) => {
       const lst = res.sort((a) => (a.isShow ? -1 : 0));
       this.valueFilters = lst;
-      debugger;
+
       this.lstFilterProps$ = of(lst);
     });
     this.openFilter = false;
@@ -216,15 +216,13 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   acceptFiler() {
-    debugger;
     this.serviceStore.props = this.valueFilters;
-    debugger;
+
     this.openFilter = false;
   }
 
   updateFilter(event: boolean, i: number) {
     this.valueFilters[i].isShow = !event;
-    debugger;
   }
 
   @HostListener('document:keydown.delete', ['$event'])
