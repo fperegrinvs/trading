@@ -34,6 +34,8 @@ export const locale = {
       XOA: 'Xoá',
       INFODELETEFOLDER:
         'Xác nhận xác thư mục. Trong quá trình xoá không thể hoàn tác',
+      XACNHAN: 'Xác nhận',
+      LOAINHANDANGKYTU: 'Loại nhận dạng kí tự',
     },
     ACTIONDIALOG: {
       XOADOITUONG: 'Xoá đối tượng',

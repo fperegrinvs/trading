@@ -5,7 +5,8 @@
       <ng-container *ngIf="(serviceStore.activeOcrNode$ | async) as activeNode">
         <!-- move  -->
         <ng-container *ngIf="activeNode.name !== 'Root'">
-          <div (click)="move()" class="action-filter" delay="500" placement="bottom" tooltip="{{ 'OCR.MOVE' | translate }}">
+          <div (click)="move()" class="action-filter" delay="500" placement="bottom"
+               tooltip="{{ 'OCR.MOVE' | translate }}">
             <button
               class="btn-action-filter">
               <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -59,7 +60,8 @@
         </ng-container>
         <!-- add new -->
         <ng-container *ngIf="activeNode.type === 'folder'">
-          <div (click)="addNew()" class="action-filter" delay="500" placement="bottom" tooltip="{{ 'OCR.THEMMOI' | translate }}">
+          <div (click)="addNew()" class="action-filter" delay="500" placement="bottom"
+               tooltip="{{ 'OCR.THEMMOI' | translate }}">
             <button
               class="btn-action-filter"
             >
@@ -86,15 +88,17 @@
         </ng-container>
       </ng-container>
       <!-- filter -->
-      <div class="action-filter">
+      <div class="action-filter relative">
         <button
-          [matMenuTriggerFor]="menu"
+          cdkOverlayOrigin #trigger="cdkOverlayOrigin" (click)="openFilter=!openFilter"
           class="btn-action-filter"
           delay="500"
           placement="bottom"
+          type="button"
           tooltip="{{ 'OCR.LOC' | translate }}"
         >
-          <svg fill="currentColor" height="24" viewBox="0 0 24 24 " width="24" xmlns="http://www.w3.org/2000/svg">
+          <svg fill="currentColor" height="24" viewBox="0 0 24 24 " width="24"
+               xmlns="http://www.w3.org/2000/svg">
             <path
               d="M7.5 14.5c-1.58 0-2.903 1.06-3.337 2.5H2v2h2.163c.434 1.44 1.757 2.5 3.337 2.5s2.903-1.06 3.337-2.5H22v-2H10.837c-.434-1.44-1.757-2.5-3.337-2.5zm0 5c-.827 0-1.5-.673-1.5-1.5s.673-1.5 1.5-1.5S9 17.173 9 18s-.673 1.5-1.5 1.5zm9-11c-1.58 0-2.903 1.06-3.337 2.5H2v2h11.163c.434 1.44 1.757 2.5 3.337 2.5s2.903-1.06 3.337-2.5H22v-2h-2.163c-.434-1.44-1.757-2.5-3.337-2.5zm0 5c-.827 0-1.5-.673-1.5-1.5s.673-1.5 1.5-1.5 1.5.673 1.5 1.5-.673 1.5-1.5 1.5z"
             ></path>
@@ -103,23 +107,46 @@
             ></path>
           </svg>
         </button>
-        <mat-menu #menu="matMenu">
-          <div class="p-4 w-full text-orange-400 font-bold">
-            Loại nhận dạng kí tự
-          </div>
-          <ng-container *ngFor="let item of lstDStypeOcr">
-            <div (click)="updateTypeOcr(item)" class="w-full px-4 py-2">
-              <div class="flex items-center inline-block">
-                <input [(ngModel)]="item.isCheck"
-                       class="h-4 w-4 border-gray-300 rounded text-orange-apple-aqua-600 focus:ring-orange-500"
-                       type="checkbox">
-                <label class="ml-3 min-w-0 flex-1 text-gray-500">
-                  {{item.name}}
-                </label>
-              </div>
+        <ng-template (overlayOutsideClick)="openFilter=false" cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+                     [cdkConnectedOverlayOpen]="openFilter">
+          <div class="mt-1.5 ocr-filter">
+            <div class=" max-h-[40vh] overflow-auto">
+              <ng-container *ngFor="let prop of serviceStore.props$ | async; let i = index">
+                <div class="px-3 py-1">
+                  <input [(ngModel)]="valueFilters[i].isShow"
+                         class="h-4 w-4 border-gray-300 rounded text-orange-apple-aqua-600 focus:ring-orange-500"
+                         type="checkbox">
+                  {{getHeaderTitle(prop.note)}} </div>
+              </ng-container>
             </div>
-          </ng-container>
-        </mat-menu>
+            <div class="w-full border-gray-400 border-b-2 border-solid"></div>
+            <div class="p-4 w-full text-orange-400 font-bold">
+              {{'OCR.LOAINHANDANGKYTU' | translate}}
+            </div>
+            <ng-container *ngFor="let item of lstDStypeOcr">
+              <div (click)="updateTypeOcr(item)" class="w-full px-4 py-2">
+                <div class="flex items-center inline-block">
+                  <input [(ngModel)]="item.isCheck"
+                         class="h-4 w-4 border-gray-300 rounded text-orange-apple-aqua-600 focus:ring-orange-500"
+                         type="checkbox">
+                  <label class="ml-3 min-w-0 flex-1 text-gray-500">
+                    {{item.name}}
+                  </label>
+                </div>
+              </div>
+            </ng-container>
+            <div class="w-full border-gray-400 border-b-2 border-solid"></div>
+            <div class="w-full items-center px-2 py-2 text-center">
+              <button (click)="acceptFiler()"
+                      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2
+          bg-orange-apple-aqua-600 text-base font-medium text-white hover:bg-orange-apple-aqua-700
+          focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-apple-aqua-500 sm:ml-3 sm:w-auto sm:text-sm"
+                      type="button">
+                {{'OCR.XACNHAN' | translate}}
+              </button>
+            </div>
+          </div>
+        </ng-template>
       </div>
       <!-- search -->
       <div class="action-filter">
@@ -144,51 +171,56 @@
     <div [ngClass]="serviceStore.showComponentFile ? 'grid grid-cols-4 body-list-table' : ''">
       <div class="w-full overflow-hidden shadow-lg bg-white h-full relative">
         <ng-container *ngIf="serviceStore.isLoading$ | async">
-        <mat-progress-bar class="z-10 top-0" mode="indeterminate" style="position: absolute" ></mat-progress-bar>
+          <mat-progress-bar class="z-10 top-0" mode="indeterminate" style="position: absolute"></mat-progress-bar>
         </ng-container>
-          <div class="w-full overflow-hidden shadow-lg bg-white h-full">
-            <div class="w-full overflow-x-auto h-full">
-              <table class="w-full table-auto">
-                <thead>
-                  <tr class="h-[50px] items-center bg-gray-50 px-2 py-2 text-sm tracking-wider border-solid border-b border-gray-apple-aqua-300">
-                    <th class="user-folder-header">
-                      <span class="pl-5">Tên</span>
-                    </th>
-                    <th class="user-folder-header min-w-[100px]">
-                      Trạng thái
-                    </th>
-                    <th class="user-folder-header min-w-[100px]" style="text-align: right">
-                      Kích cỡ tệp
-                    </th>
-                    <th class="user-folder-header min-w-[100px]">
-                      Chủ sở hữu
-                    </th>
-                    <th class="user-folder-header min-w-[100px]">
-                      Ngày tạo
-                    </th>
-                    <ng-container *ngFor="let header of serviceStore.props$ | async">
-                      <th class="user-folder-header min-w-[150px]">{{getHeaderTitle(header.note)}}</th>
-                    </ng-container>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngFor="let ocr of serviceStore.treeOcr$ | async; let i = index">
-                    <ng-container *ngIf="ocr.type === 'folder'; else file">
-                      <tr [ngClass]="(serviceStore.activeOcrNode$ | async).id === ocr.id ? getBackgroundActive() : ''" [ocrNode]="ocr" app-ocr-node-row-folder ></tr>
-                    </ng-container>
-                    <ng-template #file>
-                      <tr (click)="clickFile(ocr)" [ngClass]="(serviceStore.activeOcrNode$ | async).id === ocr.id ? getBackgroundActive(): ''"  [ocrNode]="ocr" app-ocr-node-row-file></tr>
-                    </ng-template>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
+        <div class="w-full overflow-hidden shadow-lg bg-white h-full">
+          <div class="w-full overflow-x-auto h-full">
+            <table class="w-full table-auto">
+              <thead>
+              <tr
+                class="h-[50px] items-center bg-gray-50 px-2 py-2 text-sm tracking-wider border-solid border-b border-gray-apple-aqua-300">
+                <th class="user-folder-header">
+                  <span class="pl-5">Tên</span>
+                </th>
+                <th class="user-folder-header min-w-[100px]">
+                  Trạng thái
+                </th>
+                <th class="user-folder-header min-w-[100px]" style="text-align: right">
+                  Kích cỡ tệp
+                </th>
+                <th class="user-folder-header min-w-[100px]">
+                  Chủ sở hữu
+                </th>
+                <th class="user-folder-header min-w-[100px]">
+                  Ngày tạo
+                </th>
+                <ng-container *ngFor="let header of serviceStore.propsShow$ | async">
+                  <th class="user-folder-header min-w-[150px]">{{getHeaderTitle(header.note)}}</th>
+                </ng-container>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let ocr of serviceStore.treeOcr$ | async; let i = index">
+                <ng-container *ngIf="ocr.type === 'folder'; else file">
+                  <tr [ngClass]="(serviceStore.activeOcrNode$ | async).id === ocr.id ? getBackgroundActive() : ''"
+                      [ocrNode]="ocr" app-ocr-node-row-folder></tr>
+                </ng-container>
+                <ng-template #file>
+                  <tr (click)="clickFile(ocr)"
+                      [ngClass]="(serviceStore.activeOcrNode$ | async).id === ocr.id ? getBackgroundActive(): ''"
+                      [ocrNode]="ocr" app-ocr-node-row-file></tr>
+                </ng-template>
+              </ng-container>
+              </tbody>
+            </table>
           </div>
+        </div>
       </div>
       <ng-container *ngIf="serviceStore.showComponentFile">
         <div [ngClass]="isFullScreenComponent? 'fixed  top-0 left-0 z-50  w-screen h-screen' : ''"
              class="w-full mb-8 overflow-hidden shadow-lg bg-white h-full col-span-3">
-          <div (closeComponentFile)="clickCloseComponentFile($event)" (isFullScreen)="getisFullScreenComponent($event)" app-ocr-file-info  class="w-full h-full">
+          <div (closeComponentFile)="clickCloseComponentFile($event)" (isFullScreen)="getisFullScreenComponent($event)"
+               app-ocr-file-info class="w-full h-full">
           </div>
         </div>
       </ng-container>

@@ -3,6 +3,6 @@ export interface DocumentProps {
   note: string;
   type: string;
   required: boolean;
-  isHide?: boolean;
+  isShow?: boolean;
   position?: number;
 }

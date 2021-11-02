@@ -16,6 +16,10 @@ import { TreeOcrListComponent } from './tree-ocr-list/tree-ocr-list.component';
 import { OcrNodeRowFolderComponent } from './tree-ocr-list/ocr-node-row-folder/ocr-node-row-folder.component';
 import { OcrNodeRowFileComponent } from './tree-ocr-list/ocr-node-row-file/ocr-node-row-file.component';
 import { OcrFileInfoComponent } from './tree-ocr-list/ocr-file-info/ocr-file-info.component';
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   imports: [
@@ -33,6 +37,10 @@ import { OcrFileInfoComponent } from './tree-ocr-list/ocr-file-info/ocr-file-inf
     ]),
     GeneralModule,
     DragDropModule,
+    TextFieldModule,
+    MatFormFieldModule,
+    MatInputModule,
+    OverlayModule,
   ],
   exports: [],
   entryComponents: [
@@ -54,6 +62,6 @@ import { OcrFileInfoComponent } from './tree-ocr-list/ocr-file-info/ocr-file-inf
     OcrNodeRowFileComponent,
     OcrFileInfoComponent,
   ],
-  providers: [ FolderUserStore, OcrNodeService],
+  providers: [FolderUserStore, OcrNodeService],
 })
 export class FolderUserModule {}

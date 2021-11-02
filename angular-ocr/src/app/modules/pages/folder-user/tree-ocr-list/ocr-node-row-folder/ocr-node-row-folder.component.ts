@@ -25,7 +25,6 @@ export class OcrNodeRowFolderComponent
 {
   @Input('ocrNode') ocrNode: OcrNodeModel;
 
-  spanCol: number;
   spaces: number[] = [];
 
   subjectDestroy = new Subject();
@@ -45,16 +44,6 @@ export class OcrNodeRowFolderComponent
   }
 
   ngOnInit() {
-    this.serviceStore.props$
-      .pipe(
-        shareReplay(),
-        takeUntil(this.subjectDestroy),
-        tap((res) => {
-          this.spanCol = res.filter((item) => !item.isHide).length;
-        })
-      )
-      .subscribe();
-
     for (let index = 0; index < this.ocrNode.level; index++) {
       this.spaces.push(1);
     }

@@ -10,8 +10,10 @@
         </ng-container>
         <div *ngIf="!showDoneOcr" class="relative ocr-progress-spinner text-orange-600">
           <ng-container *ngIf="ocrNode.ocring?.percent > 0; else zero">
-                 <mat-progress-spinner [value]="ocrNode.ocring?.percent" diameter="25"  mode="determinate"></mat-progress-spinner>
-                 <span class="text-xs" style="position: absolute; left: 6px; top: 6px">{{getRoundPercent(ocrNode.ocring?.percent)}}</span>
+                 <mat-progress-spinner [value]="ocrNode.ocring?.percent" diameter="25"
+                                       mode="determinate"></mat-progress-spinner>
+                 <span class="text-xs"
+                       style="position: absolute; left: 6px; top: 6px">{{getRoundPercent(ocrNode.ocring?.percent)}}</span>
           </ng-container>
           <ng-template #zero>
                   <mat-progress-spinner diameter="25" mode="indeterminate"></mat-progress-spinner>
@@ -21,7 +23,7 @@
       </ng-container>
          <span class=" mr-1">
            <ng-container *ngIf="ocrNode.type === 'pdf'; else image">
-          <svg class="text-orange-apple-aqua-500 inline-block" fill="currentColor" height="24"  viewBox="0 0 24 24"
+          <svg class="text-orange-apple-aqua-500 inline-block" fill="currentColor" height="24" viewBox="0 0 24 24"
                width="24"
                xmlns="http://www.w3.org/2000/svg"><path
             d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z"></path><path
@@ -44,14 +46,12 @@
   <td class="ocr-col-file">{{ocrNode.owner}}</td>
   <td class="ocr-col-file"> {{ocrNode.addtime | date: 'dd/MM/yyyy'}}</td>
   <ng-container *ngIf="ocrNode.ocr; else nonOcr">
-    <ng-container *ngFor="let prop of serviceStore.props$ | async">
-      <ng-container *ngIf="!prop.isHide">
-        <td [ngClass]="prop.name === 'content'? 'overflow-ellipsis overflow-hidden max-w-[300px]':''"
-            class="ocr-col-file">{{ocrNode.ocr[prop.name]}}</td>
-      </ng-container>
+    <ng-container *ngFor="let prop of serviceStore.propsShow$ | async">
+      <td [ngClass]="prop.name === 'content'? 'overflow-ellipsis overflow-hidden max-w-[300px]':''"
+          class="ocr-col-file">{{ocrNode.ocr[prop.name]}}</td>
     </ng-container>
   </ng-container>
   <ng-template #nonOcr>
-    <td [colSpan]="(serviceStore.props$ | async)?.length"></td>
+    <td [colSpan]="(serviceStore.propsShow$ | async)?.length"></td>
   </ng-template>
 </ng-container>

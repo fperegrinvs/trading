@@ -127,7 +127,6 @@ export class OcrNodeService {
    * @param ocr of file (when file state === -1 and have ocr)
    * @returns Observable<ApiResponseModel<OcrNodeModel>
    *
-   * @beta
    */
   public save(
     fileId: string,

@@ -68,6 +68,7 @@ $hover-active: #eef9fe; //cyan-apple-aqua-100
 .body-list-table {
   height: calc(100vh - 116px);
 }
+
 .action-filter {
   @apply flex mx-2 my-2
 }
@@ -85,6 +86,7 @@ $hover-active: #eef9fe; //cyan-apple-aqua-100
 tbody {
   tr:nth-child(odd) {
   }
+
   tr:nth-child(even) {
     @apply bg-gray-apple-aqua-100;
   }
@@ -95,4 +97,6 @@ tbody {
   background-color: #54a9ff !important;
 }
 
-
+.ocr-filter {
+  @apply bg-white rounded-lg drop-shadow-lg
+}

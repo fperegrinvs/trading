@@ -1,8 +1,15 @@
-import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewFolderUserDialogComponent } from '../add-new-folder-user-dialog/add-new-folder-user-dialog.component';
 import { AddNewFileDialogComponent } from '../add-new-file-dialog/add-new-file-dialog.component';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { FolderUserStore } from '../services/folder-user-store.store';
 import { OcrNodeModel } from '../models/ocr-node.model';
@@ -10,6 +17,7 @@ import { shareReplay, takeUntil, tap } from 'rxjs/operators';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DeleteDialogComponent } from '../../shares/delete-dialog/delete-dialog.component';
 import { OcrTypeModel } from '../models/ocr-type.model';
+import { DocumentProps } from '../models/document-props';
 
 @Component({
   selector: 'app-tree-ocr-list',
@@ -35,8 +43,10 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   numberCol = 4;
   rows: any = {};
   clickCountFile: number = 0;
+  openFilter: boolean;
+  valueFilters: DocumentProps[];
   public lstDStypeOcr: OcrTypeModel[];
-
+  public lstFilterProps$: Observable<DocumentProps[]>;
   private readonly _isLoading = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this._isLoading.asObservable();
 
@@ -44,7 +54,8 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public serviceStore: FolderUserStore,
     public translate: TranslateService,
-    public cd: ChangeDetectorRef
+    public cd: ChangeDetectorRef,
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   get isLoading() {
@@ -56,6 +67,14 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.valueFilters = [];
+    this.serviceStore.props$.subscribe((res) => {
+      const lst = res.sort((a) => (a.isShow ? -1 : 0));
+      this.valueFilters = lst;
+      debugger;
+      this.lstFilterProps$ = of(lst);
+    });
+    this.openFilter = false;
     this.lstDStypeOcr = this.serviceStore.ocrTypeModels;
     this.isFullScreenComponent = false;
     this.serviceStore.showComponentFile = false;
@@ -134,13 +153,11 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
             .deleteTreeOcr(this.serviceStore.activeOcrNode)
             .subscribe((res) => {
               if (res.isvalid && dataDialog.deleteAll) {
-                this.serviceStore
-                  .deleteTreeOcr(res.item)
-                  .subscribe((res2) => {
-                    if (!res2.isvalid) {
-                      console.log('lỗi 2 lần', res2);
-                    }
-                  });
+                this.serviceStore.deleteTreeOcr(res.item).subscribe((res2) => {
+                  if (!res2.isvalid) {
+                    console.log('lỗi 2 lần', res2);
+                  }
+                });
               }
             });
         }
@@ -196,6 +213,18 @@ export class TreeOcrListComponent implements OnInit, OnDestroy {
 
   clickCloseComponentFile(event: boolean) {
     this.serviceStore.showComponentFile = false;
+  }
+
+  acceptFiler() {
+    debugger;
+    this.serviceStore.props = this.valueFilters;
+    debugger;
+    this.openFilter = false;
+  }
+
+  updateFilter(event: boolean, i: number) {
+    this.valueFilters[i].isShow = !event;
+    debugger;
   }
 
   @HostListener('document:keydown.delete', ['$event'])

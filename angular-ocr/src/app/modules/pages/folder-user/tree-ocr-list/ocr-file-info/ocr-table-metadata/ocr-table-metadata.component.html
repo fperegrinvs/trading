@@ -12,17 +12,22 @@
       </tr>
       </thead>
       <tbody class="bg-white">
-      <ng-container *ngFor="let prop of serviceStore.props$ | async">
+      <ng-container *ngFor="let prop of serviceStore.propsShow$ | async">
         <tr class="border-b-2 border-gray-100 border-solid">
-          <td class="px-6 py-4 whitespace-normal">
+          <td class="px-4 py-3 whitespace-nowrap ">
             <div class="text-sm text-gray-900">{{getHeaderTitle(prop.note)}}</div>
           </td>
-          <td class="px-6 py-4 whitespace-nowrap w-full">
-            <input [(ngModel)]="ocrFile.ocr[prop.name]"
-                   class="text-sm text-gray-500 w-full border-b-2">
+          <td class="px-4 py-1 w-full">
+            <mat-form-field class="w-full">
+              <textarea matInput cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="10" [(ngModel)]="ocrFile.ocr[prop.name]"
+                        class="text-sm text-gray-500 border-none w-full resize-none outline-none rounded outline-orange-400">
+              </textarea>
+            </mat-form-field>
           </td>
         </tr>
-
       </ng-container>
       <tr class="border-b-2 border-gray-100 border-solid"></tr>
       </tbody>

@@ -38,6 +38,8 @@ export class FolderUserStore {
   readonly activeOcrNode$ = this._activeOcrNode.asObservable();
   private readonly _props = new BehaviorSubject<DocumentProps[]>([]);
   readonly props$ = this._props.asObservable();
+  private readonly _propsShow = new BehaviorSubject<DocumentProps[]>([]);
+  readonly propsShow$ = this._propsShow.asObservable();
   private readonly _showCompoentFile = new BehaviorSubject<boolean>(false);
   readonly showComponentFile$ = this._showCompoentFile.asObservable();
   private readonly _ocrTypeModels = new BehaviorSubject<OcrTypeModel[]>([]);
@@ -47,6 +49,10 @@ export class FolderUserStore {
   readonly focusFileId$ = this._focusFileId.asObservable();
 
   constructor(private service: OcrNodeService) {
+    this.props$.subscribe((res) => {
+      this._propsShow.next(res.filter((item) => item.isShow));
+    });
+
     this.getDSOcrTypeModel();
   }
 
@@ -71,6 +77,7 @@ export class FolderUserStore {
   }
 
   set props(val: DocumentProps[]) {
+    val = val.sort((a, b) => a.position - b.position);
     this._props.next(val);
   }
 
@@ -308,12 +315,14 @@ export class FolderUserStore {
         tap(
           (res) => {
             if (res.isvalid) {
-              res.props = res.props.filter(
-                (item) => item.required && item.name !== 'content'
-              );
+              res.props = res.props.filter((item) => item.name !== 'content');
               for (let index = 0; index < res.props.length; index++) {
-                if (res.props[index]?.isHide) res.props[index].isHide = false;
-                if (res.props[index]?.position)
+                if (res.props[index].required) {
+                  res.props[index].isShow = true;
+                } else {
+                  res.props[index].isShow = false;
+                }
+                if (!res.props[index].position)
                   res.props[index].position = index;
               }
               this.props = res.props;
