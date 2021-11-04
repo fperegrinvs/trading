@@ -13,6 +13,9 @@ import {NouisliderModule} from "ng2-nouislider";
 import {FormsModule} from "@angular/forms";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {TreeComponent} from "./component/tree/tree.component";
+import {MatTreeModule} from "@angular/material/tree";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   imports: [
@@ -24,9 +27,25 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     NgxSliderModule,
     FormsModule,
     MatCheckboxModule,
+    MatTreeModule,
+    MatIconModule,
   ],
-  exports: [ButtonComponent, DropdownComponent, DateFilterComponent, SelectionFilterComponent, NumberFilterComponent],
-  declarations: [ButtonComponent, DropdownComponent, DateFilterComponent, SelectionFilterComponent, NumberFilterComponent],
+  exports: [
+    ButtonComponent,
+    DropdownComponent,
+    DateFilterComponent,
+    SelectionFilterComponent,
+    NumberFilterComponent,
+    TreeComponent
+  ],
+  declarations: [
+    ButtonComponent,
+    DropdownComponent,
+    DateFilterComponent,
+    SelectionFilterComponent,
+    NumberFilterComponent,
+    TreeComponent
+  ],
   providers: [
     DatePipe
   ],

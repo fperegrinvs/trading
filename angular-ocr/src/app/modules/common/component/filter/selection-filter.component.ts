@@ -1,15 +1,18 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from "@angular/core";
 import {DropdownComponent} from "../dropdown/dropdown.component";
+import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'SelectionFilter',
   template: `
     <Dropdown
-      [type]="isActive ? 'active' : 'secondary'"
+      type="secondary"
       [text]="text"
       [icon]="icon"
       (close)="onDropDownClose($event)"
       #dropdown
+      *ngIf="!isActive"
     >
       <div class="p-2" [style.min-width]="'200px'">
         <div class="selection-item" *ngFor="let selection of model">
@@ -19,11 +22,21 @@ import {DropdownComponent} from "../dropdown/dropdown.component";
         </div>
 
         <div class="mt-2">
-          <Button *ngIf="isActive" class="w-full" (onClick)="onClearClick($event)">Xoá</Button>
           <Button *ngIf="!isActive" type="primary" class="w-full" (onClick)="onApplyClick($event)">Áp dụng</Button>
         </div>
       </div>
     </Dropdown>
+
+    <Button *ngIf="isActive" [icon]="icon" type="active" (onClick)="resetFilter()">
+      <div class="adm-dropdown-text" [style.font-size]="'10px'">
+        {{text}}
+        <div class="adm-dropdown-sub text-left" [style.line-height]="'7px'">
+          <small>{{subText}}</small>
+        </div>
+      </div>
+
+      <fa-icon class="ml-4" [icon]="faTimes"></fa-icon>
+    </Button>
   `,
   styleUrls: ['./selection-filter.component.scss'],
 })
@@ -33,11 +46,15 @@ export class SelectionFilterComponent implements OnInit {
   @Input() icon: string;
   @Input() selections: string[];
 
+  @Output() onChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
+
   @ViewChild("dropdown") dropdown: DropdownComponent;
 
   isActive: boolean = false;
   model: any[];
   subText: string = null;
+
+  faTimes: IconDefinition = faTimes;
 
   constructor() { }
 
@@ -60,20 +77,16 @@ export class SelectionFilterComponent implements OnInit {
     this.subText = fullSubText.substr(0, mainTextLength) + "...";
   }
 
-  resetSelections(): void {
-    this.model.forEach(x => x.selected = false);
-  }
-
-  onClearClick($event: any): void {
-    this.dropdown.closeDropdown();
-    this.resetSelections();
+  resetFilter(): void {
     this.isActive = false;
     this.subText = null;
+    this.model.forEach(x => x.selected = false);
   }
 
   onApplyClick($event: any): void {
     this.isActive = true;
     this.applyPreviewText();
     this.dropdown.closeDropdown();
+    this.onChanged.emit(this.model.filter(x => x.selected).map(x => x.text));
   }
 }
