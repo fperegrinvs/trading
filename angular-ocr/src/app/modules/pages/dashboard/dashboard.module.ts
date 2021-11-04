@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DashBoardComponent } from './dashboard.component';
+import {ADMCommonModule} from "../../common/common.module";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -11,9 +14,12 @@ import { DashBoardComponent } from './dashboard.component';
         children: [],
       },
     ]),
+    ADMCommonModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [],
   declarations: [DashBoardComponent],
-  providers: [],
+  providers: [MatDatepickerModule],
 })
 export class DashBoardModule {}

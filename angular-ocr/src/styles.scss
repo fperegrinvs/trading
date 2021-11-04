@@ -239,5 +239,17 @@ html {
   body::-webkit-scrollbar-button {
     display: none;
   }
+
+  .mat-menu-panel {
+    @apply border border-solid border-gray-300 mt-2
+    shadow-sm;
+    max-width: unset;
+  }
+
+  .mat-menu-content {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 }
 
+@import "~nouislider/dist/nouislider.min.css";

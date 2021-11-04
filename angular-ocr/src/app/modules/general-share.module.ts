@@ -20,24 +20,24 @@ import { DeleteDialogComponent } from './pages/shares/delete-dialog/delete-dialo
 
 @NgModule({
   imports: [MatIconModule, CommonModule, TranslateModule, FormsModule],
-  exports: [
-    TooltipDirective,
-    CdkDetailRowDirective,
-    TranslateModule,
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatMenuModule,
-    FileDropDirective,
-    MatProgressBarModule,
-    MatTabsModule,
-    FormsModule,
-    ShareMessagesComponent,
-    MatIconModule,
-    ClickOutsideDirective,
-  ],
+    exports: [
+        TooltipDirective,
+        CdkDetailRowDirective,
+        TranslateModule,
+        CommonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatMenuModule,
+        FileDropDirective,
+        MatProgressBarModule,
+        MatTabsModule,
+        FormsModule,
+        ShareMessagesComponent,
+        MatIconModule,
+        ClickOutsideDirective
+    ],
   entryComponents: [DeleteDialogComponent],
   declarations: [
     TooltipDirective,
@@ -45,7 +45,7 @@ import { DeleteDialogComponent } from './pages/shares/delete-dialog/delete-dialo
     FileDropDirective,
     ClickOutsideDirective,
     ShareMessagesComponent,
-    DeleteDialogComponent,
+    DeleteDialogComponent
   ],
   providers: [ShareMessagesService],
 })

@@ -1,1 +1,38 @@
-<div>Dashboard</div>
+<div class="p-4">
+  <h2>Buttons</h2>
+  <hr/>
+  <div class="mt-4">
+    <Button class="mr-4">Default</Button>
+    <Button type="primary" class="mr-4">Primary</Button>
+    <Button type="secondary" class="mr-4">Secondary</Button>
+  </div>
+  <div class="my-4">
+    <Button class="mr-4" icon="bx-menu.svg"></Button>
+    <Button type="primary" class="mr-4" icon="bx-menu-w.svg">Icon</Button>
+  </div>
+
+  <h2>Filter</h2>
+  <hr/>
+  <div class="mt-4">
+    <DateFilter
+      text="Ngày ký"
+      icon="bx-calendar.svg"
+      (onSelect)="onDateRangeSelect($event)"
+      class="mr-4"
+    ></DateFilter>
+
+    <SelectionFilter
+      text="Trạng thái"
+      icon="bx-list-check.svg"
+      class="mr-4"
+      [selections]="selectionData"
+    ></SelectionFilter>
+
+    <NumberFilter
+      text="Số bản cứng"
+      icon="bx-radio-circle-marked.svg"
+      [min]="6"
+      [max]="30"
+    ></NumberFilter>
+  </div>
+</div>

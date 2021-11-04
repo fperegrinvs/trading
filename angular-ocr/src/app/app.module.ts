@@ -17,9 +17,15 @@ import {GeneralModule} from './modules/general-share.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthInterceptor} from "./modules/auth/auth-interceptor";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-  declarations: [AppComponent, LoadingComponent, MessagesComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    LoadingComponent,
+    MessagesComponent,
+    LoginComponent
+  ],
   imports: [
     GeneralModule,
     BrowserModule,
@@ -31,6 +37,7 @@ import {HTTP_INTERCEPTORS} from "@angular/common/http";
     MatProgressSpinnerModule,
     TranslateModule.forRoot(),
     BrowserAnimationsModule,
+    FontAwesomeModule,
   ],
   providers: [LoadingService, MessagesService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
