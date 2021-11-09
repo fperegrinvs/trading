@@ -9,7 +9,7 @@ import {MatTreeNestedDataSource} from "@angular/material/tree";
     <mat-tree [treeControl]="treeControl" [dataSource]="dataSource">
 
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)">
-        {{node.name}}
+        {{node.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}]</small>
       </mat-tree-node>
 
       <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">

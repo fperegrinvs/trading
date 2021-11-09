@@ -16,6 +16,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {TreeComponent} from "./component/tree/tree.component";
 import {MatTreeModule} from "@angular/material/tree";
 import {MatIconModule} from "@angular/material/icon";
+import {TableComponent} from "./component/table/table.component";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   imports: [
@@ -29,6 +31,7 @@ import {MatIconModule} from "@angular/material/icon";
     MatCheckboxModule,
     MatTreeModule,
     MatIconModule,
+    MatTableModule,
   ],
   exports: [
     ButtonComponent,
@@ -36,7 +39,8 @@ import {MatIconModule} from "@angular/material/icon";
     DateFilterComponent,
     SelectionFilterComponent,
     NumberFilterComponent,
-    TreeComponent
+    TreeComponent,
+    TableComponent
   ],
   declarations: [
     ButtonComponent,
@@ -44,7 +48,8 @@ import {MatIconModule} from "@angular/material/icon";
     DateFilterComponent,
     SelectionFilterComponent,
     NumberFilterComponent,
-    TreeComponent
+    TreeComponent,
+    TableComponent
   ],
   providers: [
     DatePipe
