@@ -1,0 +1,19 @@
+.mat-header-cell {
+  @apply text-white text-sm;
+  line-height: 2rem !important;
+
+}
+
+.mat-cell {
+  line-height: 2rem !important;
+  font-size: 0.75rem;
+}
+
+tr.mat-header-row {
+  @apply h-8;
+  @apply bg-orange-apple-aqua-600;
+}
+
+tr.mat-row {
+  @apply h-8;
+}
