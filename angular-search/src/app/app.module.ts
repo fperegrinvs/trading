@@ -7,20 +7,29 @@ import { LayoutComponent } from './page/layout/layout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SearchComponent } from './page/search/search.component';
+import { NavigationComponent } from './page/layout/navigation/navigation.component';
+import { HeaderComponent } from './page/layout/header/header.component';
+import {ADMCommonModule} from "./module/common/common.module";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {DatePipe} from "@angular/common";
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
-    SearchComponent
+    SearchComponent,
+    NavigationComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ADMCommonModule,
+    NgbModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

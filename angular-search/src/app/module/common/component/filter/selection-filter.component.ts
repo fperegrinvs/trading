@@ -42,17 +42,17 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
 })
 export class SelectionFilterComponent implements OnInit {
 
-  @Input() text: string;
-  @Input() icon: string;
-  @Input() selections: string[];
+  @Input() text: string = "";
+  @Input() icon: string = "";
+  @Input() selections: string[] = [];
 
   @Output() onChanged: EventEmitter<string[]> = new EventEmitter<string[]>();
 
-  @ViewChild("dropdown") dropdown: DropdownComponent;
+  @ViewChild("dropdown") dropdown: DropdownComponent | undefined;
 
   isActive: boolean = false;
-  model: any[];
-  subText: string = null;
+  model: any[] = [];
+  subText: string = "";
 
   faTimes: IconDefinition = faTimes;
 
@@ -79,14 +79,14 @@ export class SelectionFilterComponent implements OnInit {
 
   resetFilter(): void {
     this.isActive = false;
-    this.subText = null;
+    this.subText = "";
     this.model.forEach(x => x.selected = false);
   }
 
   onApplyClick($event: any): void {
     this.isActive = true;
     this.applyPreviewText();
-    this.dropdown.closeDropdown();
+    this.dropdown?.closeDropdown();
     this.onChanged.emit(this.model.filter(x => x.selected).map(x => x.text));
   }
 }

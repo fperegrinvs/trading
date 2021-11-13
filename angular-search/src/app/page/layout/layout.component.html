@@ -1,2 +1,38 @@
-Khoa test
+<div class="layout-wrapper">
+  <app-header></app-header>
+  <!-- ./ Header -->
+
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <app-navigation></app-navigation>
+
+    <!-- Content body -->
+    <div class="content-body">
+      <!-- Content -->
+      <div class="content">
+        <router-outlet></router-outlet>
+        <div class="row">
+          <div class="col-3">
+            <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg">
+              <Tree [data]="treeData" (onSelect)="onTreeFilter($event)"></Tree>
+            </Card>
+            <Card title="Thống kê" icon="bx-search-alt.svg"></Card>
+          </div>
+          <div class="col-9 flex flex-col">
+            <Card>
+              <DateFilter></DateFilter>
+            </Card>
+            <Card class="flex-1">
+              <Table [columns]="tableColumns" class="w-full"></Table>
+            </Card>
+          </div>
+        </div>
+      </div>
+      <!-- ./ Content -->
+
+    </div>
+    <!-- ./ Content body -->
+  </div>
+  <!-- ./ Content wrapper -->
+</div>
 <router-outlet></router-outlet>

@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {NestedTreeControl} from "@angular/cdk/tree";
 import {TreeNode} from "../../model/TreeModel";
 import {MatTreeNestedDataSource} from "@angular/material/tree";
+import { v4 as uuidv4 } from 'uuid';
+import * as _ from "lodash";
 
 @Component({
   selector: 'Tree',
@@ -9,6 +11,7 @@ import {MatTreeNestedDataSource} from "@angular/material/tree";
     <mat-tree [treeControl]="treeControl" [dataSource]="dataSource">
 
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)">
+        <mat-checkbox [(ngModel)]="node.active"></mat-checkbox>
         {{node.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}
         ]</small>
       </mat-tree-node>
@@ -33,12 +36,12 @@ import {MatTreeNestedDataSource} from "@angular/material/tree";
 export class TreeComponent implements OnInit, OnChanges {
 
   @Input() data: TreeNode[] = [];
-  @Output() onSelect: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
+  @Output() onSelect: EventEmitter<TreeNode[]> = new EventEmitter<TreeNode[]>();
 
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   dataSource: MatTreeNestedDataSource<TreeNode> = new MatTreeNestedDataSource();
 
-  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: TreeNode) => !!node.children;
 
   constructor() {
   }
@@ -46,15 +49,39 @@ export class TreeComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
+  private populateNodeIds(tree: TreeNode[]): void {
+    tree.forEach(parent => {
+      parent.children?.forEach(child => {
+        child.id = uuidv4();
+      });
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data) {
-      this.dataSource.data = changes.data.currentValue;
-      this.treeControl.dataNodes = changes.data.currentValue;
+      const internalData = changes.data.currentValue;
+      this.populateNodeIds(internalData);
+
+      this.dataSource.data = internalData;
+      this.treeControl.dataNodes = internalData;
+
       this.treeControl.expandAll();
     }
   }
 
   onNodeClick(node: TreeNode): void {
-    this.onSelect.emit(node);
+    node.active = !node.active;
+
+    let currentState = _.cloneDeep(this.dataSource.data);
+
+    currentState = currentState.filter(item => {
+      const activeCount = item.children?.filter(x => x.active).length || 0;
+      return activeCount > 0;
+    }).map(parentNode => {
+      parentNode.children = parentNode.children?.filter(x => x.active);
+      return parentNode;
+    });
+
+    this.onSelect.emit(currentState);
   }
 }

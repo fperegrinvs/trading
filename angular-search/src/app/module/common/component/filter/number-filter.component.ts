@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from "@angular/core";
-import {Options} from "@angular-slider/ngx-slider";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import {DropdownComponent} from "../dropdown/dropdown.component";
@@ -55,15 +54,15 @@ import {DropdownComponent} from "../dropdown/dropdown.component";
 })
 export class NumberFilterComponent implements OnInit {
 
-  @Input() text: string;
-  @Input() icon: string;
-  @Input() min: number;
-  @Input() max: number;
-  @Input() subText: string;
+  @Input() text: string = "";
+  @Input() icon: string = "";
+  @Input() min: number = 0;
+  @Input() max: number = 0;
+  @Input() subText: string = "";
 
   @Output() onChanged: EventEmitter<number[]> = new EventEmitter<number[]>();
 
-  @ViewChild("dropdown") dropdown: DropdownComponent;
+  @ViewChild("dropdown") dropdown: DropdownComponent | undefined;
 
   isActive: boolean = false;
   selectedRange: number[] = [3, 11]
@@ -80,12 +79,12 @@ export class NumberFilterComponent implements OnInit {
 
   resetFilter(): void {
     this.isActive = false;
-    this.subText = null;
+    this.subText = "";
   }
 
   onApplyClick($event: MouseEvent): void {
     this.isActive = true;
-    this.dropdown.closeDropdown();
+    this.dropdown?.closeDropdown();
     this.applyPreviewText();
     this.onChanged.emit(this.selectedRange);
   }

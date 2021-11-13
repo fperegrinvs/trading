@@ -3,7 +3,7 @@
 }
 
 .mat-nested-tree-node div[role=group] {
-  padding-left: 40px;
+  padding-left: 30px;
 
   .mat-tree-node {
 
@@ -24,4 +24,11 @@ img {
 
 .main-node {
   @apply font-bold text-orange-apple-aqua-600;
+}
+
+.mat-checkbox ::ng-deep {
+
+  .mat-checkbox-layout {
+    @apply mb-0 mr-2;
+  }
 }
