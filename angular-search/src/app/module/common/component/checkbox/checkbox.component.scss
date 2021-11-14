@@ -1,0 +1,13 @@
+@import "src/globals";
+
+.mat-checkbox  {
+
+  &.mat-checkbox-checked ::ng-deep {
+
+    .mat-checkbox-background {
+      background-color: $color-primary !important;
+    }
+  }
+}
+
+

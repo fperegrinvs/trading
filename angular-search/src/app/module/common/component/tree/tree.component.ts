@@ -11,7 +11,7 @@ import * as _ from "lodash";
     <mat-tree [treeControl]="treeControl" [dataSource]="dataSource">
 
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)">
-        <mat-checkbox [(ngModel)]="node.active"></mat-checkbox>
+        <Checkbox [checked]="node.active"></Checkbox>
         {{node.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}
         ]</small>
       </mat-tree-node>

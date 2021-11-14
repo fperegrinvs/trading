@@ -6,14 +6,18 @@
   font-medium
   text-base
   focus:ring-2 focus:ring-offset-2
-  sm:w-auto sm:text-sm;
+  sm:w-auto sm:text-sm
+  flex justify-start items-center
+  bg-gray-200
+  rounded-md focus:text-gray-900 focus:outline-none;
+
+  @apply w-full #{!important};
 
   line-height: inherit !important;
   border: 1px solid;
 
   ::ng-deep .mat-button-wrapper {
-    display: flex;
-    align-items: center;
+    @apply flex items-center;
   }
 
   &.adm-button-default {

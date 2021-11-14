@@ -558,3 +558,9 @@ body {
   }
 }
 
+.main-table ::ng-deep {
+
+  .card {
+    @apply h-full;
+  }
+}

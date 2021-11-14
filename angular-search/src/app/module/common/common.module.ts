@@ -17,6 +17,8 @@ import {CardComponent} from "./component/card/card.component";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
 import {MatNativeDateModule} from "@angular/material/core";
+import {InputBoxComponent} from "./component/input/input.component";
+import {CheckboxComponent} from "./component/checkbox/checkbox.component";
 
 
 
@@ -29,7 +31,9 @@ import {MatNativeDateModule} from "@angular/material/core";
     SelectionFilterComponent,
     ButtonComponent,
     DropdownComponent,
-    CardComponent
+    CardComponent,
+    InputBoxComponent,
+    CheckboxComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +55,9 @@ import {MatNativeDateModule} from "@angular/material/core";
     SelectionFilterComponent,
     ButtonComponent,
     DropdownComponent,
-    CardComponent
+    CardComponent,
+    InputBoxComponent,
+    CheckboxComponent
   ]
 })
 export class ADMCommonModule { }

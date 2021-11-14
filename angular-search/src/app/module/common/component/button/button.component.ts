@@ -5,11 +5,7 @@ import {AfterContentInit, Component, ElementRef, EventEmitter, Input, OnInit, Ou
   template: `
     <button [attr.mat-button]="!icon"
             [attr.mat-icon-button]="icon"
-            class="adm-button
-              px-3 py-2
-              !flex justify-center items-center
-              bg-gray-200
-              !w-full rounded-md focus:text-gray-900 focus:outline-none"
+            class="adm-button"
             [class.adm-button-default]="type === 'default'"
             [class.adm-button-primary]="type === 'primary'"
             [class.adm-button-secondary]="type === 'secondary'"

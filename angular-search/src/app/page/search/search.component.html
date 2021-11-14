@@ -1,1 +1,38 @@
-<h1>asdf</h1>
+<div class="row">
+  <div class="col-3">
+    <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg">
+      <Tree [data]="treeData" (onSelect)="onTreeFilter($event)"></Tree>
+    </Card>
+    <Card title="Thống kê" icon="bx-search-alt.svg">
+      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Đơn vị ban hành</Button>
+      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Trạng thái</Button>
+      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Kho lưu</Button>
+    </Card>
+  </div>
+  <div class="col-9 flex flex-col">
+    <Card>
+      <DateFilter
+        text="Ngày ký"
+        icon="bx-calendar.svg"
+        class="mr-4"
+      ></DateFilter>
+
+      <SelectionFilter
+        text="Trạng thái"
+        icon="bx-list-check.svg"
+        class="mr-4"
+        [selections]="selectionData"
+      ></SelectionFilter>
+
+      <NumberFilter
+        text="Số bản cứng"
+        icon="bx-radio-circle-marked.svg"
+        [min]="6"
+        [max]="30"
+      ></NumberFilter>
+    </Card>
+    <Card class="flex-1 main-table">
+      <Table [columns]="tableColumns" class="w-full"></Table>
+    </Card>
+  </div>
+</div>

@@ -12,6 +12,8 @@ import { HeaderComponent } from './page/layout/header/header.component';
 import {ADMCommonModule} from "./module/common/common.module";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from "@angular/common";
+import { SearchboxComponent } from './page/layout/header/searchbox/searchbox.component';
+import {RightNavComponent} from "./page/layout/header/rightnav/rightnav.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import {DatePipe} from "@angular/common";
     LayoutComponent,
     SearchComponent,
     NavigationComponent,
-    HeaderComponent
+    HeaderComponent,
+    SearchboxComponent,
+    RightNavComponent
   ],
   imports: [
     BrowserModule,

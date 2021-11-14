@@ -26,7 +26,7 @@ img {
   @apply font-bold text-orange-apple-aqua-600;
 }
 
-.mat-checkbox ::ng-deep {
+:host ::ng-deep {
 
   .mat-checkbox-layout {
     @apply mb-0 mr-2;

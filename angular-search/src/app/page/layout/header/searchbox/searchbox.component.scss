@@ -1,0 +1,48 @@
+@import "src/globals";
+
+.header-search-form {
+  @apply relative;
+  width: 450px;
+
+  .ng-fa-icon {
+    padding: 0 15px;
+    padding-right: 10px;
+    font-size: 17px;
+
+    @apply text-black;
+  }
+
+  .input-group {
+    @apply items-center;
+  }
+
+  .header-search-close-btn {
+    @apply hidden;
+  }
+
+  .input-group-prepend {
+    @apply absolute;
+    z-index: 4;
+
+    .input-group-text {
+      @apply bg-none;
+    }
+  }
+
+  .input-group-append {
+    @apply absolute right-0;
+    z-index: 4;
+    height: 36px;
+
+    .input-group-text {
+      @apply bg-none;
+    }
+  }
+
+  .form-control {
+    @apply border-0 h-auto text-black;
+    border-radius: $default-border-radius;
+    padding: 10px 15px;
+    padding-left: 45px;
+  }
+}

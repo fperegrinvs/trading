@@ -1,0 +1,40 @@
+@import "src/globals";
+
+.avatar {
+  border-color: transparent;
+
+  &.avatar-state-success {
+    &:before {
+      border-color: $color-primary
+    }
+  }
+}
+
+ul.navbar-nav {
+  @apply flex-row items-center;
+
+  li.nav-item {
+
+    a.nav-link {
+      line-height: 100%;
+      padding: 10px 15px;
+
+      i {
+        font-size: 17px;
+      }
+
+      &.profile-nav-link {
+        @apply p-0 flex items-center;
+        margin-left: 10px;
+      }
+
+      &:hover, &:focus {
+        @apply outline-none text-black;
+      }
+    }
+  }
+
+  & + form.search {
+    @apply ml-6;
+  }
+}
