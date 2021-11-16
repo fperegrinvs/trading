@@ -30,8 +30,17 @@
         [min]="6"
         [max]="30"
       ></NumberFilter>
+
+      <div class="filter-action mt-2 text-right">
+        <Button icon="gray/bx-reset.svg" type="secondary" class="mr-2">Xoá tất cả</Button>
+        <Button icon="white/bx-search-alt.svg" type="primary">Tìm kiếm</Button>
+      </div>
     </Card>
     <Card class="flex-1 main-table">
+      <div class="page-action mb-2 text-right">
+        <Button icon="bx-wrench-w.svg" type="primary" class="mr-2"></Button>
+        <Button icon="bx-slider-alt-w.svg" type="primary"></Button>
+      </div>
       <Table [columns]="tableColumns" class="w-full"></Table>
     </Card>
   </div>

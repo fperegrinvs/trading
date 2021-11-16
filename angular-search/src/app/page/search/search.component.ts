@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TreeNode} from "../../module/common/model/TreeModel";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
+import {DocumentSearchService} from "../../module/document/service/document.search.service";
 
 @Component({
   selector: 'app-search',
@@ -64,9 +65,15 @@ export class SearchComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(
+    private documentService: DocumentSearchService
+  ) { }
 
   ngOnInit(): void {
+    this.documentService.getDocProps()
+      .subscribe(res => {
+        console.log(res.props);
+      });
   }
 
   onTreeFilter($event: TreeNode[]): void {

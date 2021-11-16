@@ -25,7 +25,7 @@
   }
 
   &.adm-button-primary {
-    @apply bg-orange-apple-aqua-600 text-white hover:bg-orange-apple-aqua-700
+    @apply border-orange-apple-aqua-600 bg-orange-apple-aqua-600 text-white hover:bg-orange-apple-aqua-700
     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-apple-aqua-500;
   }
 

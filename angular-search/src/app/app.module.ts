@@ -14,6 +14,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from "@angular/common";
 import { SearchboxComponent } from './page/layout/header/searchbox/searchbox.component';
 import {RightNavComponent} from "./page/layout/header/rightnav/rightnav.component";
+import {LoginComponent} from "./page/login/login.component";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {InterceptorService} from "./module/authentication/service/interceptor.service";
 
 @NgModule({
   declarations: [
@@ -23,7 +26,8 @@ import {RightNavComponent} from "./page/layout/header/rightnav/rightnav.componen
     NavigationComponent,
     HeaderComponent,
     SearchboxComponent,
-    RightNavComponent
+    RightNavComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -31,9 +35,14 @@ import {RightNavComponent} from "./page/layout/header/rightnav/rightnav.componen
     BrowserAnimationsModule,
     FontAwesomeModule,
     ADMCommonModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: InterceptorService,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

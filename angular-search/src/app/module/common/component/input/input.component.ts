@@ -5,7 +5,7 @@ import {Component, OnInit} from "@angular/core";
   template: `
     <input class="form-control"/>
   `,
-  styleUrls: [""],
+  styleUrls: [],
 })
 export class InputBoxComponent implements OnInit {
 
