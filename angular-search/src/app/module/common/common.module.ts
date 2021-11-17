@@ -19,6 +19,9 @@ import {FormsModule} from "@angular/forms";
 import {MatNativeDateModule} from "@angular/material/core";
 import {InputBoxComponent} from "./component/input/input.component";
 import {CheckboxComponent} from "./component/checkbox/checkbox.component";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {PaginationComponent} from "./component/pagination/pagination.component";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 
 
@@ -33,7 +36,8 @@ import {CheckboxComponent} from "./component/checkbox/checkbox.component";
     DropdownComponent,
     CardComponent,
     InputBoxComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,9 @@ import {CheckboxComponent} from "./component/checkbox/checkbox.component";
     MatDatepickerModule,
     MatCheckboxModule,
     FormsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatPaginatorModule,
+    NgbPaginationModule
   ],
   exports: [
     TreeComponent,
@@ -57,7 +63,8 @@ import {CheckboxComponent} from "./component/checkbox/checkbox.component";
     DropdownComponent,
     CardComponent,
     InputBoxComponent,
-    CheckboxComponent
+    CheckboxComponent,
+    PaginationComponent
   ]
 })
 export class ADMCommonModule { }

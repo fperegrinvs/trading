@@ -32,17 +32,15 @@ import {TableAlignment, TableColumn} from "../../model/TableColumn";
       <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
     </table>
+    <Pagination></Pagination>
   `,
   styleUrls: ["./table.component.scss"]
 })
 export class TableComponent implements OnInit, OnChanges {
 
   @Input() columns: TableColumn[] = [];
-
-  @Input() dataSource: any[] = [{
-    document: 'Tài liệu 1',
-    signer: 'Ngô Tuấn Khoa'
-  }]
+  @Input() dataSource: any[] = []
+  @Input() sizeOptions: number[] = [];
 
   displayColumns: string[] = [];
 

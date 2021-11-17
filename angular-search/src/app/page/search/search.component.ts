@@ -32,6 +32,41 @@ export class SearchComponent implements OnInit {
       sortable: true,
       headerAlign: TableAlignment.LEFT,
       cellAlign: TableAlignment.LEFT
+    },
+    {
+      id: "documentType",
+      text: "Loại tài liệu",
+      sortable: true,
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT
+    },
+    {
+      id: "publisher",
+      text: "Đơn vị ban hành",
+      sortable: true,
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT
+    },
+    {
+      id: "shortDesc",
+      text: "Trích yếu",
+      sortable: true,
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT
+    },
+    {
+      id: "label",
+      text: "Nhãn",
+      sortable: true,
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT
+    },
+    {
+      id: "publishedDate",
+      text: "Ngày ban hành",
+      sortable: true,
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT
     }
   ];
 

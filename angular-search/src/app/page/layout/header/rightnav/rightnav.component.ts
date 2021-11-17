@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class RightNavComponent implements OnInit {
 
   userName: string = "Ngô Tuấn Khoa";
+  isShow: boolean = false;
 
   constructor() { }
 
