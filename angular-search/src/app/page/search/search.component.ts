@@ -16,37 +16,7 @@ export class SearchComponent implements OnInit {
     "Huỷ"
   ]
 
-  treeData: TreeNode[] = [
-    {
-      name: "Người ký",
-      children: [
-        {
-          name: "Ngô Tuấn Khoa",
-          active: false
-        },
-        {
-          name: "Vũ Đình Hồng",
-          active: false
-        },
-        {
-          name: "Lê Anh Cường",
-          active: false
-        }
-      ],
-    },
-    {
-      name: "Đơn vị ban hành",
-      children: [],
-    },
-    {
-      name: "Nơi nhận",
-      children: [],
-    },
-    {
-      name: "Trạng thái",
-      children: [],
-    }
-  ];
+  treeData: TreeNode[] = [];
 
   tableColumns: TableColumn[] = [
     {
@@ -73,6 +43,26 @@ export class SearchComponent implements OnInit {
     this.documentService.getDocProps()
       .subscribe(res => {
         console.log(res.props);
+      });
+
+    this.documentService.searchDocument("", 1, 10)
+      .subscribe(res => {
+        console.log(res.hits);
+      });
+
+    this.documentService.getCategories()
+      .subscribe(res => {
+        this.treeData = res.map(x => {
+          return {
+            name: x.metaData,
+            children: x.options.map(opt => {
+              return {
+                name: opt,
+                active: false
+              }
+            })
+          }
+        });
       });
   }
 

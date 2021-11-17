@@ -46,3 +46,36 @@
     padding-left: 45px;
   }
 }
+
+@media (max-width: 992px) {
+  .header-search-form {
+    display: none;
+    position: fixed !important;
+    background: rgba(0, 0, 0, 0.30);
+    right: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+
+    &.show {
+      display: block;
+    }
+
+    .header-search-close-btn {
+      display: block !important;
+    }
+
+    .btn {
+      font-size: 16px;
+    }
+
+    .form-control {
+      border-radius: 0 !important;
+      background-color: white !important;
+      padding: 20px 0 !important;
+      padding-left: 60px !important;
+      font-size: 16px;
+    }
+  }
+}

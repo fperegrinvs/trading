@@ -65,7 +65,7 @@ export class TreeComponent implements OnInit, OnChanges {
       this.dataSource.data = internalData;
       this.treeControl.dataNodes = internalData;
 
-      this.treeControl.expandAll();
+      //this.treeControl.expandAll();
     }
   }
 

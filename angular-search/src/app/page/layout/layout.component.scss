@@ -564,3 +564,12 @@ body {
     @apply h-full;
   }
 }
+
+@media (max-width: 1200px) {
+  .layout-wrapper .content-wrapper .content-body .content {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+  }
+}
+
+

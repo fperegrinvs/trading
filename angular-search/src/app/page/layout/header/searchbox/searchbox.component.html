@@ -1,4 +1,4 @@
-<div class="header-search-form">
+<div class="header-search-form" [class.show]="isShow">
   <form>
     <div class="input-group">
       <div class="input-group-prepend">
@@ -6,8 +6,8 @@
       </div>
       <input type="text" class="form-control" placeholder="Tìm kiếm ...">
       <div class="input-group-append">
-        <button class="btn header-search-close-btn">
-          <i data-feather="x"></i>
+        <button type="button" (click)="closeSearch()" class="btn header-search-close-btn">
+          <fa-icon [icon]="faTimes"></fa-icon>
         </button>
       </div>
     </div>

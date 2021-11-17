@@ -17,6 +17,7 @@ import {RightNavComponent} from "./page/layout/header/rightnav/rightnav.componen
 import {LoginComponent} from "./page/login/login.component";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {InterceptorService} from "./module/authentication/service/interceptor.service";
+import { OverlayComponent } from './page/layout/overlay/overlay.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {InterceptorService} from "./module/authentication/service/interceptor.se
     HeaderComponent,
     SearchboxComponent,
     RightNavComponent,
-    LoginComponent
+    LoginComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,

@@ -14,6 +14,10 @@
     padding: 0 30px;
   }
 
+  .search-toggler {
+    display: none;
+  }
+
   .navigation-toggler {
     display: none;
     margin-right: 30px;
@@ -101,4 +105,42 @@
       @apply ml-6;
     }
   }
+}
+
+
+@media (max-width: 1200px) {
+  .header {
+    margin: 0;
+    left: 0;
+    right: 0;
+
+    .header-toggler {
+      display: block;
+    }
+
+    .navigation-toggler, .search-toggler {
+      display: block !important;
+    }
+
+    .header-body-right {
+
+      li {
+        a:not(.list-group-item) {
+          color: white;
+
+          &:hover, &:focus, &:active {
+            color: rgba(white, .8) !important;
+          }
+        }
+      }
+
+      &.open {
+        display: flex;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+
 }
