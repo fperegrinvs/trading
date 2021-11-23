@@ -4,6 +4,8 @@ export interface TableColumn {
   headerAlign: TableAlignment;
   cellAlign: TableAlignment;
   sortable?: boolean;
+  active: boolean;
+  bold?: boolean
 }
 
 export enum TableAlignment {

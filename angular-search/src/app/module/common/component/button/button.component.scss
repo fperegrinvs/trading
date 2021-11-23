@@ -1,3 +1,5 @@
+@import "src/globals";
+
 .adm-button {
 
   @apply px-3 py-2
@@ -29,6 +31,12 @@
     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-apple-aqua-500;
   }
 
+  &.adm-button-light {
+    background-color: $color-primary-light;
+    @apply border-orange-apple-aqua-100 text-white hover:bg-orange-apple-aqua-200
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-apple-aqua-500;
+  }
+
   &.adm-button-secondary {
     @apply border-gray-300 bg-white
     text-gray-700 hover:bg-gray-50 focus:outline-none
@@ -36,8 +44,8 @@
   }
 
   &.adm-button-active {
-    @apply border-green-400 bg-green-300
-    text-white hover:bg-gray-50 focus:outline-none
+    @apply border-gray-300 bg-white
+    text-gray-700 hover:bg-gray-50 focus:outline-none
     focus:ring-gray-500
   }
 }

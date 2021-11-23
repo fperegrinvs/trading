@@ -10,6 +10,7 @@ import {AfterContentInit, Component, ElementRef, EventEmitter, Input, OnInit, Ou
             [class.adm-button-primary]="type === 'primary'"
             [class.adm-button-secondary]="type === 'secondary'"
             [class.adm-button-active]="type === 'active'"
+            [class.adm-button-light]="type === 'light'"
             (click)="onButtonClick($event)"
     >
       <img [class.mr-1]="hasText" *ngIf="icon" src="assets/icons/{{icon}}"/>
@@ -37,7 +38,8 @@ export class ButtonComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.hasText = this.textWrapper?.nativeElement.childNodes.length > 0;
+    this.hasText = this.textWrapper?.nativeElement.childNodes.length > 0
+      && this.textWrapper?.nativeElement.childNodes[0].text;
   }
 
   onButtonClick($event: MouseEvent) {

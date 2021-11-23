@@ -86,6 +86,7 @@ export class DateFilterComponent implements OnInit {
     this.isActive = false;
     this.selectedRange = new DateRange<Date>(null, null);
     this.subText = "";
+    this.onSelect.emit(this.selectedRange);
   }
 
   onApplyClick($event: MouseEvent): void {

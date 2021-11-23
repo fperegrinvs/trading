@@ -3,6 +3,7 @@ import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {faSearch, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {UIService} from "../../../../service/ui.service";
 import {Subscription} from "rxjs";
+import {DocumentSearchService} from "../../../../module/document/service/document.search.service";
 
 @Component({
   selector: 'SearchBox',
@@ -15,9 +16,11 @@ export class SearchboxComponent implements OnInit, OnDestroy {
   faSearch: IconDefinition = faSearch;
   faTimes: IconDefinition = faTimes;
   isShow: boolean = false;
+  term: string = "";
 
   constructor(
-    private uiService: UIService
+    private uiService: UIService,
+    private documentService: DocumentSearchService
   ) { }
 
   ngOnInit(): void {
@@ -35,5 +38,9 @@ export class SearchboxComponent implements OnInit, OnDestroy {
 
   closeSearch() {
     this.uiService.toggleSearch(false);
+  }
+
+  onSearch(): void {
+    this.documentService.doSearch(this.term);
   }
 }

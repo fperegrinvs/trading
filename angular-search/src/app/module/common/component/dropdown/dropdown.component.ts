@@ -12,7 +12,7 @@ import {MatMenuTrigger} from "@angular/material/menu";
       [type]="type"
       #dropdownTrigger="matMenuTrigger"
     >
-      <div class="adm-dropdown-text">
+      <div class="adm-dropdown-text" *ngIf="text">
         {{text}}
       </div>
 

@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-12">
+    <Card>
+      <Button type="primary" icon="white/bx-arrow-back.svg" (onClick)="backToSearch()">Trở lại</Button>
+      <Table [columns]="tableColumns"
+             [pagination]="false"
+             [dataSource]="dataSource"
+             class="w-full mt-4">
+      </Table>
+    </Card>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <Card title="Các văn bản liên quan">
+      <Table [columns]="relativeColumns"
+             [pagination]="false"
+             [dataSource]="relativeData"
+             (rowClicked)="relateClicked($event)"
+             class="w-full"></Table>
+    </Card>
+  </div>
+</div>
+<ngx-spinner type="ball-clip-rotate-multiple" name="detail-spinner"></ngx-spinner>

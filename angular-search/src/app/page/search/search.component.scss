@@ -1,0 +1,18 @@
+@import "src/globals";
+
+.columns-setting, .layout-setting {
+
+  > div {
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+
+    &.last {
+      margin-bottom: 0 !important;
+    }
+
+    &.active {
+      background: $color-primary-light;
+    }
+  }
+}

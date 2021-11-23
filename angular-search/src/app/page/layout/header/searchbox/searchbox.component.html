@@ -1,10 +1,10 @@
 <div class="header-search-form" [class.show]="isShow">
-  <form>
+  <form (ngSubmit)="onSearch()">
     <div class="input-group">
       <div class="input-group-prepend">
         <fa-icon [icon]="faSearch"></fa-icon>
       </div>
-      <input type="text" class="form-control" placeholder="Tìm kiếm ...">
+      <input [ngModelOptions]="{standalone: true}" [(ngModel)]="term" type="text" class="form-control" placeholder="Tìm kiếm ...">
       <div class="input-group-append">
         <button type="button" (click)="closeSearch()" class="btn header-search-close-btn">
           <fa-icon [icon]="faTimes"></fa-icon>

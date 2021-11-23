@@ -18,6 +18,12 @@ import {LoginComponent} from "./page/login/login.component";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {InterceptorService} from "./module/authentication/service/interceptor.service";
 import { OverlayComponent } from './page/layout/overlay/overlay.component';
+import { StatisticModalComponent } from './page/search/statistic.modal/statistic.modal.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {ChartModule} from "angular2-chartjs";
+import {FormsModule} from "@angular/forms";
+import {NgxSpinnerModule} from "ngx-spinner";
+import { DetailComponent } from './page/detail/detail.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +35,9 @@ import { OverlayComponent } from './page/layout/overlay/overlay.component';
     SearchboxComponent,
     RightNavComponent,
     LoginComponent,
-    OverlayComponent
+    OverlayComponent,
+    StatisticModalComponent,
+    DetailComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +46,11 @@ import { OverlayComponent } from './page/layout/overlay/overlay.component';
     FontAwesomeModule,
     ADMCommonModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
+    ChartModule,
+    FormsModule,
+    NgxSpinnerModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

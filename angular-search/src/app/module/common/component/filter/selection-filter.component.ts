@@ -81,6 +81,7 @@ export class SelectionFilterComponent implements OnInit {
     this.isActive = false;
     this.subText = "";
     this.model.forEach(x => x.selected = false);
+    this.onChanged.emit([]);
   }
 
   onApplyClick($event: any): void {

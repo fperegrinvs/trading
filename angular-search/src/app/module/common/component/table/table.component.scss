@@ -1,3 +1,5 @@
+@import "src/globals";
+
 .mat-header-cell {
   @apply text-white text-sm;
   line-height: 2rem !important;
@@ -7,6 +9,15 @@
 .mat-cell {
   line-height: 2rem !important;
   font-size: 0.75rem;
+  @apply pl-4;
+}
+
+.mat-row {
+
+  &:hover {
+    background: $color-primary-light;
+    @apply cursor-pointer;
+  }
 }
 
 tr.mat-header-row {

@@ -1,0 +1,21 @@
+<div class="modal-title">
+  <strong>Thống kê</strong>
+  <Button (onClick)="closeModal()">Đóng</Button>
+</div>
+<mat-dialog-content class="mat-typography adm-modal-body">
+  <div class="filter-data">
+    <Tag title="Người ký" class="mr-2">Nguyễn Tấn Dũng</Tag>
+    <Tag title="Loại tài liệu">Thông tư</Tag>
+  </div>
+  <div class="statistic-meta">
+    <img src="assets/icons/bx-bar-chart-alt-2.svg" class="mr-4"/>
+    <strong>{{title}}</strong>
+    <DateFilter class="ml-4" text="Ngày thống kê"></DateFilter>
+  </div>
+  <div class="chart-container mb-4">
+    <chart [type]="barChartConfig.type" [data]="barChartConfig.data"></chart>
+  </div>
+  <div class="chart-container">
+    <chart [type]="pieChartConfig.type" [data]="pieChartConfig.data"></chart>
+  </div>
+</mat-dialog-content>

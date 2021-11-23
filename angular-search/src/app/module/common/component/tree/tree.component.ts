@@ -10,17 +10,19 @@ import * as _ from "lodash";
   template: `
     <mat-tree [treeControl]="treeControl" [dataSource]="dataSource">
 
-      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)" [class.active]="isNodeActive(node)">
         <Checkbox [checked]="node.active"></Checkbox>
-        {{node.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}
-        ]</small>
+        {{node.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}]</small>
       </mat-tree-node>
 
       <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-        <div class="mat-tree-node main-node" matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+        <div class="mat-tree-node main-node"
+             matTreeNodeToggle
+             [attr.aria-label]="'Toggle ' + node.name"
+             [class.active]="isNodeActive(node)">
           <button>
-            <img src="assets/icons/bxs-folder-open.svg" *ngIf="treeControl.isExpanded(node)"/>
-            <img src="assets/icons/bxs-folder.svg" *ngIf="!treeControl.isExpanded(node)"/>
+            <img src="assets/icons/bx-caret-down.svg" *ngIf="treeControl.isExpanded(node)"/>
+            <img src="assets/icons/bx-caret-right.svg" *ngIf="!treeControl.isExpanded(node)"/>
           </button>
           {{node.name}}
         </div>
@@ -65,7 +67,7 @@ export class TreeComponent implements OnInit, OnChanges {
       this.dataSource.data = internalData;
       this.treeControl.dataNodes = internalData;
 
-      //this.treeControl.expandAll();
+      this.treeControl.expandAll();
     }
   }
 
@@ -83,5 +85,17 @@ export class TreeComponent implements OnInit, OnChanges {
     });
 
     this.onSelect.emit(currentState);
+  }
+
+  isNodeActive(node: TreeNode): boolean {
+    if (node.active) {
+      return true;
+    }
+
+    if (node.children) {
+      return node.children?.filter(x => x.active).length > 0;
+    }
+
+    return false;
   }
 }

@@ -1,0 +1,18 @@
+@import "src/globals";
+
+$tag-padding: 10px;
+$tag-background: $color-primary;
+$tag-radius: $default-border-radius;
+$tag-font-size: 12px;
+
+.adm-tag {
+  padding: $tag-padding;
+  background-color: $tag-background;
+  border-radius: $tag-radius;
+  font-size: $tag-font-size;
+  @apply text-white inline-block;
+
+  .tag-value {
+    @apply font-bold;
+  }
+}

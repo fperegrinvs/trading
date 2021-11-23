@@ -22,6 +22,7 @@ import {CheckboxComponent} from "./component/checkbox/checkbox.component";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {PaginationComponent} from "./component/pagination/pagination.component";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {TagComponent} from "./component/tag/tag.component";
 
 
 
@@ -37,7 +38,8 @@ import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
     CardComponent,
     InputBoxComponent,
     CheckboxComponent,
-    PaginationComponent
+    PaginationComponent,
+    TagComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
     CardComponent,
     InputBoxComponent,
     CheckboxComponent,
-    PaginationComponent
+    PaginationComponent,
+    TagComponent
   ]
 })
 export class ADMCommonModule { }

@@ -1,47 +1,94 @@
 <div class="row">
   <div class="col-lg-3">
-    <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg">
+    <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg" *ngIf="leftFilterShow">
       <Tree [data]="treeData" (onSelect)="onTreeFilter($event)"></Tree>
     </Card>
-    <Card title="Thống kê" icon="bx-search-alt.svg">
-      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Đơn vị ban hành</Button>
-      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Trạng thái</Button>
-      <Button type="secondary" icon="bx-bar-chart-alt.svg" class="w-full py-1">Kho lưu</Button>
+    <Card title="Thống kê" icon="bx-search-alt.svg" *ngIf="statisticShow">
+      <Button
+        type="secondary"
+        icon="bx-bar-chart-alt.svg"
+        class="w-full py-1"
+        *ngFor="let statistic of statisticOptions"
+        (onClick)="openStatistic(statistic)"
+      >{{statistic.metaData.name}}</Button>
     </Card>
   </div>
-  <div class="col-lg-9 flex flex-col">
-    <Card>
-      <DateFilter
-        text="Ngày ký"
-        icon="bx-calendar.svg"
-        class="mr-4"
-      ></DateFilter>
+  <div class="col-lg-9 flex flex-col"
+       [class.col-lg-12]="!leftFilterShow && !statisticShow"
+       [class.col-lg-9]="leftFilterShow || statisticShow"
+  >
+    <Card *ngIf="topFilterShow">
+      <div class="top-filter mr-4 inline-block" *ngFor="let meta of topFilter">
+        <DateFilter
+          [text]="getMetaDataName(meta)"
+          icon="bx-calendar.svg"
+          *ngIf="meta.type === 'date'"
+          (onSelect)="dateFilterSelect($event, meta)"
+        ></DateFilter>
 
-      <SelectionFilter
-        text="Trạng thái"
-        icon="bx-list-check.svg"
-        class="mr-4"
-        [selections]="selectionData"
-      ></SelectionFilter>
-
-      <NumberFilter
-        text="Số bản cứng"
-        icon="bx-radio-circle-marked.svg"
-        [min]="6"
-        [max]="30"
-      ></NumberFilter>
+        <SelectionFilter
+          [text]="getMetaDataName(meta)"
+          icon="bx-list-check.svg"
+          [selections]="filterOptions[meta.name]"
+          *ngIf="meta.type === 'string'"
+          (onChanged)="selectionFilterChanged($event, meta)"
+        ></SelectionFilter>
+      </div>
 
       <div class="filter-action mt-2 text-right">
         <Button icon="gray/bx-reset.svg" type="secondary" class="mr-2">Xoá tất cả</Button>
-        <Button icon="white/bx-search-alt.svg" type="primary">Tìm kiếm</Button>
+        <Button icon="white/bx-search-alt.svg" type="primary" (onClick)="triggerFilter()">Tìm kiếm</Button>
       </div>
     </Card>
     <Card class="flex-1 main-table">
       <div class="page-action mb-2 text-right">
-        <Button icon="bx-wrench-w.svg" type="primary" class="mr-2"></Button>
-        <Button icon="bx-slider-alt-w.svg" type="primary"></Button>
+        <Dropdown type="light" icon="bx-wrench.svg" [caret]="false" class="mr-2">
+          <div class="layout-setting">
+            <div class="flex items-center column-setting"
+                 (click)="toggleCard($event, 'leftFilter')"
+                 [class.active]="leftFilterShow"
+            >
+              <Checkbox [checked]="leftFilterShow" title="Lọc theo tiêu chí"></Checkbox>
+            </div>
+            <div class="flex items-center column-setting"
+                 (click)="toggleCard($event, 'topFilter')"
+                 [class.active]="topFilterShow"
+            >
+              <Checkbox [checked]="topFilterShow" title="Lọc"></Checkbox>
+            </div>
+            <div class="flex items-center column-setting last"
+                 (click)="toggleCard($event, 'statistic')"
+                 [class.active]="statisticShow"
+            >
+              <Checkbox [checked]="statisticShow" title="Thống kê"></Checkbox>
+            </div>
+          </div>
+        </Dropdown>
+        <Dropdown type="light" icon="bx-slider-alt.svg" [caret]="false">
+          <div class="columns-setting">
+            <div *ngFor="let column of tableColumns; let i = index" class="flex items-center column-setting"
+                 (click)="toggleColumn(column)"
+                 [class.active]="column.active"
+                 [class.last]="(i + 1) === tableColumns.length"
+            >
+              <Checkbox [checked]="column.active" [title]="column.text"></Checkbox>
+            </div>
+          </div>
+        </Dropdown>
       </div>
-      <Table [columns]="tableColumns" class="w-full"></Table>
+      <div class="table-container" #table>
+        <Table [columns]="tableColumns"
+               [dataSource]="tableData"
+               [totalItems]="totalItems"
+               [sizeOptions]="[5, 10]"
+               (sizeChanged)="onTableSizeChanged($event)"
+               (pageChanged)="onTablePageChanged($event)"
+               (rowClicked)="onDocumentClicked($event)"
+               [page]="page"
+               class="w-full"
+        ></Table>
+        <ngx-spinner type="ball-clip-rotate-multiple" name="table-loader" [fullScreen]="false"></ngx-spinner>
+      </div>
     </Card>
   </div>
 </div>

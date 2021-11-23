@@ -1,6 +1,13 @@
 @import "src/globals";
 
-.mat-checkbox  {
+.mat-checkbox ::ng-deep  {
+
+  .mat-checkbox-layout {
+    margin-bottom: 0;
+  }
+}
+
+.mat-checkbox {
 
   &.mat-checkbox-checked ::ng-deep {
 

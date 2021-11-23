@@ -1,6 +1,6 @@
 export interface DocumentMetadata {
   name: string;
-  note: string;
+  note?: string;
   type: string;
   required: boolean;
 }

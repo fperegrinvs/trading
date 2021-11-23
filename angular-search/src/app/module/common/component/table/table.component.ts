@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from "@angular/core";
 import {TableAlignment, TableColumn} from "../../model/TableColumn";
 
 @Component({
@@ -17,7 +17,7 @@ import {TableAlignment, TableColumn} from "../../model/TableColumn";
             <span class="flex-1">
               {{column.text}}
             </span>
-            <img class="cursor-pointer h-5" src="assets/icons/bx-sort.svg"/>
+            <img *ngIf="column.sortable" class="cursor-pointer h-5" src="assets/icons/bx-sort.svg"/>
           </div>
         </th>
         <td
@@ -26,21 +26,42 @@ import {TableAlignment, TableColumn} from "../../model/TableColumn";
           [class.!text-center]="column.cellAlign === TableAlignment.CENTER"
           [class.!text-left]="column.cellAlign === TableAlignment.LEFT"
           [class.!text-right]="column.cellAlign === TableAlignment.RIGHT"
-        > {{element[column.id]}} </td>
+        >
+          <span *ngIf="!column.bold">{{element[column.id]}}</span>
+          <strong *ngIf="column.bold === true">{{element[column.id]}}</strong>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns;"
+          (click)="rowClick(row)"
+      ></tr>
     </table>
-    <Pagination></Pagination>
+    <Pagination
+      [totalItems]="totalItems"
+      [sizeOptions]="sizeOptions"
+      [page]="page"
+      [size]="size"
+      (sizeChanged)="onSizeChanged($event)"
+      (pageChanged)="onPageChanged($event)"
+      *ngIf="pagination"
+    ></Pagination>
   `,
   styleUrls: ["./table.component.scss"]
 })
 export class TableComponent implements OnInit, OnChanges {
 
   @Input() columns: TableColumn[] = [];
-  @Input() dataSource: any[] = []
+  @Input() dataSource: any[] = [];
   @Input() sizeOptions: number[] = [];
+  @Input() totalItems: number = 0;
+  @Input() page: number = 1;
+  @Input() pagination: boolean = true;
+  @Input() size: number = 10;
+
+  @Output() sizeChanged: EventEmitter<number> = new EventEmitter<number>();
+  @Output() pageChanged: EventEmitter<number> = new EventEmitter<number>();
+  @Output() rowClicked: EventEmitter<any> = new EventEmitter<any>();
 
   displayColumns: string[] = [];
 
@@ -53,9 +74,22 @@ export class TableComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.columns) {
-        this.displayColumns = (changes.columns.currentValue as TableColumn[]).map(x => x.id);
-        console.log(this.displayColumns);
+        this.displayColumns = (changes.columns.currentValue as TableColumn[])
+          .filter(x => x.active)
+          .map(x => x.id);
     }
+  }
+
+  onSizeChanged($event: number): void {
+    this.sizeChanged.emit($event);
+  }
+
+  onPageChanged($event: number): void {
+    this.pageChanged.emit($event);
+  }
+
+  rowClick($event: any): void {
+    this.rowClicked.emit($event);
   }
 
   get TableAlignment() {
