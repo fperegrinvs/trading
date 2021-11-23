@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  api_path: "https://core.chinhta123.com"
 };
