@@ -85,6 +85,9 @@
                (pageChanged)="onTablePageChanged($event)"
                (rowClicked)="onDocumentClicked($event)"
                [page]="page"
+               [expandable]="searchTerm.length > 0"
+               [inSearchMode]="searchTerm.length > 0"
+               expandAttr="highlight"
                class="w-full"
         ></Table>
         <ngx-spinner type="ball-clip-rotate-multiple" name="table-loader" [fullScreen]="false"></ngx-spinner>

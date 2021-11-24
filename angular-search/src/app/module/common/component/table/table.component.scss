@@ -10,13 +10,23 @@
   line-height: 2rem !important;
   font-size: 0.75rem;
   @apply pl-4;
+
+  .secondary-row {
+
+    em {
+      color: red !important;
+    }
+  }
 }
 
 .mat-row {
 
-  &:hover {
-    background: $color-primary-light;
-    @apply cursor-pointer;
+  &:not(.expanded-row) {
+
+    &:hover {
+      background: $color-primary-light;
+      @apply cursor-pointer;
+    }
   }
 }
 
@@ -27,4 +37,8 @@ tr.mat-header-row {
 
 tr.mat-row {
   @apply h-8;
+
+  &.in-search {
+    background-color: $color-primary-light !important;
+  }
 }

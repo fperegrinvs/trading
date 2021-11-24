@@ -131,10 +131,13 @@ export class SearchComponent implements OnInit, OnDestroy {
             if (this.dataProcessEngine[key]) {
               item[key] = this.dataProcessEngine[key](item[key]);
             }
-          })
+          });
+
+          item.highlight = this.searchTerm ? x.highlight.content.join("<br/>") : "";
 
           return item;
         });
+
         this.totalItems = res.total_row;
 
         this.spinnerService.hide("table-loader");

@@ -1,10 +1,20 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation
+} from "@angular/core";
 import {TableAlignment, TableColumn} from "../../model/TableColumn";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'Table',
   template: `
-    <table mat-table [dataSource]="dataSource" class="w-full">
+    <table mat-table [dataSource]="dataSource" class="w-full" multiTemplateDataRows>
       <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columns">
         <th
           mat-header-cell
@@ -32,10 +42,20 @@ import {TableAlignment, TableColumn} from "../../model/TableColumn";
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
+          <div class="row secondary-row" [@detailExpand]="'expanded'" *ngIf="expandable" [innerHTML]="element[expandAttr]">
+
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayColumns;"
+      <tr mat-row *matRowDef="let row; columns: displayColumns;" [class.in-search]="inSearchMode"
           (click)="rowClick(row)"
       ></tr>
+
+      <tr mat-row *matRowDef="let row1; columns: ['expandedDetail']" class="expanded-row" [class.hidden]="!expandable"></tr>
     </table>
     <Pagination
       [totalItems]="totalItems"
@@ -47,7 +67,15 @@ import {TableAlignment, TableColumn} from "../../model/TableColumn";
       *ngIf="pagination"
     ></Pagination>
   `,
-  styleUrls: ["./table.component.scss"]
+  styleUrls: ["./table.component.scss"],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ])
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent implements OnInit, OnChanges {
 
@@ -58,6 +86,9 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() page: number = 1;
   @Input() pagination: boolean = true;
   @Input() size: number = 10;
+  @Input() expandable: boolean = false;
+  @Input() expandAttr: string = "";
+  @Input() inSearchMode: boolean = false;
 
   @Output() sizeChanged: EventEmitter<number> = new EventEmitter<number>();
   @Output() pageChanged: EventEmitter<number> = new EventEmitter<number>();
