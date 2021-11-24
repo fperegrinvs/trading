@@ -16,3 +16,9 @@
     }
   }
 }
+
+h5.card-title {
+  text-transform: uppercase;
+  font-size: 13px;
+  @apply font-bold flex items-center mb-3;
+}

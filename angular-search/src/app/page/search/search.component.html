@@ -2,8 +2,10 @@
   <div class="col-lg-3">
     <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg" *ngIf="leftFilterShow">
       <Tree [data]="treeData" (onSelect)="onTreeFilter($event)"></Tree>
-    </Card>
-    <Card title="Thống kê" icon="bx-search-alt.svg" *ngIf="statisticShow">
+      <h5 class="card-title mt-4">
+        <img class="mr-2" src="assets/icons/bx-search-alt.svg"/>
+        Thống kê
+      </h5>
       <Button
         type="secondary"
         icon="bx-bar-chart-alt.svg"
@@ -80,7 +82,7 @@
         <Table [columns]="tableColumns"
                [dataSource]="tableData"
                [totalItems]="totalItems"
-               [sizeOptions]="[5, 10]"
+               [sizeOptions]="[10, 20, 50]"
                (sizeChanged)="onTableSizeChanged($event)"
                (pageChanged)="onTablePageChanged($event)"
                (rowClicked)="onDocumentClicked($event)"
