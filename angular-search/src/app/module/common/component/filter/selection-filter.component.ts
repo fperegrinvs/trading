@@ -15,6 +15,7 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
       *ngIf="!isActive"
     >
       <div class="p-2" [style.min-width]="'200px'">
+        <input class="form-control mb-2" placeholder="tìm kiếm ..."/>
         <div class="selection-item" *ngFor="let selection of model">
           <mat-checkbox [(ngModel)]="selection.selected">
             {{selection.text}}

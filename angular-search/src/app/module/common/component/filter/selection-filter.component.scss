@@ -3,4 +3,8 @@ mat-checkbox ::ng-deep {
   .mat-checkbox-frame {
     border-width: 1px !important;
   }
+
+  .mat-checkbox-label {
+    white-space: initial;
+  }
 }

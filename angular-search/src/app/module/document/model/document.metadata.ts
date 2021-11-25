@@ -2,7 +2,7 @@ export interface DocumentMetadata {
   name: string;
   note?: string;
   type: string;
-  required: boolean;
+  required?: boolean;
 }
 
 export enum MetadataType {

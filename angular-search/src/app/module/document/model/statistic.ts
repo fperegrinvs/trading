@@ -1,5 +1,11 @@
 import {DocumentMetadata} from "./document.metadata";
 
 export interface Statistic {
-  metaData: DocumentMetadata
+  value: number,
+  name: string
+}
+
+export interface StatisticOption {
+  name: string,
+  type: number
 }

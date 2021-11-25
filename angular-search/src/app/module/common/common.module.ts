@@ -23,6 +23,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {PaginationComponent} from "./component/pagination/pagination.component";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {TagComponent} from "./component/tag/tag.component";
+import {SingleChoiceFilterComponent} from "./component/filter/single-choice-filter.component";
 
 
 
@@ -39,7 +40,8 @@ import {TagComponent} from "./component/tag/tag.component";
     InputBoxComponent,
     CheckboxComponent,
     PaginationComponent,
-    TagComponent
+    TagComponent,
+    SingleChoiceFilterComponent
   ],
   imports: [
     CommonModule,
@@ -67,7 +69,8 @@ import {TagComponent} from "./component/tag/tag.component";
     InputBoxComponent,
     CheckboxComponent,
     PaginationComponent,
-    TagComponent
+    TagComponent,
+    SingleChoiceFilterComponent
   ]
 })
 export class ADMCommonModule { }

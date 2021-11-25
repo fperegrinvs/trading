@@ -28,6 +28,9 @@ import * as _ from "lodash";
         </div>
         <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
              role="group">
+          <div class="search-container px-4 py-2">
+            <input class="form-control" placeholder="tìm kiếm ..."/>
+          </div>
           <ng-container matTreeNodeOutlet></ng-container>
         </div>
       </mat-nested-tree-node>

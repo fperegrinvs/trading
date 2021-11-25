@@ -3,7 +3,7 @@ import {TreeNode} from "../../module/common/model/TreeModel";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
 import {MatDialog} from "@angular/material/dialog";
-import {Statistic} from "../../module/document/model/statistic";
+import {Statistic, StatisticOption} from "../../module/document/model/statistic";
 import {StatisticModalComponent} from "./statistic.modal/statistic.modal.component";
 import * as _ from "lodash";
 import {Subscription} from "rxjs";
@@ -12,6 +12,7 @@ import {Router} from "@angular/router";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
 import {DateRange} from "@angular/material/datepicker";
+import {ReportTypeEnum} from "../../module/document/enum/report.type.enum";
 
 @Component({
   selector: 'app-search',
@@ -38,27 +39,22 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   dataProcessEngine: any = {};
 
-  statisticOptions: Statistic[] = [
+  statisticOptions: StatisticOption[] = [
     {
-      metaData: {
-        name: "Đơn vị ban hành",
-        type: "string",
-        required: true
-      }
+      name: "Loại tài liệu",
+      type: ReportTypeEnum.LOAI_TAI_LIEU
     },
     {
-      metaData: {
-        name: "Trạng thái",
-        type: "string",
-        required: true
-      }
+      name: "Người ký",
+      type: ReportTypeEnum.NGUOI_KY
     },
     {
-      metaData: {
-        name: "Kho lưu",
-        type: "string",
-        required: true
-      }
+      name: "Nơi ban hành",
+      type: ReportTypeEnum.NOI_BAN_HANH
+    },
+    {
+      name: "Ngày ban hành",
+      type: ReportTypeEnum.NGAY_BAN_HANH
     }
   ]
 
@@ -185,14 +181,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private prepareTopFilter(props: DocumentMetadata[]): void {
-    const metaFilters: DocumentMetadata[] = [];
-    props.forEach(prop => {
-      if (prop.name === "signer" || prop.name === "promulgationDate") {
-        metaFilters.push(prop);
-      }
-    })
-
-    this.topFilter = metaFilters;
+    this.topFilter = [];
+    this.documentService.getSearchProps()
+      .subscribe(searchProps => {
+        this.topFilter = searchProps.items;
+      });
   }
 
   private resetFilter(): void {
@@ -233,9 +226,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.prepareTableData(searchProps);
   }
 
-  openStatistic(statistic: Statistic): void {
+  openStatistic(statistic: StatisticOption): void {
     const modalData = {
-      title: statistic.metaData.name
+      title: statistic.name,
+      type: statistic.type
     };
 
     this.dialogService.open(StatisticModalComponent, {
@@ -314,5 +308,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.statisticShow = !this.statisticShow;
         break;
     }
+  }
+
+  hideLeftBar(): void {
+    this.leftFilterShow = false;
   }
 }
