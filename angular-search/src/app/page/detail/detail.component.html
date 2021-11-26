@@ -7,6 +7,18 @@
              [dataSource]="dataSource"
              class="w-full mt-4">
       </Table>
+      <div class="downloads mt-4" *ngIf="document.linkdoc">
+        <Button
+          type="secondary"
+          icon="gray/bxs-download.svg"
+          *ngFor="let item of document.linkdoc"
+          (onClick)="downloadFile(item)"
+          class="mr-2"
+        >
+          {{getFileName(item)}}
+          <img class="ml-2" src="assets/icons/gray/bx-file.svg"/>
+        </Button>
+      </div>
     </Card>
   </div>
 </div>

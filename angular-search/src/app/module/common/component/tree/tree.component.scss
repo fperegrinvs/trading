@@ -38,6 +38,11 @@ img {
   }
 }
 
+.view-more {
+  @apply font-bold cursor-pointer text-center;
+  color: $color-primary;
+}
+
 :host ::ng-deep {
 
   .mat-tree {

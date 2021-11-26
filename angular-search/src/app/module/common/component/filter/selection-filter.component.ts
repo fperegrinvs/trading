@@ -28,7 +28,7 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
       </div>
     </Dropdown>
 
-    <Button *ngIf="isActive" [icon]="icon" type="active" (onClick)="resetFilter()">
+    <Button *ngIf="isActive" [icon]="icon" type="active">
       <div class="adm-dropdown-text" [style.font-size]="'10px'">
         {{text}}
         <div class="adm-dropdown-sub text-left" [style.line-height]="'7px'">
@@ -36,7 +36,7 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
         </div>
       </div>
 
-      <fa-icon class="ml-4" [icon]="faTimes"></fa-icon>
+      <fa-icon (click)="resetFilter()" class="ml-4" [icon]="faTimes"></fa-icon>
     </Button>
   `,
   styleUrls: ['./selection-filter.component.scss'],

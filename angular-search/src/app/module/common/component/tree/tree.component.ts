@@ -4,6 +4,8 @@ import {TreeNode} from "../../model/TreeModel";
 import {MatTreeNestedDataSource} from "@angular/material/tree";
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from "lodash";
+import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faTimes} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'Tree',
@@ -28,10 +30,16 @@ import * as _ from "lodash";
         </div>
         <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
              role="group">
-          <div class="search-container px-4 py-2">
+          <div class="search-container px-4 py-2" *ngIf="node.inSearchMode">
             <input class="form-control" placeholder="tìm kiếm ..."/>
           </div>
           <ng-container matTreeNodeOutlet></ng-container>
+          <div class="view-more" *ngIf="!node.inSearchMode" (click)="toggleSearchMode(node)">
+            Xem thêm <fa-icon [icon]="faChevronDown"></fa-icon>
+          </div>
+          <div class="view-more" *ngIf="node.inSearchMode" (click)="toggleSearchMode(node)">
+            Đóng <fa-icon [icon]="faTimes"></fa-icon>
+          </div>
         </div>
       </mat-nested-tree-node>
     </mat-tree>
@@ -46,6 +54,9 @@ export class TreeComponent implements OnInit, OnChanges {
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   dataSource: MatTreeNestedDataSource<TreeNode> = new MatTreeNestedDataSource();
 
+  faChevronDown: IconDefinition = faChevronDown;
+  faTimes: IconDefinition = faTimes;
+
   hasChild = (_: number, node: TreeNode) => !!node.children;
 
   constructor() {
@@ -56,6 +67,7 @@ export class TreeComponent implements OnInit, OnChanges {
 
   private populateNodeIds(tree: TreeNode[]): void {
     tree.forEach(parent => {
+      parent.inSearchMode = false;
       parent.children?.forEach(child => {
         child.id = uuidv4();
       });
@@ -100,5 +112,9 @@ export class TreeComponent implements OnInit, OnChanges {
     }
 
     return false;
+  }
+
+  toggleSearchMode(node: TreeNode): void {
+    node.inSearchMode = !node.inSearchMode;
   }
 }

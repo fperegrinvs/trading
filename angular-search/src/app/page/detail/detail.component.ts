@@ -4,6 +4,7 @@ import {DocumentSearchService} from "../../module/document/service/document.sear
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
+import {Document} from "../../module/document/model/document";
 
 @Component({
   selector: 'app-detail',
@@ -36,6 +37,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   relativeColumns: TableColumn[] = [];
   relativeData: any[] = [];
+  document: any = {};
 
   constructor(
     private documentService: DocumentSearchService,
@@ -49,10 +51,11 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.documentService.getDocProps()
       .subscribe(props => {
         props.props.forEach(prop => {
-          if (this.documentService.getCurrentDocument()[prop.name]) {
+          this.document = this.documentService.getCurrentDocument();
+          if (this.document[prop.name]) {
             source.push({
               metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
-              content: this.documentService.getCurrentDocument()[prop.name]
+              content: this.document[prop.name]
             });
           }
         });
@@ -121,5 +124,14 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   relateClicked($event: any): void {
     this.documentService.selectDocument($event);
+  }
+
+  getFileName(url: string): string {
+    const parts = url.split("/");
+    return parts.length > 0 ? parts[parts.length - 1] : url;
+  }
+
+  downloadFile(url: string): void {
+    window.open(url, "_blank");
   }
 }

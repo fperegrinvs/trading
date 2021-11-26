@@ -26,7 +26,9 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
       </div>
     </Dropdown>
 
-    <Button *ngIf="isActive" [icon]="icon" type="active" (onClick)="resetFilter()">
+    <Button *ngIf="isActive" [icon]="icon" type="active" (onClick)="resetFilter()"
+            matTooltip="Info about the action"
+    >
       <div class="adm-dropdown-text" [style.font-size]="'10px'">
         {{text}}
         <div class="adm-dropdown-sub text-left" [style.line-height]="'7px'">

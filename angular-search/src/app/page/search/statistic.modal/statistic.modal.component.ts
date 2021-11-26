@@ -63,7 +63,10 @@ export class StatisticModalComponent implements OnInit, AfterViewInit {
     this.pieChartConfig.data.labels = labels;
     this.pieChartConfig.data.datasets[0].data = values;
 
-    this.pieChartConfig.data.datasets[0].backgroundColor = labels.map(() => this.getRandomColor());
+    const colors = labels.map(() => this.getRandomColor());
+
+    this.pieChartConfig.data.datasets[0].backgroundColor = colors;
+    this.barChartConfig.data.datasets[0].backgroundColor = colors;
 
     this.barChart?.chart.update();
     this.pieChart?.chart.update();

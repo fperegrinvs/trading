@@ -2,14 +2,19 @@
 
 .mat-header-cell {
   @apply text-white text-sm;
-  line-height: 2rem !important;
 
+  &:first-of-type {
+    @apply p-0 #{!important};
+  }
+
+  &:last-of-type {
+    @apply p-0 #{!important};
+  }
 }
 
 .mat-cell {
-  line-height: 2rem !important;
   font-size: 0.75rem;
-  @apply pl-4;
+  @apply p-2 #{!important};
 
   .secondary-row {
 

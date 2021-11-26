@@ -24,6 +24,7 @@ import {PaginationComponent} from "./component/pagination/pagination.component";
 import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {TagComponent} from "./component/tag/tag.component";
 import {SingleChoiceFilterComponent} from "./component/filter/single-choice-filter.component";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 
@@ -43,20 +44,21 @@ import {SingleChoiceFilterComponent} from "./component/filter/single-choice-filt
     TagComponent,
     SingleChoiceFilterComponent
   ],
-  imports: [
-    CommonModule,
-    MatTreeModule,
-    MatTableModule,
-    MatButtonModule,
-    MatMenuModule,
-    FontAwesomeModule,
-    MatDatepickerModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    NgbPaginationModule
-  ],
+    imports: [
+        CommonModule,
+        MatTreeModule,
+        MatTableModule,
+        MatButtonModule,
+        MatMenuModule,
+        FontAwesomeModule,
+        MatDatepickerModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatPaginatorModule,
+        NgbPaginationModule,
+        MatTooltipModule
+    ],
   exports: [
     TreeComponent,
     TableComponent,

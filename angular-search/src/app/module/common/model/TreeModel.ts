@@ -4,4 +4,5 @@ export interface TreeNode {
   children?: TreeNode[]
   count?: number;
   active?: boolean;
+  inSearchMode?: boolean;
 }
