@@ -21,6 +21,7 @@
        [class.col-lg-9]="leftFilterShow"
   >
     <Card *ngIf="topFilterShow">
+      <img class="mr-2 top-toggle" src="assets/icons/bx-chevrons-left.svg" (click)="hideTopBar()"/>
       <div class="top-filter mr-4 mb-4 inline-block" *ngFor="let meta of topFilter">
         <DateFilter
           [text]="getMetaDataName(meta)"
@@ -45,22 +46,16 @@
     </Card>
     <Card class="flex-1 main-table">
       <div class="page-action mb-2 text-right">
-        <Dropdown type="light" icon="bx-wrench.svg" [caret]="false" class="mr-2">
-          <div class="layout-setting">
-            <div class="flex items-center column-setting"
-                 (click)="toggleCard($event, 'leftFilter')"
-                 [class.active]="leftFilterShow"
-            >
-              <Checkbox [checked]="leftFilterShow" title="Lọc theo tiêu chí & thống kê"></Checkbox>
-            </div>
-            <div class="flex items-center column-setting last"
-                 (click)="toggleCard($event, 'topFilter')"
-                 [class.active]="topFilterShow"
-            >
-              <Checkbox [checked]="topFilterShow" title="Lọc"></Checkbox>
-            </div>
-          </div>
-        </Dropdown>
+        <Button icon="bxs-dock-left.svg"
+                [type]="leftFilterShow ? 'light' : 'default'"
+                class="mr-2"
+                (click)="toggleCard($event, 'leftFilter')"
+        ></Button>
+        <Button icon="bxs-dock-top.svg"
+                [type]="topFilterShow ? 'light' : 'default'"
+                class="mr-2"
+                (click)="toggleCard($event, 'topFilter')"
+        ></Button>
         <Dropdown type="light" icon="bx-slider-alt.svg" [caret]="false">
           <div class="columns-setting">
             <div *ngFor="let column of tableColumns; let i = index" class="flex items-center column-setting"

@@ -1,6 +1,6 @@
 @import "src/globals";
 
-.left-toggle {
+.left-toggle, .top-toggle {
   @apply absolute;
   right: 1rem;
   top: 1rem;

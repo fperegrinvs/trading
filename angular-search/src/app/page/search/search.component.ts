@@ -313,4 +313,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   hideLeftBar(): void {
     this.leftFilterShow = false;
   }
+
+  hideTopBar(): void {
+    this.topFilterShow = false;
+  }
 }
