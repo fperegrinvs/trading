@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from "@angular/core";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from "@angular/core";
 import {NestedTreeControl} from "@angular/cdk/tree";
 import {TreeNode} from "../../model/TreeModel";
-import {MatTreeNestedDataSource} from "@angular/material/tree";
+import {MatTree, MatTreeNestedDataSource} from "@angular/material/tree";
 import { v4 as uuidv4 } from 'uuid';
 import * as _ from "lodash";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +10,7 @@ import {faChevronDown, faTimes} from "@fortawesome/free-solid-svg-icons";
 @Component({
   selector: 'Tree',
   template: `
-    <mat-tree [treeControl]="treeControl" [dataSource]="dataSource">
+    <mat-tree [treeControl]="treeControl" [dataSource]="dataSource" #tree>
 
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)" [class.active]="isNodeActive(node)">
         <Checkbox [checked]="node.active"></Checkbox>
@@ -50,12 +50,17 @@ export class TreeComponent implements OnInit, OnChanges {
 
   @Input() data: TreeNode[] = [];
   @Output() onSelect: EventEmitter<TreeNode[]> = new EventEmitter<TreeNode[]>();
+  @Output() onSearchToggle: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
+
+  @ViewChild('tree') tree: MatTree<TreeNode> | undefined;
 
   treeControl = new NestedTreeControl<TreeNode>(node => node.children);
   dataSource: MatTreeNestedDataSource<TreeNode> = new MatTreeNestedDataSource();
 
   faChevronDown: IconDefinition = faChevronDown;
   faTimes: IconDefinition = faTimes;
+
+  originalTreeData: TreeNode[] = [];
 
   hasChild = (_: number, node: TreeNode) => !!node.children;
 
@@ -72,11 +77,18 @@ export class TreeComponent implements OnInit, OnChanges {
         child.id = uuidv4();
       });
     });
+
+    this.originalTreeData = _.cloneDeep(tree);
+
+    tree.forEach(parent => {
+      parent.children = parent.children?.slice(0, 5);
+    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data) {
       const internalData = changes.data.currentValue;
+
       this.populateNodeIds(internalData);
 
       this.dataSource.data = internalData;
@@ -116,5 +128,14 @@ export class TreeComponent implements OnInit, OnChanges {
 
   toggleSearchMode(node: TreeNode): void {
     node.inSearchMode = !node.inSearchMode;
+
+    let currentState = _.cloneDeep(this.dataSource.data);
+    currentState[0].children = [];
+
+    this.dataSource.data = currentState;
+
+    this.treeControl.expandAll();
+
+    this.onSearchToggle.emit(node);
   }
 }

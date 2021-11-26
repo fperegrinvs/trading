@@ -1,6 +1,5 @@
 export interface Category {
-  id: number,
-  metaDataId: string,
-  metaData: string,
-  options: string[]
+  name: string,
+  value: number,
+  show: boolean,
 }

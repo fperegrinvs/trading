@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {DocPropsResponse} from "../model/response/docprops.response";
 import {Observable, Subject, Subscription} from "rxjs";
 import {DocumentResponse} from "../model/response/document.response";
 import {Category} from "../model/category";
 import {SearchPropsResponse} from "../model/response/searchprops.response";
+import {CategoryResponse} from "../model/response/category.response";
 
 const API_PATH = environment.api_path;
 const MOCK_API_PATH = "https://6193d360221e680017450c50.mockapi.io";
@@ -17,6 +18,7 @@ export class DocumentSearchService {
   subjectSearch: Subject<string> = new Subject<string>();
   subjectSelect: Subject<any> = new Subject();
   private currentDocument: any;
+  private currentSearchTerm: string = "";
 
 
   constructor(
@@ -25,6 +27,7 @@ export class DocumentSearchService {
   }
 
   doSearch(term: string): void {
+    this.currentSearchTerm = term;
     this.subjectSearch.next(term);
   }
 
@@ -32,9 +35,19 @@ export class DocumentSearchService {
     return this.subjectSearch;
   }
 
-  getCategories(): Observable<Category[]> {
-    const categoriesUrl = `${MOCK_API_PATH}/category`;
-    return this.http.get<Category[]>(categoriesUrl);
+  getCurrentSearchTerm(): string {
+    return this.currentSearchTerm;
+  }
+
+  getCategories(type: number, limit: number): Observable<CategoryResponse> {
+    const categoriesUrl = `${API_PATH}/category`;
+    const params = new HttpParams()
+      .set("level1", type)
+      .set("limit", limit);
+
+    return this.http.get<CategoryResponse>(categoriesUrl, {
+      params
+    });
   }
 
   getDocProps(): Observable<DocPropsResponse> {

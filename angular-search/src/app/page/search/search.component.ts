@@ -3,16 +3,18 @@ import {TreeNode} from "../../module/common/model/TreeModel";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
 import {MatDialog} from "@angular/material/dialog";
-import {Statistic, StatisticOption} from "../../module/document/model/statistic";
+import {StatisticOption} from "../../module/document/model/statistic";
 import {StatisticModalComponent} from "./statistic.modal/statistic.modal.component";
 import * as _ from "lodash";
-import {Subscription} from "rxjs";
+import {forkJoin, Observable, Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Router} from "@angular/router";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
 import {DateRange} from "@angular/material/datepicker";
 import {ReportTypeEnum} from "../../module/document/enum/report.type.enum";
+import {CategoryResponse} from "../../module/document/model/response/category.response";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-search',
@@ -63,6 +65,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   leftFilterShow: boolean = true;
   topFilterShow: boolean = true;
   statisticShow: boolean = true;
+
+  treeDataOriginal: any = {};
 
   constructor(
     private documentService: DocumentSearchService,
@@ -161,23 +165,46 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private prepareTreeFilter(props: DocumentMetadata[]): void {
-    this.treeData = ["publisherName", "documentName"].map(prop => {
-      const options: string[] = this.filterOptions[prop]
-      const meta = props.filter(x => x.name === prop)[0];
+    const treeMeta = [
+      {
+        name: "Đơn vị ban hành",
+        type: ReportTypeEnum.NOI_BAN_HANH,
+        id: "publisherName"
+      },
+      {
+        name: "Loại tài liệu",
+        type: ReportTypeEnum.LOAI_TAI_LIEU,
+        id: "documentName"
+      }
+    ];
 
-      const node: TreeNode = {
-        id: prop,
-        name: this.getMetaDataName(meta),
-        children: options.map(x => {
-          const childNode: TreeNode = {
-            name: x
-          }
-          return childNode;
-        })
-      };
+    const obs: Observable<CategoryResponse>[] = [];
 
-      return node;
-    })
+    treeMeta.forEach(type => {
+      obs.push(this.documentService.getCategories(type.type, 100));
+    });
+
+    forkJoin(obs).subscribe(res => {
+      // store original data
+      treeMeta.forEach((meta, index) => {
+        this.treeDataOriginal[meta.id] = res[index].data;
+      })
+
+      this.treeData = treeMeta.map((type, idx) => {
+        const node: TreeNode = {
+          id: type.id,
+          name: type.name,
+          children: res[idx].data.map(x => {
+            const childNode: TreeNode = {
+              name: x.name
+            }
+            return childNode;
+          })
+        };
+
+        return node;
+      });
+    });
   }
 
   private prepareTopFilter(props: DocumentMetadata[]): void {
@@ -210,6 +237,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.subcriptions.push(onSearchSubscription);
     this.prepareFilterOptions();
+
+    if (this.documentService.getCurrentSearchTerm()) {
+      this.documentService.doSearch(this.documentService.getCurrentSearchTerm());
+    }
   }
 
   ngOnDestroy() {
@@ -316,5 +347,15 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   hideTopBar(): void {
     this.topFilterShow = false;
+  }
+
+  onTreeSearchToggle(node: TreeNode): void {
+    console.log(node);
+    if (node.inSearchMode) {
+
+      // toggle all options
+    } else {
+      //
+    }
   }
 }

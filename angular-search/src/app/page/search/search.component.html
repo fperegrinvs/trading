@@ -2,7 +2,7 @@
   <div class="col-lg-3">
     <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg" *ngIf="leftFilterShow">
       <img class="mr-2 left-toggle" src="assets/icons/bx-chevrons-left.svg" (click)="hideLeftBar()"/>
-      <Tree [data]="treeData" (onSelect)="onTreeFilter($event)"></Tree>
+      <Tree [data]="treeData" (onSelect)="onTreeFilter($event)" (onSearchToggle)="onTreeSearchToggle($event)"></Tree>
       <h5 class="card-title mt-4">
         <img class="mr-2" src="assets/icons/bx-search-alt.svg"/>
         Thống kê

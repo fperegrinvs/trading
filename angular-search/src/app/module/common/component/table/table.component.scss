@@ -17,6 +17,7 @@
   @apply p-2 #{!important};
 
   .secondary-row {
+    display: contents;
 
     em {
       color: red !important;
