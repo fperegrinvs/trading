@@ -8,3 +8,12 @@ mat-checkbox ::ng-deep {
     white-space: initial;
   }
 }
+
+.selection-wrapper {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.no-result {
+  @apply text-center italic text-gray-400 py-4;
+}

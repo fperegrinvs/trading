@@ -30,15 +30,11 @@ import {faChevronDown, faTimes} from "@fortawesome/free-solid-svg-icons";
         </div>
         <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
              role="group">
-          <div class="search-container px-4 py-2" *ngIf="node.inSearchMode">
-            <input class="form-control" placeholder="tìm kiếm ..."/>
+          <div class="search-container px-4 py-2">
+            <input class="form-control" placeholder="tìm kiếm ..." [value]="node.searchTerm" (keyup)="onSearch(node, search)" #search/>
           </div>
-          <ng-container matTreeNodeOutlet></ng-container>
-          <div class="view-more" *ngIf="!node.inSearchMode" (click)="toggleSearchMode(node)">
-            Xem thêm <fa-icon [icon]="faChevronDown"></fa-icon>
-          </div>
-          <div class="view-more" *ngIf="node.inSearchMode" (click)="toggleSearchMode(node)">
-            Đóng <fa-icon [icon]="faTimes"></fa-icon>
+          <div class="tree-node-content">
+            <ng-container matTreeNodeOutlet></ng-container>
           </div>
         </div>
       </mat-nested-tree-node>
@@ -73,16 +69,11 @@ export class TreeComponent implements OnInit, OnChanges {
   private populateNodeIds(tree: TreeNode[]): void {
     tree.forEach(parent => {
       parent.inSearchMode = false;
+      parent.searchTerm = "";
       parent.children?.forEach(child => {
         child.id = uuidv4();
       });
     });
-
-    this.originalTreeData = _.cloneDeep(tree);
-
-    tree.forEach(parent => {
-      parent.children = parent.children?.slice(0, 5);
-    })
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -137,5 +128,22 @@ export class TreeComponent implements OnInit, OnChanges {
     this.treeControl.expandAll();
 
     this.onSearchToggle.emit(node);
+  }
+
+  onSearch(node: TreeNode, input: HTMLInputElement): void {
+    const newState = _.cloneDeep(this.dataSource.data);
+    newState.forEach(dataNode => {
+      if (dataNode.id === node.id) {
+        dataNode.searchTerm = input.value;
+        dataNode.children = dataNode.children?.filter(x => x.name.toLowerCase().startsWith(input.value.toLowerCase()));
+      }
+    });
+
+    this.dataSource.data = newState;
+    this.treeControl.dataNodes = newState;
+
+    this.treeControl.expandAll();
+
+    input.focus();
   }
 }

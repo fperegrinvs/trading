@@ -10,6 +10,8 @@ import {
 } from "@angular/core";
 import {TableAlignment, TableColumn} from "../../model/TableColumn";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {faTrashAlt, faEdit} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'Table',
@@ -42,15 +44,35 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="action">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [width]="80"
+        >
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+        >
+          <a href="#" class="mr-2">
+            <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
+          </a>
+          <a href="#">
+            <fa-icon [icon]="faTrash" [classes]="['btn-delete']" size="lg"></fa-icon>
+          </a>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="expandedDetail">
-        <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="columns.length + 1">
           <div class="row secondary-row" [@detailExpand]="'expanded'" *ngIf="expandable" [innerHTML]="element[expandAttr]">
 
           </div>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayColumns;" [class.in-search]="inSearchMode"
           (click)="rowClick(row)"
       ></tr>
@@ -96,6 +118,9 @@ export class TableComponent implements OnInit, OnChanges {
 
   displayColumns: string[] = [];
 
+  faTrash: IconDefinition = faTrashAlt;
+  faEdit: IconDefinition = faEdit;
+
   constructor() {
   }
 
@@ -108,6 +133,8 @@ export class TableComponent implements OnInit, OnChanges {
         this.displayColumns = (changes.columns.currentValue as TableColumn[])
           .filter(x => x.active)
           .map(x => x.id);
+
+        this.displayColumns.push("action");
     }
   }
 

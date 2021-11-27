@@ -5,4 +5,5 @@ export interface TreeNode {
   count?: number;
   active?: boolean;
   inSearchMode?: boolean;
+  searchTerm?: string;
 }

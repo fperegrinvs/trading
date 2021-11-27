@@ -48,3 +48,17 @@ tr.mat-row {
     background-color: $color-primary-light !important;
   }
 }
+
+.btn-edit {
+
+  path {
+    fill: $color-primary;
+  }
+}
+
+.btn-delete {
+
+  path {
+    fill: $color-danger;
+  }
+}

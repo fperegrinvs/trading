@@ -15,11 +15,14 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
       *ngIf="!isActive"
     >
       <div class="p-2" [style.min-width]="'200px'">
-        <input class="form-control mb-2" placeholder="tìm kiếm ..."/>
-        <div class="selection-item" *ngFor="let selection of model">
-          <mat-checkbox [(ngModel)]="selection.selected">
-            {{selection.text}}
-          </mat-checkbox>
+        <input class="form-control mb-2" placeholder="tìm kiếm ..." (keyup)="doSearch(input.value)" #input/>
+        <div class="selection-wrapper">
+          <div *ngIf="model.length === 0" class="no-result">Không có kết quả</div>
+          <div class="selection-item" *ngFor="let selection of model">
+            <mat-checkbox [(ngModel)]="selection.selected">
+              {{selection.text}}
+            </mat-checkbox>
+          </div>
         </div>
 
         <div class="mt-2">
@@ -54,18 +57,20 @@ export class SelectionFilterComponent implements OnInit {
   isActive: boolean = false;
   model: any[] = [];
   subText: string = "";
+  originalData: any[] = [];
 
   faTimes: IconDefinition = faTimes;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.model = this.selections.map(selection => {
+    this.originalData = this.selections.filter(x => x).map(selection => {
       return {
         text: selection,
         selected: false
       }
     });
+    this.model = this.originalData;
   }
 
   onDropDownClose($event: any): void {
@@ -90,5 +95,9 @@ export class SelectionFilterComponent implements OnInit {
     this.applyPreviewText();
     this.dropdown?.closeDropdown();
     this.onChanged.emit(this.model.filter(x => x.selected).map(x => x.text));
+  }
+
+  doSearch(term: string) {
+    this.model = this.originalData.filter(x => x.text && x.text.toLowerCase().includes(term.toLowerCase()));
   }
 }

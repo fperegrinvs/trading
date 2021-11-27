@@ -152,7 +152,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           .subscribe(props => {
             props.props.forEach(prop => {
               const options = [...new Set(response.hits
-                .map(x => x._source[prop.name]))].slice(0, 5);
+                .map(x => x._source[prop.name]))];
 
               filterOptions[prop.name] = options;
             });

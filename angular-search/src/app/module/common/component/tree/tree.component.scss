@@ -54,3 +54,8 @@ img {
     @apply mb-0 mr-2;
   }
 }
+
+.tree-node-content {
+  max-height: 250px;
+  overflow-y: auto;
+}
