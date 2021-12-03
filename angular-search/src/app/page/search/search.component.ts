@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {TreeNode} from "../../module/common/model/TreeModel";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
@@ -8,13 +8,15 @@ import {StatisticModalComponent} from "./statistic.modal/statistic.modal.compone
 import * as _ from "lodash";
 import {forkJoin, Observable, Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
-import {Router} from "@angular/router";
+import {Route, Router} from "@angular/router";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
 import {DateRange} from "@angular/material/datepicker";
 import {ReportTypeEnum} from "../../module/document/enum/report.type.enum";
 import {CategoryResponse} from "../../module/document/model/response/category.response";
 import {take} from "rxjs/operators";
+import {DateFilterComponent} from "../../module/common/component/filter/date-filter.component";
+import {SelectionFilterComponent} from "../../module/common/component/filter/selection-filter.component";
 
 @Component({
   selector: 'app-search',
@@ -24,6 +26,8 @@ import {take} from "rxjs/operators";
 export class SearchComponent implements OnInit, OnDestroy {
 
   @ViewChild("table") table: ElementRef | undefined;
+  @ViewChildren(DateFilterComponent) dateFilters: QueryList<DateFilterComponent> | undefined;
+  @ViewChildren(SelectionFilterComponent) selectionFilters: QueryList<SelectionFilterComponent> | undefined;
 
   subcriptions: Subscription[] = [];
 
@@ -36,7 +40,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   tableColumns: TableColumn[] = [];
   tableData: any[] = [];
   totalItems: number = 0;
-  tableSize: number = 10;
+  tableSize: number = 20;
   page: number = 1;
 
   dataProcessEngine: any = {};
@@ -68,6 +72,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   treeDataOriginal: any = {};
 
+  isBookmark: boolean = false;
+
+  docProps: DocumentMetadata[] = [];
+
   constructor(
     private documentService: DocumentSearchService,
     private dialogService: MatDialog,
@@ -98,6 +106,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   private prepareTableColumns(callback?: Function): void {
     this.documentService.getDocProps()
       .subscribe(res => {
+        this.docProps = res.props;
         const requiredProps = res.props.filter(x => x.required);
         this.prepareDataProcess(res.props);
         this.tableColumns = requiredProps
@@ -122,7 +131,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private prepareTableData(searchProps?: any): void {
     this.spinnerService.show("table-loader");
-    this.documentService.searchDocument(this.searchTerm, this.page, this.tableSize, searchProps)
+    this.documentService.searchDocument(this.isBookmark, this.searchTerm, this.page, this.tableSize, searchProps)
       .subscribe(res => {
         this.tableData = res.hits.map(x => {
           const item = x._source;
@@ -146,7 +155,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private prepareFilterOptions(): void {
     const filterOptions: any = {};
-    this.documentService.searchDocument("", 1, 100)
+    this.documentService.searchDocument(this.isBookmark, "", 1, 100)
       .subscribe(response => {
         this.documentService.getDocProps()
           .subscribe(props => {
@@ -181,7 +190,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     const obs: Observable<CategoryResponse>[] = [];
 
     treeMeta.forEach(type => {
-      obs.push(this.documentService.getCategories(type.type, 100));
+      obs.push(this.documentService.getCategories(this.isBookmark, type.type, 100));
     });
 
     forkJoin(obs).subscribe(res => {
@@ -222,6 +231,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isBookmark = this.router.url === "/app/bookmark";
+
     this.prepareTableColumns(() => {
       this.prepareTableData();
     });
@@ -258,9 +269,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   openStatistic(statistic: StatisticOption): void {
+    const filterValue = {
+      ...this.topFilterSelections,
+      ...this.treeFilterSelections
+    }
+
     const modalData = {
       title: statistic.name,
-      type: statistic.type
+      type: statistic.type,
+      bookmarked: this.isBookmark,
+      filterValue,
+      docProps: this.docProps
     };
 
     this.dialogService.open(StatisticModalComponent, {
@@ -357,5 +376,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       //
     }
+  }
+
+  goToUpload(): void {
+    this.router.navigate(['/app', 'upload']);
+  }
+
+  clearTopFilters(): void {
+    this.dateFilters?.forEach(filter => {
+      filter.resetFilter();
+    });
+    this.selectionFilters?.forEach(filter => {
+      filter.resetFilter();
+    })
   }
 }

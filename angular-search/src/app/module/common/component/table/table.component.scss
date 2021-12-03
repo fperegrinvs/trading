@@ -46,6 +46,17 @@ tr.mat-row {
 
   &.in-search {
     background-color: $color-primary-light !important;
+
+    td {
+      border-bottom: none !important;
+    }
+  }
+
+  td {
+
+    &.mat-column-expandedDetail {
+      @apply pb-6 #{!important};
+    }
   }
 }
 

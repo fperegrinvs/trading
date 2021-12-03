@@ -4,8 +4,7 @@
 </div>
 <mat-dialog-content class="mat-typography adm-modal-body">
   <div class="filter-data">
-    <Tag title="Người ký" class="mr-2">Nguyễn Tấn Dũng</Tag>
-    <Tag title="Loại tài liệu">Thông tư</Tag>
+    <Tag *ngFor="let filter of filterValues" [title]="filter.label" class="mr-2 mb-2">{{filter.value}}</Tag>
   </div>
   <div class="statistic-meta">
     <img src="assets/icons/bx-bar-chart-alt-2.svg" class="mr-4"/>

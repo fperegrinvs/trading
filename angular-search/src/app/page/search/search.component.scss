@@ -29,3 +29,19 @@ h5.card-title {
   font-size: 13px;
   @apply font-bold flex items-center mb-3;
 }
+
+.page-action-wrapper {
+  @apply flex justify-between mb-2;
+
+  .page-action {
+    @apply inline-block;
+  }
+}
+
+table ::ng-deep {
+
+  thead {
+    @apply sticky;
+    top: 90px;
+  }
+}

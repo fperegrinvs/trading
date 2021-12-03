@@ -116,7 +116,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private prepareTableData(): void {
-    this.documentService.searchDocument("", 1, 10)
+    this.documentService.searchDocument(false, "", 1, 10)
       .subscribe(res => {
         this.relativeData = res.hits.map(x => x._source);
       });

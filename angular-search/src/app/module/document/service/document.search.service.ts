@@ -39,11 +39,16 @@ export class DocumentSearchService {
     return this.currentSearchTerm;
   }
 
-  getCategories(type: number, limit: number): Observable<CategoryResponse> {
+  getCategories(bookmarked: boolean, type: number, limit: number): Observable<CategoryResponse> {
     const categoriesUrl = `${API_PATH}/category`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set("level1", type)
+      .set("showall", true)
       .set("limit", limit);
+
+    if (bookmarked) {
+      params = params.set("bookmarked", bookmarked);
+    }
 
     return this.http.get<CategoryResponse>(categoriesUrl, {
       params
@@ -60,13 +65,14 @@ export class DocumentSearchService {
     return this.http.get<SearchPropsResponse>(searchpropsUrl);
   }
 
-  searchDocument(query: string, page: number, size: number, searchProps?: any): Observable<DocumentResponse> {
+  searchDocument(bookmark: boolean, query: string, page: number, size: number, searchProps?: any): Observable<DocumentResponse> {
     const docSearchUrl = `${API_PATH}/searchapi`;
 
     const postData = {
       text: query,
       page: page,
       pagesize: size,
+      bookmarked: bookmark,
       ...searchProps
     }
 

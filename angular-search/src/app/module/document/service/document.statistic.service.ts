@@ -16,11 +16,15 @@ export class DocumentStatisticService {
   ) {
   }
 
-  getStatisticData(type: number, count: number): Observable<StatisticResponse> {
+  getStatisticData(bookmarked: boolean, type: number, count: number): Observable<StatisticResponse> {
     const apiUrl = `${API_PATH}/stat`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set("type", type)
       .set("limit", count);
+
+    if (bookmarked) {
+      params = params.set("bookmarked", bookmarked);
+    }
 
     return this.http.get<StatisticResponse>(apiUrl, {
       params

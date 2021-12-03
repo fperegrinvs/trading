@@ -1,0 +1,63 @@
+<div class="row" #step2>
+  <div class="col-12">
+    <Card title="Bước 1: Tải lên tập tin tài liệu">
+      <ngx-dropzone (change)="onSelect($event)" accept=".txt, .docx">
+        <ngx-dropzone-label>
+          <fa-icon [icon]="faFile"></fa-icon>
+          Bấm để chọn hoặc kéo thả tập tin tài liệu để tải lên ... <br/>
+          <small><em>(Hỗ trợ .txt, .docx)</em></small>
+        </ngx-dropzone-label>
+        <ngx-dropzone-preview class="dropzone-preview" [class.doc]="f.name.endsWith('.doc') || f.name.endsWith('.docx')"
+                              [class.txt]="f.name.endsWith('.txt')"
+                              *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+          <img src="assets/icons/bxs-file-doc.svg"/>
+          <ngx-dropzone-label class="dropzone-label">{{ f.name }}</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </ngx-dropzone>
+    </Card>
+  </div>
+</div>
+<div class="row" *ngIf="files.length > 0">
+  <div class="col-12">
+    <Card title="Bước 2: Cập nhật thông tin tài liệu">
+      <mat-tab-group [(selectedIndex)]="currentIndex">
+        <mat-tab [label]="file.name" *ngFor="let file of files; let i = index" [disabled]="!tabTracking[i]" >
+          <div class="container-fluid p-4">
+            <div class="row mb-2 text-red-600">
+              <p>
+                <span *ngFor="let error of validationTracking[i]">- {{error}}</span><br/>
+              </p>
+            </div>
+            <div class="row mb-2" *ngFor="let propChunk of requiredProps">
+              <div class="col-md-6">
+                <label class="font-bold" for="{{propChunk[0].name}}"><span class="asterisk">*</span> {{propChunk[0].note}}</label>
+                <input [type]="propChunk[0].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[0].name}}" [(ngModel)]="metaTracking[i][propChunk[0].name]"/>
+              </div>
+              <div class="col-md-6" *ngIf="propChunk.length > 1">
+                <label class="font-bold" for="{{propChunk[1].name}}"><span class="asterisk">*</span> {{propChunk[1].note}}</label>
+                <input [type]="propChunk[1].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[1].name}}" [(ngModel)]="metaTracking[i][propChunk[1].name]"/>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-12">
+                <label class="font-bold">Nội dung</label>
+                <textarea class="form-control col-12" [rows]="10">{{getContent(i)}}</textarea>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </Card>
+  </div>
+</div>
+
+<div class="row" *ngIf="files.length > 0">
+  <div class="col-12">
+    <Card title="Bước 3: Lưu tài liệu">
+      <div class="flex justify-center">
+        <Button type="primary" class="mr-2" (onClick)="saveCurrentDocument()">Lưu tài liệu này</Button>
+        <Button type="primary" *ngIf="files.length > 1">Lưu toàn bộ ({{files.length}}) tài liệu</Button>
+      </div>
+    </Card>
+  </div>
+</div>

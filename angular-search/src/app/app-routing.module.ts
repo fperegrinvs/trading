@@ -4,6 +4,7 @@ import {SearchComponent} from "./page/search/search.component";
 import {LayoutComponent} from "./page/layout/layout.component";
 import {LoginComponent} from "./page/login/login.component";
 import {DetailComponent} from "./page/detail/detail.component";
+import {UploadComponent} from "./page/upload/upload.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,14 @@ const routes: Routes = [
       {
         path: "search",
         component: SearchComponent
+      },
+      {
+        path: "bookmark",
+        component: SearchComponent
+      },
+      {
+        path: "upload",
+        component: UploadComponent
       },
       {
         path: "detail",

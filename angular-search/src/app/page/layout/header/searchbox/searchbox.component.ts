@@ -4,6 +4,7 @@ import {faSearch, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {UIService} from "../../../../service/ui.service";
 import {Subscription} from "rxjs";
 import {DocumentSearchService} from "../../../../module/document/service/document.search.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'SearchBox',
@@ -20,7 +21,8 @@ export class SearchboxComponent implements OnInit, OnDestroy {
 
   constructor(
     private uiService: UIService,
-    private documentService: DocumentSearchService
+    private documentService: DocumentSearchService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -41,6 +43,9 @@ export class SearchboxComponent implements OnInit, OnDestroy {
   }
 
   onSearch(): void {
-    this.documentService.doSearch(this.term);
+    this.router.navigate(["/app", "search"])
+      .then(success => {
+        this.documentService.doSearch(this.term);
+      });
   }
 }

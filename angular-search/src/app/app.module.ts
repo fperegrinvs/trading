@@ -24,6 +24,10 @@ import {ChartModule} from "angular2-chartjs";
 import {FormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
 import { DetailComponent } from './page/detail/detail.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { UploadComponent } from './page/upload/upload.component';
+import {NgxDropzoneModule} from "ngx-dropzone";
+import {MatTabsModule} from "@angular/material/tabs";
 
 @NgModule({
   declarations: [
@@ -37,7 +41,8 @@ import { DetailComponent } from './page/detail/detail.component';
     LoginComponent,
     OverlayComponent,
     StatisticModalComponent,
-    DetailComponent
+    DetailComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +55,10 @@ import { DetailComponent } from './page/detail/detail.component';
     MatDialogModule,
     ChartModule,
     FormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatTooltipModule,
+    NgxDropzoneModule,
+    MatTabsModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

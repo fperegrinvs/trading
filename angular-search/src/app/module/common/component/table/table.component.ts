@@ -107,7 +107,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() totalItems: number = 0;
   @Input() page: number = 1;
   @Input() pagination: boolean = true;
-  @Input() size: number = 10;
+  @Input() size: number = 20;
   @Input() expandable: boolean = false;
   @Input() expandAttr: string = "";
   @Input() inSearchMode: boolean = false;

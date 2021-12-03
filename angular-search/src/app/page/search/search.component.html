@@ -40,33 +40,38 @@
       </div>
 
       <div class="filter-action text-right">
-        <Button icon="gray/bx-reset.svg" type="secondary" class="mr-2">Xoá tất cả</Button>
+        <Button icon="gray/bx-reset.svg" type="secondary" class="mr-2" (onClick)="clearTopFilters()">Xoá tất cả</Button>
         <Button icon="white/bx-search-alt.svg" type="primary" (onClick)="triggerFilter()">Tìm kiếm</Button>
       </div>
     </Card>
     <Card class="flex-1 main-table">
-      <div class="page-action mb-2 text-right">
-        <Button icon="bxs-dock-left.svg"
-                [type]="leftFilterShow ? 'light' : 'default'"
-                class="mr-2"
-                (click)="toggleCard($event, 'leftFilter')"
-        ></Button>
-        <Button icon="bxs-dock-top.svg"
-                [type]="topFilterShow ? 'light' : 'default'"
-                class="mr-2"
-                (click)="toggleCard($event, 'topFilter')"
-        ></Button>
-        <Dropdown type="light" icon="bx-slider-alt.svg" [caret]="false">
-          <div class="columns-setting">
-            <div *ngFor="let column of tableColumns; let i = index" class="flex items-center column-setting"
-                 (click)="toggleColumn(column)"
-                 [class.active]="column.active"
-                 [class.last]="(i + 1) === tableColumns.length"
-            >
-              <Checkbox [checked]="column.active" [title]="column.text"></Checkbox>
+      <div class="page-action-wrapper text-left">
+        <div class="page-action">
+          <Button icon="white/bx-cloud-upload.svg" type="primary" (onClick)="goToUpload()">Tải lên</Button>
+        </div>
+        <div class="page-action">
+          <Button icon="bxs-dock-left.svg"
+                  [type]="leftFilterShow ? 'light' : 'default'"
+                  class="mr-2"
+                  (click)="toggleCard($event, 'leftFilter')"
+          ></Button>
+          <Button icon="bxs-dock-top.svg"
+                  [type]="topFilterShow ? 'light' : 'default'"
+                  class="mr-2"
+                  (click)="toggleCard($event, 'topFilter')"
+          ></Button>
+          <Dropdown type="light" icon="bx-slider-alt.svg" [caret]="false">
+            <div class="columns-setting">
+              <div *ngFor="let column of tableColumns; let i = index" class="flex items-center column-setting"
+                   (click)="toggleColumn(column)"
+                   [class.active]="column.active"
+                   [class.last]="(i + 1) === tableColumns.length"
+              >
+                <Checkbox [checked]="column.active" [title]="column.text"></Checkbox>
+              </div>
             </div>
-          </div>
-        </Dropdown>
+          </Dropdown>
+        </div>
       </div>
       <div class="table-container" #table>
         <Table [columns]="tableColumns"

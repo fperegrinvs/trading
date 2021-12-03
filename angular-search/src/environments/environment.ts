@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_path: "https://core.chinhta123.com"
+  api_path: "https://devcore.chinhta123.com"
 };
 
 /*

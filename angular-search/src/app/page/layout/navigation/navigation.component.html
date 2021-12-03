@@ -5,9 +5,9 @@
     </a>
   </div>
   <ul>
-    <li>
-      <a  href="dashboard.html">
-        <img src="assets/icons/primary/bx-search-alt.svg"/>
+    <li [matTooltip]="menu.text" matTooltipPosition="right" *ngFor="let menu of menus">
+      <a [routerLink]="[menu.path]">
+        <img [src]="getMenuIcon(menu)"/>
       </a>
     </li>
   </ul>
