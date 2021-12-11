@@ -65,7 +65,7 @@ export class DocumentSearchService {
     return this.http.get<SearchPropsResponse>(searchpropsUrl);
   }
 
-  searchDocument(bookmark: boolean, query: string, page: number, size: number, searchProps?: any): Observable<DocumentResponse> {
+  searchDocument(bookmark: boolean, query: string, page: number, size: number, sortBy?: string, sortDirection?: string, searchProps?: any): Observable<DocumentResponse> {
     const docSearchUrl = `${API_PATH}/searchapi`;
 
     const postData = {
@@ -73,10 +73,39 @@ export class DocumentSearchService {
       page: page,
       pagesize: size,
       bookmarked: bookmark,
+      sort: sortBy || "docidx",
+      sort_direction: sortDirection || "desc", 
       ...searchProps
     }
 
     return this.http.post<DocumentResponse>(docSearchUrl, postData);
+  }
+
+  getNeedApproval(page: number, size: number): Observable<DocumentResponse> {
+    const docSearchUrl = `${API_PATH}/searchapi`;
+
+    const postData = {
+      text: "",
+      page: page,
+      pagesize: size,
+      bookmarked: false,
+      needApprove: true
+    }
+
+    return this.http.post<DocumentResponse>(docSearchUrl, postData);
+  }
+
+  countNeedApproval(): Observable<number> {
+    const docSearchUrl = `${API_PATH}/searchapi`;
+
+    const postData = {
+      text: "",
+      bookmarked: false,
+      needApprove: true,
+      count: true
+    }
+
+    return this.http.post<number>(docSearchUrl, postData);
   }
 
   selectDocument(document: any): void {
@@ -90,5 +119,14 @@ export class DocumentSearchService {
 
   onDocumentSelected(): Observable<any> {
     return this.subjectSelect.asObservable();
+  }
+
+  approveDocument(docId: number): Observable<boolean> {
+    const apiPath = `${API_PATH}/searchapi/approve`;
+    const body = {
+      document_id: docId
+    };
+
+    return this.http.post<boolean>(apiPath, body);
   }
 }

@@ -1,0 +1,23 @@
+<div class="container-fluid p-4">
+    <div class="row mb-2 text-red-600">
+      <p>
+        <span *ngFor="let error of validation">- {{error}}<br/></span>
+      </p>
+    </div>
+    <div class="row mb-2" *ngFor="let propChunk of chunks">
+      <div class="col-md-6">
+        <label class="font-bold" for="{{propChunk[0].name}}"><span class="asterisk" *ngIf="propChunk[0].required">*</span> {{propChunk[0].note}}</label>
+        <input [type]="propChunk[0].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[0].name}}" [(ngModel)]="doc[propChunk[0].name]"/>
+      </div>
+      <div class="col-md-6" *ngIf="propChunk.length > 1">
+        <label class="font-bold" for="{{propChunk[1].name}}"><span class="asterisk" *ngIf="propChunk[0].required">*</span> {{propChunk[1].note}}</label>
+        <input [type]="propChunk[1].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[1].name}}" [(ngModel)]="doc[propChunk[1].name]"/>
+      </div>
+    </div>
+    <div class="row mt-4" *ngIf="hasContent">
+      <div class="col-12">
+        <label class="font-bold">Nội dung</label>
+        <textarea class="form-control col-12" [rows]="10" [(ngModel)]="doc.content"></textarea>
+      </div>
+    </div>
+  </div>

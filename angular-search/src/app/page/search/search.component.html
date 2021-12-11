@@ -1,4 +1,11 @@
 <div class="row">
+  <div class="col-12 page-header">
+    <img [src]="isBookmark ? 'assets/icons/primary/bxs-star.svg' : 'assets/icons/primary/bx-search-alt.svg'"/>
+    <h1 *ngIf="!isBookmark">Tìm kiếm tài liệu</h1>
+    <h1 *ngIf="isBookmark">Tài liệu đánh dấu</h1>
+  </div>
+</div>
+<div class="row">
   <div class="col-lg-3">
     <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg" *ngIf="leftFilterShow">
       <img class="mr-2 left-toggle" src="assets/icons/bx-chevrons-left.svg" (click)="hideLeftBar()"/>
@@ -80,13 +87,24 @@
                [sizeOptions]="[10, 20, 50]"
                (sizeChanged)="onTableSizeChanged($event)"
                (pageChanged)="onTablePageChanged($event)"
-               (rowClicked)="onDocumentClicked($event)"
+               (bookmarkClicked)="onBookmarkClicked($event)"
+               (sorted)="onSorted($event)"
                [page]="page"
                [expandable]="searchTerm.length > 0"
                [inSearchMode]="searchTerm.length > 0"
+               [bookmark]="true"
                expandAttr="highlight"
                class="w-full"
-        ></Table>
+        >
+          <ng-template #actionTemplate>
+            <a href="#" class="mr-2">
+              <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
+            </a>
+            <a href="#">
+              <fa-icon [icon]="faTrash" [classes]="['btn-delete']" size="lg"></fa-icon>
+            </a>
+          </ng-template>
+        </Table>
         <ngx-spinner type="ball-clip-rotate-multiple" name="table-loader" [fullScreen]="false"></ngx-spinner>
       </div>
     </Card>

@@ -6,6 +6,7 @@ export interface TableColumn {
   sortable?: boolean;
   active: boolean;
   bold?: boolean
+  clickFn?: Function
 }
 
 export enum TableAlignment {

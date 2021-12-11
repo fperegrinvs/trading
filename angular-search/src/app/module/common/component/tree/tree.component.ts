@@ -6,11 +6,32 @@ import { v4 as uuidv4 } from 'uuid';
 import * as _ from "lodash";
 import {IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {faChevronDown, faTimes} from "@fortawesome/free-solid-svg-icons";
+import { E } from "@angular/cdk/keycodes";
 
 @Component({
   selector: 'Tree',
   template: `
-    <mat-tree [treeControl]="treeControl" [dataSource]="dataSource" #tree>
+    <mat-accordion multi>
+        <mat-expansion-panel *ngFor="let node of data">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{node.name}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <div class="search-container mb-2 px-4">
+              <input class="form-control" placeholder="tìm kiếm ..." [value]="node.searchTerm" (keyup)="onSearch(node, search)" #search/>
+            </div>
+            <div class="tree-option-wrappers">
+              <div *ngFor="let option of node.children" class="py-2 cursor-pointer tree-option" (click)="onNodeClick(option)" [class.active]="isNodeActive(option)">
+                <Checkbox [checked]="option.active || false"></Checkbox>
+                {{option.name}} &nbsp; <small class="node-count font-bold text-red-600" *ngIf="node.count">[{{node.count}}]</small>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    <!--<mat-tree [treeControl]="treeControl" [dataSource]="dataSource" #tree>
 
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle (click)="onNodeClick(node)" [class.active]="isNodeActive(node)">
         <Checkbox [checked]="node.active"></Checkbox>
@@ -38,7 +59,7 @@ import {faChevronDown, faTimes} from "@fortawesome/free-solid-svg-icons";
           </div>
         </div>
       </mat-nested-tree-node>
-    </mat-tree>
+    </mat-tree>-->
   `,
   styleUrls: ["./tree.component.scss"]
 })
@@ -47,11 +68,6 @@ export class TreeComponent implements OnInit, OnChanges {
   @Input() data: TreeNode[] = [];
   @Output() onSelect: EventEmitter<TreeNode[]> = new EventEmitter<TreeNode[]>();
   @Output() onSearchToggle: EventEmitter<TreeNode> = new EventEmitter<TreeNode>();
-
-  @ViewChild('tree') tree: MatTree<TreeNode> | undefined;
-
-  treeControl = new NestedTreeControl<TreeNode>(node => node.children);
-  dataSource: MatTreeNestedDataSource<TreeNode> = new MatTreeNestedDataSource();
 
   faChevronDown: IconDefinition = faChevronDown;
   faTimes: IconDefinition = faTimes;
@@ -79,20 +95,15 @@ export class TreeComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.data) {
       const internalData = changes.data.currentValue;
-
       this.populateNodeIds(internalData);
-
-      this.dataSource.data = internalData;
-      this.treeControl.dataNodes = internalData;
-
-      this.treeControl.expandAll();
+      this.originalTreeData = _.cloneDeep(internalData);
     }
   }
 
   onNodeClick(node: TreeNode): void {
     node.active = !node.active;
 
-    let currentState = _.cloneDeep(this.dataSource.data);
+    let currentState = _.cloneDeep(this.data);
 
     currentState = currentState.filter(item => {
       const activeCount = item.children?.filter(x => x.active).length || 0;
@@ -117,33 +128,14 @@ export class TreeComponent implements OnInit, OnChanges {
     return false;
   }
 
-  toggleSearchMode(node: TreeNode): void {
-    node.inSearchMode = !node.inSearchMode;
-
-    let currentState = _.cloneDeep(this.dataSource.data);
-    currentState[0].children = [];
-
-    this.dataSource.data = currentState;
-
-    this.treeControl.expandAll();
-
-    this.onSearchToggle.emit(node);
-  }
-
   onSearch(node: TreeNode, input: HTMLInputElement): void {
-    const newState = _.cloneDeep(this.dataSource.data);
-    newState.forEach(dataNode => {
-      if (dataNode.id === node.id) {
-        dataNode.searchTerm = input.value;
-        dataNode.children = dataNode.children?.filter(x => x.name.toLowerCase().startsWith(input.value.toLowerCase()));
+    this.data.forEach((dataNode, idx) => {
+      dataNode.searchTerm = input.value;
+      if (!input.value) {
+        dataNode.children = this.originalTreeData[idx].children;
+      } else {
+        dataNode.children = this.originalTreeData[idx].children?.filter(x => x.name.toLowerCase().startsWith(input.value.toLowerCase()));
       }
     });
-
-    this.dataSource.data = newState;
-    this.treeControl.dataNodes = newState;
-
-    this.treeControl.expandAll();
-
-    input.focus();
   }
 }

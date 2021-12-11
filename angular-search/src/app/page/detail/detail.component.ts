@@ -5,6 +5,10 @@ import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Document} from "../../module/document/model/document";
+import {COMMA, ENTER} from "@angular/cdk/keycodes";
+import { faEdit, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
+import { TagsModalComponent } from './tags.modal/tags.modal.component';
 
 @Component({
   selector: 'app-detail',
@@ -38,11 +42,13 @@ export class DetailComponent implements OnInit, OnDestroy {
   relativeColumns: TableColumn[] = [];
   relativeData: any[] = [];
   document: any = {};
+  faEdit: IconDefinition = faEdit;
 
   constructor(
     private documentService: DocumentSearchService,
     private router: Router,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private modalService: MatDialog
   ) { }
 
   private loadDocument(): void {
@@ -50,15 +56,25 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     this.documentService.getDocProps()
       .subscribe(props => {
+        this.document = this.documentService.getCurrentDocument();
+
         props.props.forEach(prop => {
-          this.document = this.documentService.getCurrentDocument();
-          if (this.document[prop.name]) {
+          if (this.document[prop.name] && prop.note) {
             source.push({
               metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
-              content: this.document[prop.name]
+              content: this.document[prop.name],
+              editable: prop.name === "tags"
             });
           }
         });
+
+        if (!this.document.tags) {
+          source.push({
+            metadata: "Nhãn",
+            content: [],
+            editable: true
+          })
+        }
 
         this.dataSource = source;
       });
@@ -133,5 +149,13 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   downloadFile(url: string): void {
     window.open(url, "_blank");
+  }
+
+  onEditClick(data: any): void {
+    this.modalService.open(TagsModalComponent, {
+      data: {
+        document: this.document
+      }
+    });
   }
 }

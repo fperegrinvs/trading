@@ -21,13 +21,21 @@ import { OverlayComponent } from './page/layout/overlay/overlay.component';
 import { StatisticModalComponent } from './page/search/statistic.modal/statistic.modal.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {ChartModule} from "angular2-chartjs";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgxSpinnerModule} from "ngx-spinner";
 import { DetailComponent } from './page/detail/detail.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { UploadComponent } from './page/upload/upload.component';
 import {NgxDropzoneModule} from "ngx-dropzone";
 import {MatTabsModule} from "@angular/material/tabs";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatIconModule} from "@angular/material/icon";
+import {TagsModalComponent} from './page/detail/tags.modal/tags.modal.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ApproveComponent } from './page/approve/approve.component';
+import { ApproveModalComponent } from './page/approve/approve.modal/approve.modal.component';
+import { DocformComponent } from './component/docform/docform.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +50,11 @@ import {MatTabsModule} from "@angular/material/tabs";
     OverlayComponent,
     StatisticModalComponent,
     DetailComponent,
-    UploadComponent
+    UploadComponent,
+    TagsModalComponent,
+    ApproveComponent,
+    ApproveModalComponent,
+    DocformComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +70,11 @@ import {MatTabsModule} from "@angular/material/tabs";
     NgxSpinnerModule,
     MatTooltipModule,
     NgxDropzoneModule,
-    MatTabsModule
+    MatTabsModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatIconModule,
+    MatExpansionModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

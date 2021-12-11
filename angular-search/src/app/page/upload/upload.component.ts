@@ -5,6 +5,9 @@ import {DocumentSearchService} from "../../module/document/service/document.sear
 import {DocumentProcessService} from "../../module/document/service/document.process.service";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
+import Swal from 'sweetalert2';
+import { forkJoin, Observable } from 'rxjs';
+import { UIService } from 'src/app/service/ui.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,20 +17,20 @@ import {DatePipe} from "@angular/common";
 export class UploadComponent implements OnInit {
 
   files: File[] = [];
-  tabTracking: boolean[] = [];
-  metaTracking: any[] = [];
+  metaTracking: any = {};
+  metaList: any[] = [];
   faFile: IconDefinition = faFile;
   requiredProps: DocumentMetadata[][] = [];
   allProps: DocumentMetadata[] = [];
-  validationTracking: string[][] = [];
-  currentIndex: number = 0;
+  validationTracking: string[]= [];
 
   @ViewChild("step2") step2El: ElementRef | undefined;
 
   constructor(
     private documentService: DocumentSearchService,
     private documentProcessService: DocumentProcessService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private uiService: UIService
   ) { }
 
   private getBase64(file: File): Promise<string> {
@@ -76,26 +79,60 @@ export class UploadComponent implements OnInit {
     return data;
   }
 
-  onSelect($event: any) {
-    $event.addedFiles.forEach((file: File) => {
-      const index = this.files.length;
-      this.files.push(file);
-      this.tabTracking.push(false);
-      this.getBase64(file)
-        .then(base64 => {
-          this.documentProcessService.extractMetaData(file.name, base64)
-            .subscribe(res => {
-              this.tabTracking[index] = true;
-              this.metaTracking.push(this.processMetaResponse(res.doc));
-              this.validationTracking.push([]);
-            })
-        });
+  private mergeMeta(): void {
+    this.metaTracking = {};
+    this.metaList.forEach(meta => {
+      this.allProps.forEach(prop => {
+        if (meta[prop.name]) {
+          this.metaTracking[prop.name] = meta[prop.name]
+        }
+      });
+
+      if (meta.content) {
+        if (!this.metaTracking.content) {
+          this.metaTracking.content = meta.content;
+        } else {
+          this.metaTracking.content += `\n-------------------------------- \n${meta.content}`;
+        }
+      }
     });
   }
 
+  onSelect($event: any) {
+    const pros : Promise<string>[] = [];
+    $event.addedFiles.forEach((file: File) => {
+      this.files.push(file);
+      pros.push(this.getBase64(file));
+    });
+
+    const obs : Observable<any>[] = [];
+
+    Promise.all(pros)
+      .then(res => {
+        res.forEach((base64, idx) => {
+          obs.push(this.documentProcessService.extractMetaData($event.addedFiles[idx].name, base64));
+        });
+
+        forkJoin(obs)
+        .subscribe(metas => {
+          metas.filter(x => x.isvalid).map(x => this.processMetaResponse(x.doc))
+            .forEach(meta => {
+              this.metaList.push(meta);
+            });
+          this.mergeMeta();
+        });
+      });
+  }
+
+  private clearDataIndex(idx: number): void {
+    this.files.splice(idx, 1);
+    this.metaList.splice(idx, 1);
+  }
+
   onRemove($event: any) {
-    this.files.splice(this.files.indexOf($event), 1);
-    this.currentIndex = 0;
+    const idx = this.files.indexOf($event);
+    this.clearDataIndex(idx);
+    this.mergeMeta();
   }
 
   processUploadMeta(obj: any): void {
@@ -112,23 +149,22 @@ export class UploadComponent implements OnInit {
     });
   }
 
-  getContent(index: number): string {
-    if (!this.metaTracking[index] || !this.metaTracking[index].content) {
+  getContent(): string {
+    if (!this.metaTracking || !this.metaTracking.content) {
       return "";
     }
 
-    return this.metaTracking[index].content;
+    return this.metaTracking.content;
   }
 
-  private validateDocumentMeta(document: any): boolean {
-    this.validationTracking[this.currentIndex] = [];
+  private validateDocumentMeta(): boolean {
     this.allProps.forEach(prop => {
-      if (!document[prop.name]) {
-        this.validationTracking[this.currentIndex].push(`${prop.note} là thông tin bắt buộc`);
+      if (!this.metaTracking[prop.name]) {
+        this.validationTracking.push(`${prop.note} là thông tin bắt buộc`);
       }
     });
 
-    if (this.validationTracking[this.currentIndex].length > 0) {
+    if (this.validationTracking.length > 0) {
       this.step2El?.nativeElement.scrollIntoView({behavior: 'smooth'});
       return false;
     }
@@ -136,23 +172,43 @@ export class UploadComponent implements OnInit {
     return true;
   }
 
+  private reset(): void {
+    this.metaTracking = {};
+    this.files = [];
+    this.validationTracking = [];
+  }
+
   saveCurrentDocument(): void {
-    if (this.validateDocumentMeta(this.metaTracking[this.currentIndex])) {
+    if (this.validateDocumentMeta()) {
       // validation passed
-      this.getBase64(this.files[this.currentIndex])
-        .then(base64 => {
-          this.processUploadMeta(this.metaTracking[this.currentIndex]);
-          const parts = this.files[this.currentIndex].name.split(".");
-          this.documentProcessService.saveDocument([this.metaTracking[this.currentIndex]], [{
-             data: base64,
+      const pros: Promise<string>[] = [];
+      this.files.forEach(file => {
+        pros.push(this.getBase64(file));
+      });
+
+      Promise.all(pros)
+        .then((res) => {
+          const attachments = res.map((base64, idx) => {
+            const parts = this.files[idx].name.split(".");
+            return {
+              data: base64,
               type: parts[parts.length - 1],
-              downname: this.files[this.currentIndex].name
-          }])
+              downname: this.files[idx].name
+            }
+          });
+
+          this.processUploadMeta(this.metaTracking);
+          this.documentProcessService.saveDocument(this.metaTracking, attachments)
             .subscribe(res => {
               if (res.isvalid) {
-                alert("success");
+                this.reset();
+                Swal.fire({
+                  text: "Tải lên tài liệu thành công",
+                  icon: "success"
+                });
+                this.uiService.updateApproveCount();
               }
-            })
+            });
         });
     }
   }

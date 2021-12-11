@@ -4,18 +4,35 @@
   display: none;
 }
 
-.mat-nested-tree-node div[role=group] {
-  .mat-tree-node {
-    padding-left: 30px;
-    padding-right: 10px;
+.tree-option {
+  padding-left: 30px;
+  padding-right: 10px;
 
-    &.active {
-      background: $color-primary-light;
-    }
+  &.active {
+    background: $color-primary-light;
+  }
 
-    &:hover {
-      @apply text-orange-apple-aqua-600;
-    }
+  &:hover {
+    @apply text-orange-apple-aqua-600;
+  }
+}
+
+:host ::ng-deep {
+
+  .mat-expansion-panel-body {
+    @apply p-0;
+  }
+
+  .mat-expansion-panel {
+    @apply m-0;
+    @apply border-gray-300 border;
+    border-radius: $default-border-radius;
+    box-shadow: none !important;
+  }
+
+  .tree-option-wrappers {
+    max-height: 250px;
+    overflow-y: auto;
   }
 }
 
@@ -44,18 +61,7 @@ img {
 }
 
 :host ::ng-deep {
-
-  .mat-tree {
-    @apply border-gray-300 border;
-    border-radius: $default-border-radius;
-  }
-
   .mat-checkbox-layout {
     @apply mb-0 mr-2;
   }
-}
-
-.tree-node-content {
-  max-height: 250px;
-  overflow-y: auto;
 }

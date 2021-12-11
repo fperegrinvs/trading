@@ -1,0 +1,26 @@
+<div class="modal-title">
+    <strong>Gắn nhãn tài liệu</strong>
+    <Button (onClick)="closeModal()">Đóng</Button>
+</div>
+<mat-dialog-content class="mat-typography adm-modal-body">
+    <div class="tagging">
+        <mat-form-field class="w-full tags-wrapper" appearance="fill">
+            <mat-label>Nhãn</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip *ngFor="let tag of document.tags" [selectable]="false"
+                        [removable]="true" (removed)="remove(tag)">
+                {{tag}}
+                <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="gắn thẻ mới"
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="tagSeparators"
+                    [matChipInputAddOnBlur]="false"
+                    (matChipInputTokenEnd)="add($event)"
+            >
+            </mat-chip-list>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>

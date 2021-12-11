@@ -25,6 +25,7 @@ import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 import {TagComponent} from "./component/tag/tag.component";
 import {SingleChoiceFilterComponent} from "./component/filter/single-choice-filter.component";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 
@@ -57,7 +58,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
         MatNativeDateModule,
         MatPaginatorModule,
         NgbPaginationModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatExpansionModule
     ],
   exports: [
     TreeComponent,

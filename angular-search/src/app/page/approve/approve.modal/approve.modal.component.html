@@ -1,0 +1,48 @@
+<h2 mat-dialog-title class="p-4 mb-0">Phê duyệt tài liệu: {{doc.signNumber}}</h2>
+<mat-dialog-content class="mat-typography adm-modal-body">
+    <mat-tab-group>
+        <mat-tab label="Metadata">
+            <Docform [doc]="doc" [props]="meta" [validation]="validation" #docForm></Docform>
+            <!--<div class="container-fluid pt-4">
+                <div class="row" *ngFor="let chunk of metaChunks">
+                    <div class="col-6 mb-4">
+                        <label><strong><span class="asterisk" *ngIf="chunk[0].required">*</span> {{chunk[0].note}}</strong></label>
+                        <input [type]="chunk[0].type === 'date' ? 'datetime-local' : 'text'" class="form-control" [(ngModel)]="doc[chunk[0].name]"/>
+                    </div>
+                    <div class="col-6 mb-4" *ngIf="chunk.length > 1">
+                        <label><strong><span class="asterisk" *ngIf="chunk[1].required">*</span> {{chunk[1].note}}</strong></label>
+                        <input [type]="chunk[1].type === 'date' ? 'datetime-local' : 'text'" class="form-control" [(ngModel)]="doc[chunk[1].name]"/>
+                    </div>
+                </div>
+            </div>-->
+        </mat-tab>
+        <mat-tab label="Nội dung" *ngIf="doc.content"> 
+            <textarea class="form-control" [(ngModel)]="doc.content" [rows]="20"></textarea>
+        </mat-tab>
+        <mat-tab *ngIf="doc.attachments && doc.attachments.length > 0">
+            <ng-template mat-tab-label>
+                Tập tin đính kèm
+                &nbsp;
+                <span class="badge badge-danger">{{doc.attachments.length}}</span>
+            </ng-template>
+            <Button (onClick)="downloadAttachment(doc.docidx, file)" class="mt-4 mr-2" icon="bxs-download.svg" type="secondary" *ngFor="let file of doc.attachments">{{file.downname}}</Button>
+        </mat-tab>
+        <mat-tab> 
+            <ng-template mat-tab-label>
+                Tài liệu liên quan
+                &nbsp;
+                <span class="badge badge-danger">{{tableData.length}}</span>
+            </ng-template>
+            <Table [columns]="tableColumns" [dataSource]="tableData" class="w-full" [pagination]="false">
+                <ng-template #actionTemplate let-data="data">
+                    <img class="cursor-pointer" src="assets/icons/primary/bx-search-alt.svg"/>
+                </ng-template>
+            </Table>
+        </mat-tab>
+      </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="p-4">
+    <Button type="primary" class="mb-4 mr-2" (onClick)="approve()">Duyệt</Button>
+    <Button type="secondary" class="mb-4 mr-2" (onClick)="reject()">Từ chối</Button>
+    <Button type="default" class="mb-4" (onClick)="close()">Đóng</Button>
+</mat-dialog-actions>

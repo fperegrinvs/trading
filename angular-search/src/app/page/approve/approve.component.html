@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-12 page-header">
+      <img src="assets/icons/primary/bx-list-check.svg"/>
+      <h1>Duyệt tài liệu</h1>
+    </div>
+  </div>
+<div class="row">
+    <div class="col-12">
+        <Card>
+            <Table class="w-full" 
+            [dataSource]="tableData" 
+            [columns]="tableColumns"
+            [totalItems]="totalItems"
+            [action]="true"
+            [sizeOptions]="[10, 20, 50]">
+                <ng-template #actionTemplate let-data="data">
+                    <img class="cursor-pointer" (click)="openApproveDetail(data)" src="assets/icons/primary/bx-file-find.svg"/>
+                </ng-template>
+            </Table>
+        </Card>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+@import "src/globals";
+
+.tagging {
+    width: 450px;
+
+    .tags-wrapper ::ng-deep {
+        
+        .mat-chip {
+            background-color: $color-primary;
+            @apply text-white;
+        }
+
+        .mat-form-field-underline {
+
+            &::before {
+                background-color: $color-primary;
+            }
+        }
+
+        .mat-form-field-ripple {
+            background-color: $color-primary-light;
+        }
+    }
+}
+
+:host {
+    @apply block static;
+  
+    ::ng-deep {
+  
+      .adm-modal-body {
+        @apply p-4 m-0;
+      }
+  
+      .chart-container {
+        width: 700px;
+      }
+  
+      .statistic-meta {
+        @apply flex items-center mt-4 mb-8;
+      }
+    }
+  }
+  
+  .modal-title {
+    @apply flex justify-between items-center
+    border-b border-gray-400 px-4 py-2;
+  
+    strong {
+      @apply text-lg;
+    }
+  }

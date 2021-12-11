@@ -1,0 +1,23 @@
+@import "src/globals";
+
+:host {
+    @apply block static;
+  
+    ::ng-deep {
+  
+      .adm-modal-body {
+        @apply p-4 m-0;
+      }
+    }
+  }
+
+.asterisk {
+    color: red !important;
+}
+
+.mat-tab-group ::ng-deep {
+
+    .mat-ink-bar {
+      background-color: $color-primary !important;
+    }
+  }

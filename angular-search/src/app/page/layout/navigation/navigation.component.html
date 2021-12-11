@@ -5,9 +5,10 @@
     </a>
   </div>
   <ul>
-    <li [matTooltip]="menu.text" matTooltipPosition="right" *ngFor="let menu of menus">
+    <li [matTooltip]="menu.text" atTooltipPosition="right" *ngFor="let menu of menus">
       <a [routerLink]="[menu.path]">
         <img [src]="getMenuIcon(menu)"/>
+        <span *ngIf="menu.badge && menu.badge !== '0'" class="badge badge-danger">{{menu.badge}}</span>
       </a>
     </li>
   </ul>

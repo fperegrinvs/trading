@@ -5,6 +5,7 @@ import {LayoutComponent} from "./page/layout/layout.component";
 import {LoginComponent} from "./page/login/login.component";
 import {DetailComponent} from "./page/detail/detail.component";
 import {UploadComponent} from "./page/upload/upload.component";
+import { ApproveComponent } from './page/approve/approve.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
       {
         path: "detail",
         component: DetailComponent
+      },
+      {
+        path: "approve",
+        component: ApproveComponent
       }
     ]
   },

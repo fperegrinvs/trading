@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UIService} from "../../../service/ui.service";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import { DocumentSearchService } from 'src/app/module/document/service/document.search.service';
 
 @Component({
   selector: 'app-navigation',
@@ -28,11 +29,18 @@ export class NavigationComponent implements OnInit, OnDestroy {
       text: 'Tải lên tài liệu',
       path: '/app/upload'
     },
+    {
+      icon: 'bx-list-check.svg',
+      text: 'Duyệt tài liệu',
+      path: '/app/approve',
+      badge: "0"
+    }
   ]
 
   constructor(
     private uiService: UIService,
-    private router: Router
+    private router: Router,
+    private documentService: DocumentSearchService
   ) { }
 
   ngOnInit(): void {
@@ -41,7 +49,26 @@ export class NavigationComponent implements OnInit, OnDestroy {
         this.isOpen = isOpen;
       });
 
+    const approveCountChanged = this.uiService.onApproveCountChanged()
+      .subscribe(bool => {
+        this.countApprove();
+      });
+
     this.subscriptions.push(navigationToggledSub);
+    this.subscriptions.push(approveCountChanged);
+
+    this.countApprove();
+  }
+
+  private countApprove(): void {
+    this.documentService.countNeedApproval()
+    .subscribe(res => {
+      this.menus.forEach((menu: any) => {
+        if (menu.path === "/app/approve") {
+          menu.badge = res.toString();
+        }
+      })
+    });
   }
 
   ngOnDestroy() {

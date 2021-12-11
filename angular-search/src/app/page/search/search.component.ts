@@ -6,17 +6,21 @@ import {MatDialog} from "@angular/material/dialog";
 import {StatisticOption} from "../../module/document/model/statistic";
 import {StatisticModalComponent} from "./statistic.modal/statistic.modal.component";
 import * as _ from "lodash";
-import {forkJoin, Observable, Subscription} from "rxjs";
+import {forkJoin, Observable, Subject, Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
-import {Route, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
 import {DateRange} from "@angular/material/datepicker";
 import {ReportTypeEnum} from "../../module/document/enum/report.type.enum";
 import {CategoryResponse} from "../../module/document/model/response/category.response";
-import {take} from "rxjs/operators";
 import {DateFilterComponent} from "../../module/common/component/filter/date-filter.component";
 import {SelectionFilterComponent} from "../../module/common/component/filter/selection-filter.component";
+import {DocumentProcessService} from "../../module/document/service/document.process.service";
+import Swal from 'sweetalert2'
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faEdit, faTrash, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-search',
@@ -45,6 +49,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   dataProcessEngine: any = {};
 
+  sortBy: string = "docidx";
+  sortDirection: string = "desc";
+
   statisticOptions: StatisticOption[] = [
     {
       name: "Loại tài liệu",
@@ -62,7 +69,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       name: "Ngày ban hành",
       type: ReportTypeEnum.NGAY_BAN_HANH
     }
-  ]
+  ];
+
+  propTypeMap: any = {
+    documentName: 0,
+    signer: 1,
+    publisherName: 2,
+    topics: 3,
+    entities: 4,
+    promulgationDate: 5,
+    tags: 9
+  }
 
   searchTerm: string = "";
 
@@ -75,9 +92,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   isBookmark: boolean = false;
 
   docProps: DocumentMetadata[] = [];
+  myBookmarks: number[] = [];
+
+  bookmarkLoaded$: Subject<boolean> = new Subject<boolean>();
+
+  faEdit: IconDefinition = faEdit;
+  faTrash: IconDefinition = faTrashAlt;
 
   constructor(
     private documentService: DocumentSearchService,
+    private documentProcessService: DocumentProcessService,
     private dialogService: MatDialog,
     private spinnerService: NgxSpinnerService,
     private router: Router,
@@ -120,6 +144,13 @@ export class SearchComponent implements OnInit, OnDestroy {
             cellAlign: TableAlignment.LEFT,
             active: true
           }
+
+          if (column.id !== "action") {
+            column.clickFn = (element: any) => {
+              this.documentService.selectDocument(element);
+              this.router.navigate(["app", "detail"]);
+            }
+          }
           return column;
         });
 
@@ -131,7 +162,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private prepareTableData(searchProps?: any): void {
     this.spinnerService.show("table-loader");
-    this.documentService.searchDocument(this.isBookmark, this.searchTerm, this.page, this.tableSize, searchProps)
+    this.documentService.searchDocument(this.isBookmark, this.searchTerm, this.page, this.tableSize, this.sortBy, this.sortDirection, searchProps)
       .subscribe(res => {
         this.tableData = res.hits.map(x => {
           const item = x._source;
@@ -143,6 +174,9 @@ export class SearchComponent implements OnInit, OnDestroy {
           });
 
           item.highlight = this.searchTerm ? x.highlight.content.join("<br/>") : "";
+          if (this.isBookmark) {
+            item.bookmarked = true;
+          } else item.bookmarked = this.myBookmarks.indexOf(item.docidx) >= 0;
 
           return item;
         });
@@ -155,21 +189,26 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private prepareFilterOptions(): void {
     const filterOptions: any = {};
-    this.documentService.searchDocument(this.isBookmark, "", 1, 100)
-      .subscribe(response => {
-        this.documentService.getDocProps()
-          .subscribe(props => {
-            props.props.forEach(prop => {
-              const options = [...new Set(response.hits
-                .map(x => x._source[prop.name]))];
+    const obs: Observable<any>[] = [];
+    this.documentService.getSearchProps()
+      .subscribe(props => {
+        const validProps: DocumentMetadata[] = [];
+        props.items.forEach(prop => {
+          if (this.propTypeMap[prop.name]) {
+            obs.push(this.documentService.getCategories(this.isBookmark, this.propTypeMap[prop.name], 100));
+            validProps.push(prop);
+          }
+        })
 
-              filterOptions[prop.name] = options;
-            });
-
-            this.filterOptions = filterOptions;
-            this.prepareTreeFilter(props.props);
-            this.prepareTopFilter(props.props);
+        forkJoin(obs).subscribe(res => {
+          validProps.forEach((prop, idx) => {
+            filterOptions[prop.name] = res[idx].data.map((x: any) => x.name);
           });
+
+          this.filterOptions = filterOptions;
+          this.prepareTreeFilter(validProps);
+          this.prepareTopFilter(validProps);
+        });
       });
   }
 
@@ -213,15 +252,13 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         return node;
       });
+
+      console.log(this.treeData)
     });
   }
 
   private prepareTopFilter(props: DocumentMetadata[]): void {
-    this.topFilter = [];
-    this.documentService.getSearchProps()
-      .subscribe(searchProps => {
-        this.topFilter = searchProps.items;
-      });
+    this.topFilter = props;
   }
 
   private resetFilter(): void {
@@ -234,7 +271,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.isBookmark = this.router.url === "/app/bookmark";
 
     this.prepareTableColumns(() => {
-      this.prepareTableData();
+
     });
 
     const onSearchSubscription = this.documentService.onSearch()
@@ -252,6 +289,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.documentService.getCurrentSearchTerm()) {
       this.documentService.doSearch(this.documentService.getCurrentSearchTerm());
     }
+
+    this.documentProcessService.getMyBookmarks()
+      .subscribe(res => {
+        this.myBookmarks = res;
+        this.bookmarkLoaded$.next(true);
+      });
+
+    this.bookmarkLoaded$.subscribe(() => {
+      this.prepareTableData();
+    })
   }
 
   ngOnDestroy() {
@@ -308,11 +355,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.page = $event;
 
     this.prepareTableData();
-  }
-
-  onDocumentClicked($event: any): void {
-    this.documentService.selectDocument($event);
-    this.router.navigate(["app", "detail"]);
   }
 
   getMetaDataName(meta: DocumentMetadata): string {
@@ -389,5 +431,65 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.selectionFilters?.forEach(filter => {
       filter.resetFilter();
     })
+  }
+
+  removeBookmark(document: any): void {
+    this.documentProcessService.removeBookmark(document.docidx)
+      .subscribe(res => {
+        if (res) {
+          document.bookmarked = false;
+          this.myBookmarks = this.myBookmarks.splice(this.myBookmarks.indexOf(document.docidx), 1);
+
+          if (this.isBookmark) {
+            // in bookmark mode, refresh data
+            this.prepareTableData();
+          }
+        }
+      })
+  }
+
+  addBookmark(document: any): void {
+    this.documentProcessService.bookmarkDocument(document.docidx)
+      .subscribe(res => {
+        if (res) {
+          document.bookmarked = true;
+          this.myBookmarks.push(document.docidx);
+        }
+      });
+  }
+
+  onBookmarkClicked($event: any): void {
+    if ($event.bookmarked) {
+      Swal.fire({
+        text: "Xác nhận bỏ đánh dấu tài liệu này?",
+        showCancelButton: true
+      }).then(res => {
+        if (res.isConfirmed) {
+          this.removeBookmark($event);
+        }
+      });
+    } else {
+      this.addBookmark($event);
+    }
+  }
+
+  onSorted(sort: any): void {
+    this.sortDirection = sort.sortDirection;
+    this.docProps.forEach(prop => {
+      if (prop.name === sort.sortBy) {
+        if (prop.type === "string") {
+          this.sortBy = sort.sortBy + ".raw";
+        } else {
+          this.sortBy = sort.sortBy;
+        }
+      }
+    })
+
+    const filterValue = {
+      ...this.topFilterSelections,
+      ...this.treeFilterSelections
+    }
+
+    this.prepareTableData(filterValue);
   }
 }

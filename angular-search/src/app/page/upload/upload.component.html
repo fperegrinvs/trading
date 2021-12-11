@@ -1,3 +1,9 @@
+<div class="row">
+  <div class="col-12 page-header">
+    <img src="assets/icons/primary/bx-cloud-upload.svg"/>
+    <h1>Tải lên tài liệu</h1>
+  </div>
+</div>
 <div class="row" #step2>
   <div class="col-12">
     <Card title="Bước 1: Tải lên tập tin tài liệu">
@@ -20,33 +26,29 @@
 <div class="row" *ngIf="files.length > 0">
   <div class="col-12">
     <Card title="Bước 2: Cập nhật thông tin tài liệu">
-      <mat-tab-group [(selectedIndex)]="currentIndex">
-        <mat-tab [label]="file.name" *ngFor="let file of files; let i = index" [disabled]="!tabTracking[i]" >
-          <div class="container-fluid p-4">
-            <div class="row mb-2 text-red-600">
-              <p>
-                <span *ngFor="let error of validationTracking[i]">- {{error}}</span><br/>
-              </p>
-            </div>
-            <div class="row mb-2" *ngFor="let propChunk of requiredProps">
-              <div class="col-md-6">
-                <label class="font-bold" for="{{propChunk[0].name}}"><span class="asterisk">*</span> {{propChunk[0].note}}</label>
-                <input [type]="propChunk[0].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[0].name}}" [(ngModel)]="metaTracking[i][propChunk[0].name]"/>
-              </div>
-              <div class="col-md-6" *ngIf="propChunk.length > 1">
-                <label class="font-bold" for="{{propChunk[1].name}}"><span class="asterisk">*</span> {{propChunk[1].note}}</label>
-                <input [type]="propChunk[1].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[1].name}}" [(ngModel)]="metaTracking[i][propChunk[1].name]"/>
-              </div>
-            </div>
-            <div class="row mt-4">
-              <div class="col-12">
-                <label class="font-bold">Nội dung</label>
-                <textarea class="form-control col-12" [rows]="10">{{getContent(i)}}</textarea>
-              </div>
-            </div>
+      <div class="container-fluid p-4">
+        <div class="row mb-2 text-red-600">
+          <p>
+            <span *ngFor="let error of validationTracking">- {{error}}<br/></span>
+          </p>
+        </div>
+        <div class="row mb-2" *ngFor="let propChunk of requiredProps">
+          <div class="col-md-6">
+            <label class="font-bold" for="{{propChunk[0].name}}"><span class="asterisk">*</span> {{propChunk[0].note}}</label>
+            <input [type]="propChunk[0].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[0].name}}" [(ngModel)]="metaTracking[propChunk[0].name]"/>
           </div>
-        </mat-tab>
-      </mat-tab-group>
+          <div class="col-md-6" *ngIf="propChunk.length > 1">
+            <label class="font-bold" for="{{propChunk[1].name}}"><span class="asterisk">*</span> {{propChunk[1].note}}</label>
+            <input [type]="propChunk[1].type === 'date' ? 'datetime-local' : 'text'" class="form-control col-12" id="{{propChunk[1].name}}" [(ngModel)]="metaTracking[propChunk[1].name]"/>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12">
+            <label class="font-bold">Nội dung</label>
+            <textarea class="form-control col-12" [rows]="10">{{getContent()}}</textarea>
+          </div>
+        </div>
+      </div>
     </Card>
   </div>
 </div>
@@ -56,7 +58,6 @@
     <Card title="Bước 3: Lưu tài liệu">
       <div class="flex justify-center">
         <Button type="primary" class="mr-2" (onClick)="saveCurrentDocument()">Lưu tài liệu này</Button>
-        <Button type="primary" *ngIf="files.length > 1">Lưu toàn bộ ({{files.length}}) tài liệu</Button>
       </div>
     </Card>
   </div>

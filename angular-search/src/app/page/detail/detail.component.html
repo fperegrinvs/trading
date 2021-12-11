@@ -5,7 +5,13 @@
       <Table [columns]="tableColumns"
              [pagination]="false"
              [dataSource]="dataSource"
+             [action]="true"
              class="w-full mt-4">
+             <ng-template #actionTemplate let-data="data">
+              <a href="javascript: void(0);" class="mr-2" *ngIf="data.editable" (click)="onEditClick(data)">
+                <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
+              </a>
+             </ng-template>
       </Table>
       <div class="downloads mt-4" *ngIf="document.linkdoc">
         <Button
