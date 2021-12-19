@@ -1,18 +1,28 @@
 <div class="row">
   <div class="col-12">
     <Card>
-      <Button type="primary" icon="white/bx-arrow-back.svg" (onClick)="backToSearch()">Trở lại</Button>
-      <Table [columns]="tableColumns"
-             [pagination]="false"
-             [dataSource]="dataSource"
-             [action]="true"
-             class="w-full mt-4">
-             <ng-template #actionTemplate let-data="data">
-              <a href="javascript: void(0);" class="mr-2" *ngIf="data.editable" (click)="onEditClick(data)">
-                <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
-              </a>
-             </ng-template>
-      </Table>
+      <Button class="mr-2" type="primary" icon="white/bx-arrow-back.svg" (onClick)="backToSearch()">Trở lại</Button>
+      <Button (click)="deleteDocument()" *ngIf="permissions.candelete" class="mr-2" type="secondary" icon="bx-trash.svg">Xoá tài liệu</Button>
+      <Button *ngIf="permissions.canedit" class="mr-2" type="secondary" icon="bx-edit-alt.svg">Sửa</Button>
+      <div class="row">
+        <div class="col-md-6">
+          <Table [columns]="tableColumns"
+            [pagination]="false"
+            [dataSource]="dataSource"
+            [action]="true"
+            class="w-full mt-4">
+            <ng-template #actionTemplate let-data="data">
+            <a href="javascript: void(0);" class="mr-2" *ngIf="data.editable" (click)="onEditClick(data)">
+              <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
+            </a>
+            </ng-template>
+        </Table>
+        </div>
+        <div class="col-md-6">
+          <textarea class="form-control" rows="23" [value]="document.content"></textarea>
+        </div>
+      </div>
+      
       <div class="downloads mt-4" *ngIf="document.linkdoc">
         <Button
           type="secondary"
@@ -24,6 +34,9 @@
           {{getFileName(item)}}
           <img class="ml-2" src="assets/icons/gray/bx-file.svg"/>
         </Button>
+        <p *ngFor="let attachment of document.attachments">
+          {{attachment.downname}}
+        </p>
       </div>
     </Card>
   </div>

@@ -9,10 +9,12 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
     <Dropdown
       type="secondary"
       [text]="text"
+      [subtext]="subText"
       [icon]="icon"
       (close)="onDropDownClose($event)"
+      (clear)="resetFilter()"
       #dropdown
-      *ngIf="!isActive"
+      [active]="isActive"
     >
       <div class="p-2" [style.min-width]="'200px'">
         <input class="form-control mb-2" placeholder="tìm kiếm ..." (keyup)="doSearch(input.value)" #input/>
@@ -26,12 +28,12 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
         </div>
 
         <div class="mt-2">
-          <Button *ngIf="!isActive" type="primary" class="w-full" (onClick)="onApplyClick($event)">Áp dụng</Button>
+          <Button type="primary" class="w-full" (onClick)="onApplyClick($event)">Áp dụng</Button>
         </div>
       </div>
     </Dropdown>
 
-    <Button *ngIf="isActive" [icon]="icon" type="active">
+    <!--<Button *ngIf="isActive" [icon]="icon" type="active">
       <div class="adm-dropdown-text" [style.font-size]="'10px'">
         {{text}}
         <div class="adm-dropdown-sub text-left" [style.line-height]="'7px'">
@@ -40,7 +42,7 @@ import {faTimes} from "@fortawesome/free-solid-svg-icons";
       </div>
 
       <fa-icon (click)="resetFilter()" class="ml-4" [icon]="faTimes"></fa-icon>
-    </Button>
+    </Button>-->
   `,
   styleUrls: ['./selection-filter.component.scss'],
 })

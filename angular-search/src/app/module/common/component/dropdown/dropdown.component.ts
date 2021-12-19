@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {faCaretDown, IconDefinition} from "@fortawesome/free-solid-svg-icons";
+import {faCaretDown, faTimes, IconDefinition} from "@fortawesome/free-solid-svg-icons";
 import {MenuCloseReason} from "@angular/material/menu/menu";
 import {MatMenuTrigger} from "@angular/material/menu";
 
@@ -14,9 +14,13 @@ import {MatMenuTrigger} from "@angular/material/menu";
     >
       <div class="adm-dropdown-text" *ngIf="text">
         {{text}}
+        <div class="adm-dropdown-sub text-left" *ngIf="subText" [style.line-height]="'7px'">
+          <small>{{subText}}</small>
+        </div>
       </div>
 
-      <fa-icon class="ml-4" *ngIf="caret" [icon]="faCaret"></fa-icon>
+      <fa-icon class="ml-4" *ngIf="caret && !active" [icon]="faCaret"></fa-icon>
+      <fa-icon (click)="dropdownClear($event)" class="ml-4" [icon]="faTimes" *ngIf="active"></fa-icon>
     </Button>
 
     <mat-menu #menu [class.hidden]="disable">
@@ -39,12 +43,16 @@ export class DropdownComponent implements OnInit {
   @Input("caret") caret: boolean = true;
   @Input("width") width: string = "";
   @Input("disable") disable: boolean = false;
+  @Input("active") active: boolean = false;
+  @Input("subtext") subText: string = "";
 
   @Output() close: EventEmitter<MenuCloseReason> = new EventEmitter<MenuCloseReason>();
+  @Output() clear: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild("dropdownTrigger") dropdownTrigger: MatMenuTrigger | undefined;
 
   faCaret: IconDefinition = faCaretDown;
+  faTimes: IconDefinition = faTimes;
 
   constructor() { }
 
@@ -53,5 +61,10 @@ export class DropdownComponent implements OnInit {
 
   public closeDropdown(): void {
     this.dropdownTrigger?.closeMenu();
+  }
+
+  dropdownClear($event: MouseEvent): void {
+    $event.stopPropagation();
+    this.clear.emit(true);
   }
 }

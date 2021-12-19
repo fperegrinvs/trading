@@ -6,6 +6,7 @@ import {LoginComponent} from "./page/login/login.component";
 import {DetailComponent} from "./page/detail/detail.component";
 import {UploadComponent} from "./page/upload/upload.component";
 import { ApproveComponent } from './page/approve/approve.component';
+import { MyDocumentComponent } from './page/my-document/my-document.component';
 
 const routes: Routes = [
   {
@@ -20,17 +21,21 @@ const routes: Routes = [
         path: "bookmark",
         component: SearchComponent
       },
-      {
+      /*{
         path: "upload",
         component: UploadComponent
-      },
+      },*/
       {
-        path: "detail",
+        path: "detail/:docId",
         component: DetailComponent
       },
       {
         path: "approve",
         component: ApproveComponent
+      },
+      {
+        path: "mydoc",
+        component: MyDocumentComponent
       }
     ]
   },

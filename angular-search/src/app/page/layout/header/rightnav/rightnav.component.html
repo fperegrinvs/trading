@@ -15,7 +15,8 @@
       ngbDropdownMenu
     >
       <div class="list-group list-group-flush">
-        <a href="http://bifor.laborasyon.com/login" class="list-group-item">Đăng xuất</a>
+        <a *ngIf="user?.canadd" href="javascript: void(0)" (click)="goToMyDocs()" class="list-group-item">Tài liệu của tôi</a>
+        <a href="javascript: void(0)" (click)="logout()" class="list-group-item">Đăng xuất</a>
       </div>
     </div>
   </li>

@@ -2,7 +2,16 @@
 <mat-dialog-content class="mat-typography adm-modal-body">
     <mat-tab-group>
         <mat-tab label="Metadata">
-            <Docform [doc]="doc" [props]="meta" [validation]="validation" #docForm></Docform>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <Docform [doc]="doc" [props]="meta" [validation]="validation" #docForm></Docform>
+                    </div>
+                    <div class="col-md-6 p-4">
+                        <textarea class="form-control" [(ngModel)]="doc.content" [rows]="20"></textarea>
+                    </div>
+                </div>
+            </div>
             <!--<div class="container-fluid pt-4">
                 <div class="row" *ngFor="let chunk of metaChunks">
                     <div class="col-6 mb-4">
@@ -16,14 +25,11 @@
                 </div>
             </div>-->
         </mat-tab>
-        <mat-tab label="Nội dung" *ngIf="doc.content"> 
-            <textarea class="form-control" [(ngModel)]="doc.content" [rows]="20"></textarea>
-        </mat-tab>
         <mat-tab *ngIf="doc.attachments && doc.attachments.length > 0">
             <ng-template mat-tab-label>
                 Tập tin đính kèm
                 &nbsp;
-                <span class="badge badge-danger">{{doc.attachments.length}}</span>
+                <span class="badge badge-warning">{{doc.attachments.length}}</span>
             </ng-template>
             <Button (onClick)="downloadAttachment(doc.docidx, file)" class="mt-4 mr-2" icon="bxs-download.svg" type="secondary" *ngFor="let file of doc.attachments">{{file.downname}}</Button>
         </mat-tab>
@@ -31,7 +37,7 @@
             <ng-template mat-tab-label>
                 Tài liệu liên quan
                 &nbsp;
-                <span class="badge badge-danger">{{tableData.length}}</span>
+                <span class="badge badge-warning">{{tableData.length}}</span>
             </ng-template>
             <Table [columns]="tableColumns" [dataSource]="tableData" class="w-full" [pagination]="false">
                 <ng-template #actionTemplate let-data="data">

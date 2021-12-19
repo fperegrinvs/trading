@@ -44,7 +44,14 @@ import { DocumentMetadata } from "src/app/module/document/model/document.metadat
           (click)="onCellClick(element, column)"
         >
           <div *ngIf="isArray(element[column.id])">
-            <span class="tag badge badge-primary mr-1" *ngFor="let el of element[column.id]">{{el}}</span>
+            <span 
+              class="tag badge mr-1"
+              [class.badge-success]="el.type === 'success'"
+              [class.badge-primary]="el.type === 'default'"
+              [class.badge-warning]="el.type === 'warning'"
+              [class.badge-danger]="el.type === 'danger'"
+              [class.badge-dark]="el.type === 'dark'"
+             *ngFor="let el of element[column.id]">{{el.text}}</span>
           </div>
           <div *ngIf="isUrl(element[column.id])">
             <a [href]="element[column.id]" target="_blank">{{element[column.id]}}</a>

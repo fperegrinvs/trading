@@ -36,6 +36,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ApproveComponent } from './page/approve/approve.component';
 import { ApproveModalComponent } from './page/approve/approve.modal/approve.modal.component';
 import { DocformComponent } from './component/docform/docform.component';
+import { MyDocumentComponent } from './page/my-document/my-document.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { DocformComponent } from './component/docform/docform.component';
     TagsModalComponent,
     ApproveComponent,
     ApproveModalComponent,
-    DocformComponent
+    DocformComponent,
+    MyDocumentComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,8 @@ import { DocformComponent } from './component/docform/docform.component';
     MatFormFieldModule,
     MatChipsModule,
     MatIconModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatSlideToggleModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

@@ -10,17 +10,19 @@
     <Card title="Lọc theo tiêu chí" icon="bx-search-alt.svg" *ngIf="leftFilterShow">
       <img class="mr-2 left-toggle" src="assets/icons/bx-chevrons-left.svg" (click)="hideLeftBar()"/>
       <Tree [data]="treeData" (onSelect)="onTreeFilter($event)" (onSearchToggle)="onTreeSearchToggle($event)"></Tree>
-      <h5 class="card-title mt-4">
-        <img class="mr-2" src="assets/icons/bx-search-alt.svg"/>
-        Thống kê
-      </h5>
-      <Button
-        type="secondary"
-        icon="bx-bar-chart-alt.svg"
-        class="w-full py-1"
-        *ngFor="let statistic of statisticOptions"
-        (onClick)="openStatistic(statistic)"
-      >{{statistic.name}}</Button>
+      <div class="statistic" *ngIf="enableStatistic">
+        <h5 class="card-title mt-4">
+          <img class="mr-2" src="assets/icons/bx-search-alt.svg"/>
+          Thống kê
+        </h5>
+        <Button
+          type="secondary"
+          icon="bx-bar-chart-alt.svg"
+          class="w-full py-1"
+          *ngFor="let statistic of statisticOptions"
+          (onClick)="openStatistic(statistic)"
+        >{{statistic.name}}</Button>
+      </div>
     </Card>
   </div>
   <div class="col-lg-9 flex flex-col"
@@ -93,17 +95,15 @@
                [expandable]="searchTerm.length > 0"
                [inSearchMode]="searchTerm.length > 0"
                [bookmark]="true"
+               [action]="false"
                expandAttr="highlight"
                class="w-full"
         >
-          <ng-template #actionTemplate>
-            <a href="#" class="mr-2">
-              <fa-icon [icon]="faEdit" [classes]="['btn-edit']" size="lg"></fa-icon>
-            </a>
-            <a href="#">
+          <!--<ng-template #actionTemplate let-data="data">
+            <a href="javascript: void(0)" (click)="deleteDocument(data)" *ngIf="enableDelete">
               <fa-icon [icon]="faTrash" [classes]="['btn-delete']" size="lg"></fa-icon>
             </a>
-          </ng-template>
+          </ng-template>-->
         </Table>
         <ngx-spinner type="ball-clip-rotate-multiple" name="table-loader" [fullScreen]="false"></ngx-spinner>
       </div>

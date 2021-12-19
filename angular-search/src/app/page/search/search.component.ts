@@ -8,7 +8,7 @@ import {StatisticModalComponent} from "./statistic.modal/statistic.modal.compone
 import * as _ from "lodash";
 import {forkJoin, Observable, Subject, Subscription} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {DocumentMetadata} from "../../module/document/model/document.metadata";
 import {DatePipe} from "@angular/common";
 import {DateRange} from "@angular/material/datepicker";
@@ -21,6 +21,9 @@ import Swal from 'sweetalert2'
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faEdit, faTrash, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import {MatAccordion} from '@angular/material/expansion';
+import { User } from 'src/app/module/authentication/model/user.model';
+import { AuthenticationService } from 'src/app/module/authentication/service/authentication.service';
+import { CookieAuth } from 'src/app/module/authentication/model/cookie.auth';
 
 @Component({
   selector: 'app-search',
@@ -51,6 +54,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   sortBy: string = "docidx";
   sortDirection: string = "desc";
+
+  enableStatistic: boolean = false;
+  enableDelete: boolean = false;
 
   statisticOptions: StatisticOption[] = [
     {
@@ -99,14 +105,19 @@ export class SearchComponent implements OnInit, OnDestroy {
   faEdit: IconDefinition = faEdit;
   faTrash: IconDefinition = faTrashAlt;
 
+  userInfo : User | undefined;
+
   constructor(
     private documentService: DocumentSearchService,
     private documentProcessService: DocumentProcessService,
     private dialogService: MatDialog,
     private spinnerService: NgxSpinnerService,
     private router: Router,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private authService: AuthenticationService
+  ) { 
+    this.userInfo = authService.getCookieAuthInfo()?.user;
+  }
 
   private prepareDataProcess(metaData: DocumentMetadata[]): void {
     const engine: any = {};
@@ -148,7 +159,11 @@ export class SearchComponent implements OnInit, OnDestroy {
           if (column.id !== "action") {
             column.clickFn = (element: any) => {
               this.documentService.selectDocument(element);
-              this.router.navigate(["app", "detail"]);
+              this.router.navigate(["app", "detail", element.docidx], {
+                queryParams: {
+                  from: "search"
+                }
+              });
             }
           }
           return column;
@@ -298,7 +313,21 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.bookmarkLoaded$.subscribe(() => {
       this.prepareTableData();
-    })
+    });
+
+    this.checkPermissions();
+  }
+
+  private checkPermissions(): void {
+    const user = this.authService.getCookieAuthInfo()?.user;
+
+    if (user?.cantk) {
+      this.enableStatistic = true;
+    }
+    if (user?.candelete) {
+      this.enableDelete = true;
+      console.log(this.enableDelete)
+    }
   }
 
   ngOnDestroy() {
@@ -308,7 +337,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   onTreeFilter($event: TreeNode[]): void {
     const searchProps: any = {};
     $event.forEach(metaData => {
-      searchProps[metaData.id || ""] = metaData.children ? metaData.children[0].name : "";
+      searchProps[metaData.id || ""] = metaData.children ? metaData.children.map(x => x.name) : [];
     })
 
     this.treeFilterSelections = searchProps;
@@ -373,7 +402,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   selectionFilterChanged($event: string[], meta: DocumentMetadata): void {
     if ($event.length > 0) {
-      this.topFilterSelections[meta.name] = $event[0];
+      this.topFilterSelections[meta.name] = $event;
     } else {
       delete this.topFilterSelections[meta.name];
     }
@@ -491,5 +520,21 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
 
     this.prepareTableData(filterValue);
+  }
+
+  deleteDocument(data: any): void {
+    Swal.fire({
+      title: "Xác nhận xoá tài liệu?",
+      showCancelButton: true
+    }).then(res => {
+      if (res.isConfirmed) {
+        this.documentProcessService.deleteDocument(data.docidx)
+          .subscribe(response => {
+            if (response.isvalid) {
+              this.prepareTableData();
+            }
+          })
+      }
+    });
   }
 }

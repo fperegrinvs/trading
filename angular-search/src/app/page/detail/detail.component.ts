@@ -2,13 +2,15 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Document} from "../../module/document/model/document";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import { faEdit, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { TagsModalComponent } from './tags.modal/tags.modal.component';
+import Swal from 'sweetalert2';
+import { DocumentProcessService } from 'src/app/module/document/service/document.process.service';
 
 @Component({
   selector: 'app-detail',
@@ -43,23 +45,38 @@ export class DetailComponent implements OnInit, OnDestroy {
   relativeData: any[] = [];
   document: any = {};
   faEdit: IconDefinition = faEdit;
+  ignoreField: string[] = [
+    "attachments",
+    "statusNum",
+    "companyId",
+    "createdBy",
+    "receivers",
+    "content",
+    "updateTime",
+    "docsource",
+    "promulgationDate"
+  ];
+  permissions: any = {}
+  fromPage: string = "";
 
   constructor(
     private documentService: DocumentSearchService,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private modalService: MatDialog
+    private modalService: MatDialog,
+    private route: ActivatedRoute,
+    private documentProcessService: DocumentProcessService
   ) { }
 
-  private loadDocument(): void {
+  private loadDocument(doc: Document): void {
     const source: any[] = [];
 
     this.documentService.getDocProps()
       .subscribe(props => {
-        this.document = this.documentService.getCurrentDocument();
+        this.document = doc;
 
         props.props.forEach(prop => {
-          if (this.document[prop.name] && prop.note) {
+          if (this.document[prop.name] && prop.note && !this.ignoreField.includes(prop.name)) {
             source.push({
               metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
               content: this.document[prop.name],
@@ -84,16 +101,25 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.documentService.getCurrentDocument()) {
-      this.loadDocument();
-    } else {
-      this.backToSearch();
-    }
+    this.route.params
+      .subscribe(res => {
+        this.documentService.getDocumentById(res.docId)
+          .subscribe((res: any) => {
+            this.loadDocument(res._source);
+            this.permissions = res.permissions;
+          });
+      });
+
+      this.route.queryParams.subscribe(res => {
+        if (res.from) {
+          this.fromPage = res.from;
+        }
+      });
 
     const onDocumentSelected = this.documentService.onDocumentSelected()
       .subscribe(doc => {
         this.spinner.show("detail-spinner");
-        this.loadDocument();
+        this.loadDocument(doc);
         setTimeout(() => {
           this.spinner.hide("detail-spinner");
           window.scroll(0,0);
@@ -108,7 +134,12 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   backToSearch(): void {
-    this.router.navigate(["app", "search"]);
+    console.log(this.fromPage);
+    if (this.fromPage === "search") {
+      this.router.navigate(["app", "search"]);
+    } else {
+      this.router.navigate(["app", "mydoc"]);
+    }
   }
 
   private prepareTableColumns(): void {
@@ -155,6 +186,22 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.modalService.open(TagsModalComponent, {
       data: {
         document: this.document
+      }
+    });
+  }
+
+  deleteDocument(): void {
+    Swal.fire({
+      title: "Xác nhận xoá tài liệu?",
+      showCancelButton: true
+    }).then(res => {
+      if (res.isConfirmed) {
+        this.documentProcessService.deleteDocument(this.document.docidx)
+          .subscribe(response => {
+            if (response.isvalid) {
+              this.backToSearch();
+            }
+          })
       }
     });
   }

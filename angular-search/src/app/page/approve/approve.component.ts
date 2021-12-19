@@ -76,7 +76,7 @@ export class ApproveComponent implements OnInit {
       data: {
         doc: data
       },
-      width: "1000px"
+      width: "100%"
     });
 
     dialogRef.afterClosed()

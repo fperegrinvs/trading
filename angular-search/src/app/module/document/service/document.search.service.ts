@@ -4,9 +4,11 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {DocPropsResponse} from "../model/response/docprops.response";
 import {Observable, Subject, Subscription} from "rxjs";
 import {DocumentResponse} from "../model/response/document.response";
-import {Category} from "../model/category";
 import {SearchPropsResponse} from "../model/response/searchprops.response";
 import {CategoryResponse} from "../model/response/category.response";
+import { map } from "rxjs/operators";
+import { Document } from "../model/document";
+import { DocumentStatus } from "../enum/document.status.enum";
 
 const API_PATH = environment.api_path;
 const MOCK_API_PATH = "https://6193d360221e680017450c50.mockapi.io";
@@ -117,6 +119,15 @@ export class DocumentSearchService {
     return this.currentDocument;
   }
 
+  getDocumentById(docId: number): any {
+    const docSearchUrl = `${API_PATH}/document`;
+
+    const params = new HttpParams()
+      .set("docid", docId);
+
+    return this.http.get<any>(docSearchUrl, {params});
+  }
+
   onDocumentSelected(): Observable<any> {
     return this.subjectSelect.asObservable();
   }
@@ -128,5 +139,56 @@ export class DocumentSearchService {
     };
 
     return this.http.post<boolean>(apiPath, body);
+  }
+
+  rejectDocument(docId: number): Observable<boolean> {
+    const apiPath = `${API_PATH}/searchapi/approve`;
+    const body = {
+      document_id: docId
+    }
+
+    return this.http.delete<boolean>(apiPath, {
+      body
+    });
+  }
+
+  getMyDocuments(params: any): Observable<Document[]> {
+    const apiPath = `${API_PATH}/mydocs`;
+    return this.http.get<Document[]>(apiPath, {
+      params
+    });
+  }
+
+  countMyDocuments(): Observable<any> {
+    const apiPath = `${API_PATH}/mydocs`;
+    const params = new HttpParams()
+      .set("count", true);
+
+      return this.http.get<any>(apiPath, {
+        params
+      }).pipe(map(res => {
+        const total = res.user_docs.doc_count;
+        const buckets = res.user_docs.status_count.buckets;
+        let newCount = 0;
+        let approvedCount = 0;
+        let rejectedCount = 0;
+
+        buckets.forEach((bucket: any) => {
+          if (bucket.key === DocumentStatus.NEW) {
+            newCount = bucket.doc_count;
+          } else if (bucket.key === DocumentStatus.APPROVED) {
+            approvedCount = bucket.doc_count;
+          } else {
+            rejectedCount = bucket.doc_count;
+          }
+        });
+
+        return {
+          total: total,
+          new: newCount,
+          approved: approvedCount,
+          rejected: rejectedCount
+        }
+      }));
   }
 }

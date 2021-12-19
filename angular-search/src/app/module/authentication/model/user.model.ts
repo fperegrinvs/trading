@@ -8,6 +8,8 @@ export interface User {
   cantkmeta: boolean,
   cantkcate: boolean,
   cantkname: boolean,
+  canapprove: boolean,
+  cansearch: boolean,
   ismanager: boolean,
   name: string,
   isnew: boolean,

@@ -38,7 +38,11 @@
 
 tr.mat-header-row {
   @apply h-8;
-  @apply bg-orange-apple-aqua-600;
+  background-color: rgb(249, 250, 251);
+
+  th {
+    color: rgb(55, 65, 81);
+  }
 }
 
 tr.mat-row {

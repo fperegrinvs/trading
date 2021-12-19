@@ -28,7 +28,10 @@ export class ApproveModalComponent implements OnInit {
     "receivers",
     "tags",
     "attachments",
-    "promulgationDateStr"
+    "promulgationDateStr",
+    "updateTime",
+    "docsource",
+    "createdBy"
   ];
   tableColumns: TableColumn[] = [];
   tableData: any[] = [];
@@ -163,15 +166,15 @@ export class ApproveModalComponent implements OnInit {
   reject(): void {
     if (this.docForm) {
       Swal.fire({
-        title: "Xác nhận huỷ tài liệu?",
+        title: "Xác nhận từ chối tài liệu?",
         showCancelButton: true
       }).then(res => {
         if (res.isConfirmed) {
           const document = this.docForm?.getFormData();
           
-          this.documentProcessService.deleteDocument(document.docidx)
+          this.documentService.rejectDocument(document.docidx)
             .subscribe(res => {
-              if (res.isvalid) {
+              if (res) {
                 this.dialogRef.close({refresh: true});
               }
             })

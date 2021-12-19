@@ -3,6 +3,8 @@ import {UIService} from "../../../service/ui.service";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import { DocumentSearchService } from 'src/app/module/document/service/document.search.service';
+import { environment } from 'src/environments/environment';
+import { AuthenticationService } from 'src/app/module/authentication/service/authentication.service';
 
 @Component({
   selector: 'app-navigation',
@@ -14,34 +16,57 @@ export class NavigationComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   isOpen: boolean = false;
   menus: any = [
-    {
-      icon: 'bx-search-alt.svg',
-      text: 'Tìm kiếm',
-      path: '/app/search'
-    },
-    {
-      icon: 'bxs-star.svg',
-      text: 'Các mục đánh dấu',
-      path: '/app/bookmark'
-    },
-    {
-      icon: 'bx-cloud-upload.svg',
-      text: 'Tải lên tài liệu',
-      path: '/app/upload'
-    },
-    {
-      icon: 'bx-list-check.svg',
-      text: 'Duyệt tài liệu',
-      path: '/app/approve',
-      badge: "0"
-    }
-  ]
+    
+  ];
+
+  homeUrl: string = "";
 
   constructor(
     private uiService: UIService,
     private router: Router,
-    private documentService: DocumentSearchService
+    private documentService: DocumentSearchService,
+    private authService: AuthenticationService
   ) { }
+
+  private checkPermissions(): void {
+    const user = this.authService.getCookieAuthInfo();
+
+    if (user?.user.cansearch) {
+      this.menus.push({
+        icon: 'bx-search-alt.svg',
+        text: 'Tìm kiếm',
+        path: '/app/search'
+      },
+      {
+        icon: 'bxs-star.svg',
+        text: 'Các mục đánh dấu',
+        path: '/app/bookmark'
+      });
+    }
+
+    if (user?.user.canadd) {
+      /*this.menus.push({
+        icon: 'bx-cloud-upload.svg',
+        text: 'Tải lên tài liệu',
+        path: '/app/upload'
+      });*/
+
+      this.menus.push({
+        icon: 'bxs-user-detail.svg',
+        text: 'Tài liệu của tôi',
+        path: '/app/mydoc'
+      });
+    }
+
+    if (user?.user.canapprove) {
+      this.menus.push({
+        icon: 'bx-list-check.svg',
+        text: 'Duyệt tài liệu',
+        path: '/app/approve',
+        badge: "0"
+      });
+    }
+  }
 
   ngOnInit(): void {
     const navigationToggledSub = this.uiService.onNavigationToggled()
@@ -58,6 +83,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.subscriptions.push(approveCountChanged);
 
     this.countApprove();
+
+    this.homeUrl = environment.home_path;
+    this.checkPermissions();
   }
 
   private countApprove(): void {

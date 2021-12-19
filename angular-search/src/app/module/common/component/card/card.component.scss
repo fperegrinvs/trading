@@ -4,8 +4,8 @@
   @apply mb-6;
   position: relative;
   border-radius: $default-border-radius;
-  @apply border-0 #{!important}
-    bg-white;
+  background-color: rgb(244, 244, 244);
+  @apply border-0 #{!important};
 
   &.bg-primary .card-header, &.bg-secondary .card-header, &.bg-success .card-header, &.bg-danger .card-header, &.bg-warning .card-header, &.bg-info .card-header, &.bg-dark .card-header {
     border-bottom: 1px solid rgba(235, 235, 235, 0.40);

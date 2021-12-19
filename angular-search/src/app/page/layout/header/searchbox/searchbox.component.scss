@@ -40,7 +40,7 @@
   }
 
   .form-control {
-    @apply border-0 h-auto text-black;
+    @apply h-auto text-black;
     border-radius: $default-border-radius;
     padding: 10px 15px;
     padding-left: 45px;
