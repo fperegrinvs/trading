@@ -112,6 +112,8 @@ export class DocumentProcessService {
     });
   }
 
+  
+
   fetchDownloadLink(docId: number, file: any): string {
     return `${API_PATH}/download?id=${file.type}/${file.name}&docid=${docId}`;
   }
