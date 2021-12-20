@@ -74,12 +74,13 @@ export class MyDocumentComponent implements OnInit {
   data: any[] = [];
 
   settings: any = {
-    new: true,
+    new: false,
     approved: false,
     rejected: false
   };
 
   filters: number[] = [0];
+  filterStorageKey: string = "myDocumentFilters";
 
   constructor(
     private documentService: DocumentSearchService,
@@ -124,8 +125,31 @@ export class MyDocumentComponent implements OnInit {
 
   }
 
+  private getFilters(): any {
+    const savedFilters = localStorage.getItem(this.filterStorageKey);
+    if (!savedFilters) {
+      return [0];
+    }
+
+    const obj = JSON.parse(savedFilters) as number[];
+
+    if (obj.includes(DocumentStatus.WAITING)) {
+      this.settings.new = true;
+    }
+    
+    if (obj.includes(DocumentStatus.APPROVED)) {
+      this.settings.approved = true;
+    }
+
+    if (obj.includes(DocumentStatus.REJECTED)) {
+      this.settings.rejected = true;
+    }
+
+    return obj;
+  }
+
   ngOnInit(): void {
-    this.fetchDocuments(this.filters);
+    this.fetchDocuments(this.getFilters());
     this.documentService.countMyDocuments()
       .subscribe(res => {
         this.documentCount = res;
@@ -137,7 +161,7 @@ export class MyDocumentComponent implements OnInit {
     this.settings[filter] = !this.settings[filter];
 
     if (this.settings.new) {
-      filters.push(DocumentStatus.NEW);
+      filters.push(DocumentStatus.WAITING);
     }
 
     if (this.settings.approved) {
@@ -149,6 +173,8 @@ export class MyDocumentComponent implements OnInit {
     }
 
     this.filters = filters;
+
+    localStorage.setItem(this.filterStorageKey, JSON.stringify(filters));
 
     this.fetchDocuments(this.filters);
   }
