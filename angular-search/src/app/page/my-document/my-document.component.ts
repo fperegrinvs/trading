@@ -11,6 +11,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
 import { DocumentProcessService } from 'src/app/module/document/service/document.process.service';
 import { Router } from '@angular/router';
+import { isNumber } from 'lodash';
 
 @Component({
   selector: 'app-my-document',
@@ -96,14 +97,9 @@ export class MyDocumentComponent implements OnInit {
     .subscribe(res => {
       this.data = res.map(x => {
         const item = x._source;
-        if (item.statusNum === DocumentStatus.NEW) {
+        if (item.statusNum === DocumentStatus.WAITING) {
           item.status = [{
             text: "Chờ duyệt",
-            type: "default"
-          }];
-        } else if (item.statusNum === DocumentStatus.WAITING) {
-          item.status = [{
-            text: "Chỉnh sửa",
             type: "warning"
           }];
         } else if (item.statusNum === DocumentStatus.APPROVED) {
@@ -118,7 +114,7 @@ export class MyDocumentComponent implements OnInit {
           }];
         }
 
-        if (item.updateTime) {
+        if (item.updateTime && isNumber(item.updateTime)) {
           item.updateTime = this.datePipe.transform(new Date(item.updateTime), "dd/MM/yyyy HH:mm");
         }
 
