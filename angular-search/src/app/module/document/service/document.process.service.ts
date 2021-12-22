@@ -43,7 +43,7 @@ export class DocumentProcessService {
   updateDocument(document: any): Observable<any> {
     const postData = {
       docinfo: document,
-      id: document.docidx
+      id: document.docidx ? document.docidx : document.file
     };
 
     const importUrl = `${API_PATH}/import/doc`;

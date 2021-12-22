@@ -128,6 +128,7 @@ export class MyDocumentComponent implements OnInit {
   private getFilters(): any {
     const savedFilters = localStorage.getItem(this.filterStorageKey);
     if (!savedFilters) {
+      this.settings.new = true;
       return [0];
     }
 
