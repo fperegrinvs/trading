@@ -20,6 +20,7 @@ export class ApproveModalComponent implements OnInit {
 
   doc: any = {};
   meta: DocumentMetadata[] = [];
+  requiredProps: DocumentMetadata[] = [];
   metaChunks: DocumentMetadata[][] = [];
   ignoreFields: string[] = [
     "content",
@@ -53,10 +54,16 @@ export class ApproveModalComponent implements OnInit {
       .subscribe(res => {
         if (res.isvalid) {
           this.meta = res.props.filter(prop => {
+            if (prop.note) {
+              prop.note = prop.note.replace(/\(.+\)/gi, "").trim();
+            }
+
+            if (prop.required && prop.name !== "content") {
+              this.requiredProps.push(prop);
+              return true;
+            }
+
             if (this.doc[prop.name] && !this.ignoreFields.includes(prop.name) && prop.note && prop.name !== "content") { 
-              if (prop.note) {
-                prop.note = prop.note.replace(/\(.+\)/gi, "").trim();
-              }
               return true;
             }
 
@@ -115,7 +122,7 @@ export class ApproveModalComponent implements OnInit {
 
   private validateDocumentMeta(doc: any): boolean {
     this.validation = [];
-    this.meta.forEach(prop => {
+    this.requiredProps.forEach(prop => {
       if (!doc[prop.name]) {
         this.validation.push(`${prop.note} là thông tin bắt buộc`);
       }
