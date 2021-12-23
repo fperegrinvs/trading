@@ -172,8 +172,8 @@ export class ApproveModalComponent implements OnInit {
       }).then(res => {
         if (res.isConfirmed) {
           const document = this.docForm?.getFormData();
-          
-          this.documentService.rejectDocument(document.docidx)
+          const docId = document.docidx ? document.docidx : document.file;
+          this.documentService.rejectDocument(docId)
             .subscribe(res => {
               if (res) {
                 this.dialogRef.close({refresh: true});
