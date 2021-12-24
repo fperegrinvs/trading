@@ -45,17 +45,6 @@ export class DetailComponent implements OnInit, OnDestroy {
   relativeData: any[] = [];
   document: any = {};
   faEdit: IconDefinition = faEdit;
-  ignoreField: string[] = [
-    "attachments",
-    "statusNum",
-    "companyId",
-    "createdBy",
-    "receivers",
-    "content",
-    "updateTime",
-    "docsource",
-    "promulgationDate"
-  ];
   permissions: any = {}
   fromPage: string = "";
 
@@ -76,7 +65,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.document = doc;
 
         props.props.forEach(prop => {
-          if (this.document[prop.name] && prop.note && !this.ignoreField.includes(prop.name)) {
+          if (this.document[prop.name] && prop.note && prop.show_in_detail) {
             source.push({
               metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
               content: this.document[prop.name],

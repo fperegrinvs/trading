@@ -22,18 +22,6 @@ export class ApproveModalComponent implements OnInit {
   meta: DocumentMetadata[] = [];
   requiredProps: DocumentMetadata[] = [];
   metaChunks: DocumentMetadata[][] = [];
-  ignoreFields: string[] = [
-    "content",
-    "companyId",
-    "",
-    "receivers",
-    "tags",
-    "attachments",
-    "promulgationDateStr",
-    "updateTime",
-    "docsource",
-    "createdBy"
-  ];
   tableColumns: TableColumn[] = [];
   tableData: any[] = [];
   validation: string[] = [];
@@ -58,12 +46,16 @@ export class ApproveModalComponent implements OnInit {
               prop.note = prop.note.replace(/\(.+\)/gi, "").trim();
             }
 
+            if (!prop.show_in_form) {
+              return false;
+            }
+
             if (prop.required && prop.name !== "content") {
               this.requiredProps.push(prop);
               return true;
             }
 
-            if (this.doc[prop.name] && !this.ignoreFields.includes(prop.name) && prop.note && prop.name !== "content") { 
+            if (this.doc[prop.name] && prop.name !== "content") { 
               return true;
             }
 

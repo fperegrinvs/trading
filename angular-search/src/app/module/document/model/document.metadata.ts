@@ -3,6 +3,8 @@ export interface DocumentMetadata {
   note?: string;
   type: string;
   required?: boolean;
+  show_in_form?: boolean;
+  show_in_detail?: boolean;
 }
 
 export enum MetadataType {
