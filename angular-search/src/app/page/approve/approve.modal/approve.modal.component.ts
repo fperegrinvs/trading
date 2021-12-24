@@ -44,6 +44,8 @@ export class ApproveModalComponent implements OnInit {
           this.meta = res.props.filter(prop => {
             if (prop.note) {
               prop.note = prop.note.replace(/\(.+\)/gi, "").trim();
+            } else {
+              return false;
             }
 
             if (!prop.show_in_form) {

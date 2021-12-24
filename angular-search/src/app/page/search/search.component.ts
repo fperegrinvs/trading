@@ -159,7 +159,8 @@ export class SearchComponent implements OnInit, OnDestroy {
           if (column.id !== "action") {
             column.clickFn = (element: any) => {
               this.documentService.selectDocument(element);
-              this.router.navigate(["app", "detail", element.docidx], {
+              const docidx = element.docidx ? element.docidx : element.file;
+              this.router.navigate(["app", "detail", docidx], {
                 queryParams: {
                   from: "search"
                 }
