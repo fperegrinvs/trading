@@ -70,11 +70,24 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.htmlPageCount = this.document.content_html ? Object.keys(this.document.content_html).length : 0;
         props.props.forEach(prop => {
           if (this.document[prop.name] && prop.note && prop.show_in_detail) {
-            source.push({
-              metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
-              content: this.document[prop.name],
-              editable: prop.name === "tags"
-            });
+            if (prop.name == "tags") {
+              source.push({
+                metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
+                content: this.document.tags.map((tag: any) => {
+                  return {
+                    text: tag,
+                    type: "default"
+                  }
+                }),
+                editable: prop.name === "tags"
+              });
+            } else {
+              source.push({
+                metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
+                content: this.document[prop.name],
+                editable: prop.name === "tags"
+              });
+            }
           }
         });
 
@@ -87,6 +100,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
 
         this.dataSource = source;
+        console.log(this.dataSource);
       });
 
     this.prepareTableColumns();
