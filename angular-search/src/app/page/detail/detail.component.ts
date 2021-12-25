@@ -50,6 +50,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   permissions: any = {}
   fromPage: string = "";
   showContentHtml: boolean = false;
+  htmlPageCount: number = 0;
 
   constructor(
     private documentService: DocumentSearchService,
@@ -66,7 +67,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.documentService.getDocProps()
       .subscribe(props => {
         this.document = doc;
-
+        this.htmlPageCount = this.document.content_html ? Object.keys(this.document.content_html).length : 0;
         props.props.forEach(prop => {
           if (this.document[prop.name] && prop.note && prop.show_in_detail) {
             source.push({
