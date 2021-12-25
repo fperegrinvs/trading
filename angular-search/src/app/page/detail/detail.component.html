@@ -19,7 +19,10 @@
         </Table>
         </div>
         <div class="col-md-6">
-          <textarea class="form-control" rows="23" [value]="document.content"></textarea>
+          <Toggle [checked]="showContentHtml" class="mt-4 mb-2" title="Hiển thị dạng HTML" (onChanged)="toggleHtml($event)"></Toggle>
+          <textarea *ngIf="!showContentHtml" class="form-control" rows="25" [value]="document.content"></textarea>
+          <Pagination *ngIf="showContentHtml" [desc]="false" [totalItems]="2" [page]="1" [size]="1" (pageChanged)="htmlPageChanged($event)"></Pagination>
+          <iframe #contentHtml class="w-full bg-white border-0" [class.hide]="!showContentHtml"></iframe>
         </div>
       </div>
       

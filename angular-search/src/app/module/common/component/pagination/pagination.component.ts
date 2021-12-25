@@ -4,10 +4,10 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
   selector: 'Pagination',
   template: `
     <div class="adm-pagination">
-        <span>{{currentItem + 1}}-{{currentItem + size}} trong tổng {{totalItems}}</span>
+        <span *ngIf="desc">{{currentItem + 1}}-{{currentItem + size}} trong tổng {{totalItems}}</span>
         <div>
-          <span>Số dòng mỗi trang: </span>
-          <select [(ngModel)]="size" (change)="onSizeChanged()">
+          <span *ngIf="desc">Số dòng mỗi trang: </span>
+          <select  *ngIf="desc" [(ngModel)]="size" (change)="onSizeChanged()">
             <option [value]="size" *ngFor="let size of sizeOptions">{{size}}</option>
           </select>
           <ngb-pagination
@@ -28,6 +28,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   @Input() sizeOptions: number[] = [5];
   @Input() page: number = 1;
   @Input() size: number = 5;
+  @Input() desc: boolean = true;
   currentItem: number = 0;
 
   @Output() sizeChanged: EventEmitter<number> = new EventEmitter<number>();

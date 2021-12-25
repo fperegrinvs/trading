@@ -26,6 +26,8 @@ import {TagComponent} from "./component/tag/tag.component";
 import {SingleChoiceFilterComponent} from "./component/filter/single-choice-filter.component";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ToggleComponent } from './component/toggle/toggle.component';
 
 
 
@@ -43,7 +45,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     CheckboxComponent,
     PaginationComponent,
     TagComponent,
-    SingleChoiceFilterComponent
+    SingleChoiceFilterComponent,
+    ToggleComponent
   ],
     imports: [
         CommonModule,
@@ -59,7 +62,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         MatPaginatorModule,
         NgbPaginationModule,
         MatTooltipModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatSlideToggleModule
     ],
   exports: [
     TreeComponent,
@@ -74,7 +78,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     CheckboxComponent,
     PaginationComponent,
     TagComponent,
-    SingleChoiceFilterComponent
+    SingleChoiceFilterComponent,
+    ToggleComponent
   ]
 })
 export class ADMCommonModule { }

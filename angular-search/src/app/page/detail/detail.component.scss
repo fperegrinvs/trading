@@ -1,0 +1,8 @@
+iframe {
+    height: 500px;
+    border: none !important;
+    
+    &.hide {
+        height: 0 !important;
+    }
+}

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
@@ -18,6 +18,8 @@ import { DocumentProcessService } from 'src/app/module/document/service/document
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit, OnDestroy {
+
+  @ViewChild("contentHtml") contentHtml: ElementRef | undefined;
 
   subscriptions: Subscription[] = [];
   tableColumns: TableColumn[] = [
@@ -47,6 +49,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   faEdit: IconDefinition = faEdit;
   permissions: any = {}
   fromPage: string = "";
+  showContentHtml: boolean = false;
 
   constructor(
     private documentService: DocumentSearchService,
@@ -193,5 +196,21 @@ export class DetailComponent implements OnInit, OnDestroy {
           })
       }
     });
+  }
+
+  toggleHtml($event: boolean): void {
+    this.showContentHtml = !this.showContentHtml;
+    const doc = this.contentHtml?.nativeElement.contentWindow.document;
+    doc.open();
+    doc.write(this.document.content_html[0]);
+    doc.close();
+  }
+
+  htmlPageChanged($event: any): void {
+    const page = +$event - 1;
+    const doc = this.contentHtml?.nativeElement.contentWindow.document;
+    doc.open();
+    doc.write(this.document.content_html[page]);
+    doc.close();
   }
 }

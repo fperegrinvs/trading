@@ -38,6 +38,7 @@ import { ApproveModalComponent } from './page/approve/approve.modal/approve.moda
 import { DocformComponent } from './component/docform/docform.component';
 import { MyDocumentComponent } from './page/my-document/my-document.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatChipsModule,
     MatIconModule,
     MatExpansionModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatCheckboxModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,
