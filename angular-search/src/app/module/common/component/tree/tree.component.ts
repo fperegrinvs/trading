@@ -12,7 +12,7 @@ import { E } from "@angular/cdk/keycodes";
   selector: 'Tree',
   template: `
     <mat-accordion multi>
-        <mat-expansion-panel *ngFor="let node of data">
+        <mat-expansion-panel *ngFor="let node of data; let i = index">
           <mat-expansion-panel-header>
             <mat-panel-title>
               {{node.name}}
@@ -20,7 +20,7 @@ import { E } from "@angular/cdk/keycodes";
           </mat-expansion-panel-header>
           <div>
             <div class="search-container mb-2 px-4">
-              <input class="form-control" placeholder="tìm kiếm ..." [value]="node.searchTerm" (keyup)="onSearch(node, search)" #search/>
+              <input class="form-control" placeholder="tìm kiếm ..." [value]="node.searchTerm" (keyup)="onSearch(node, i, search)" #search/>
             </div>
             <div class="tree-option-wrappers">
               <div *ngFor="let option of node.children" class="py-2 cursor-pointer tree-option" (click)="onNodeClick(option)" [class.active]="isNodeActive(option)">
@@ -128,14 +128,17 @@ export class TreeComponent implements OnInit, OnChanges {
     return false;
   }
 
-  onSearch(node: TreeNode, input: HTMLInputElement): void {
-    this.data.forEach((dataNode, idx) => {
+  onSearch(node: TreeNode, nodeIndex: number, input: HTMLInputElement): void {
+    node.searchTerm = input.value;
+    if (!input.value) {
+      node.children = this.originalTreeData[nodeIndex].children;
+    } else {
+      node.children = this.originalTreeData[nodeIndex].children?.filter(x => x.name.toLowerCase().includes(input.value.toLowerCase()));
+    }
+    /*this.data.forEach((dataNode, idx) => {
+
       dataNode.searchTerm = input.value;
-      if (!input.value) {
-        dataNode.children = this.originalTreeData[idx].children;
-      } else {
-        dataNode.children = this.originalTreeData[idx].children?.filter(x => x.name.toLowerCase().startsWith(input.value.toLowerCase()));
-      }
-    });
+      
+    });*/
   }
 }
