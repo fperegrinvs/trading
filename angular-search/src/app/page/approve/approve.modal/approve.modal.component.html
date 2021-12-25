@@ -41,7 +41,7 @@
             </ng-template>
             <Table [columns]="tableColumns" [dataSource]="tableData" class="w-full" [pagination]="false">
                 <ng-template #actionTemplate let-data="data">
-                    <img class="cursor-pointer" src="assets/icons/primary/bx-search-alt.svg"/>
+                    <img (click)="goToDocument(data)" class="cursor-pointer" src="assets/icons/primary/bx-search-alt.svg"/>
                 </ng-template>
             </Table>
         </mat-tab>

@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
+import { Route } from '@angular/compiler/src/core';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DocformComponent } from 'src/app/component/docform/docform.component';
 import { TableAlignment, TableColumn } from 'src/app/module/common/model/TableColumn';
@@ -33,6 +35,7 @@ export class ApproveModalComponent implements OnInit {
     private documentProcessService: DocumentProcessService,
     private dialogService: MatDialog,
     private dialogRef: MatDialogRef<ApproveModalComponent>,
+    private router: Router
   ) { 
     
   }
@@ -192,5 +195,11 @@ export class ApproveModalComponent implements OnInit {
   downloadAttachment(docId: number, file: any): void {
     const url = this.documentProcessService.fetchDownloadLink(docId, file);
     window.open(url, "_blank");
+  }
+
+  goToDocument(doc: any): void {
+    const docId = doc.docidx ? doc.docidx : doc.file;
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/app/detail', docId]));
+    window.open(url, '_blank');
   }
 }
