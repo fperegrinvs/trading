@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { DocumentProcessService } from 'src/app/module/document/service/document.process.service';
 import { Router } from '@angular/router';
 import { isNumber } from 'lodash';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-my-document',
@@ -91,8 +92,10 @@ export class MyDocumentComponent implements OnInit {
   ) { }
 
   private fetchDocuments(filters: number[]) {
-    const params = new HttpParams()
-      .set("filters", filters.join(","));
+    let params = new HttpParams();
+    if (filters.length > 0) {
+      params = params.set("filters", filters.join(","));
+    }
 
     this.documentService.getMyDocuments(params)
     .subscribe(res => {
