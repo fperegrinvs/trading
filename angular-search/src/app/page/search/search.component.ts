@@ -192,7 +192,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           item.highlight = this.searchTerm ? x.highlight.content.join("<br/>") : "";
           if (this.isBookmark) {
             item.bookmarked = true;
-          } else item.bookmarked = this.myBookmarks.indexOf(item.docidx) >= 0;
+          } else item.bookmarked = this.myBookmarks.indexOf(x._id) >= 0;
 
           return item;
         });
@@ -464,11 +464,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   removeBookmark(document: any): void {
-    this.documentProcessService.removeBookmark(document.docidx)
+    const docidx = document.docidx ? document.docidx : document.file;
+    this.documentProcessService.removeBookmark(docidx)
       .subscribe(res => {
         if (res) {
           document.bookmarked = false;
-          this.myBookmarks = this.myBookmarks.splice(this.myBookmarks.indexOf(document.docidx), 1);
+          this.myBookmarks = this.myBookmarks.splice(this.myBookmarks.indexOf(docidx), 1);
 
           if (this.isBookmark) {
             // in bookmark mode, refresh data
@@ -479,11 +480,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   addBookmark(document: any): void {
-    this.documentProcessService.bookmarkDocument(document.docidx)
+    const docidx = document.docidx ? document.docidx : document.file;
+    this.documentProcessService.bookmarkDocument(docidx)
       .subscribe(res => {
         if (res) {
           document.bookmarked = true;
-          this.myBookmarks.push(document.docidx);
+          this.myBookmarks.push(docidx);
         }
       });
   }

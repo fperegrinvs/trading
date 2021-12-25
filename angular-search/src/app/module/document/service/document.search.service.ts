@@ -172,19 +172,22 @@ export class DocumentSearchService {
         let newCount = 0;
         let approvedCount = 0;
         let rejectedCount = 0;
+        let ignoreCount = 0;
 
         buckets.forEach((bucket: any) => {
           if (bucket.key === DocumentStatus.WAITING) {
             newCount = bucket.doc_count;
           } else if (bucket.key === DocumentStatus.APPROVED) {
             approvedCount = bucket.doc_count;
-          } else {
+          } else if (bucket.key === DocumentStatus.REJECTED) {
             rejectedCount = bucket.doc_count;
+          } else {
+            ignoreCount += bucket.doc_count;
           }
         });
 
         return {
-          total: total,
+          total: total - ignoreCount,
           new: newCount,
           approved: approvedCount,
           rejected: rejectedCount
