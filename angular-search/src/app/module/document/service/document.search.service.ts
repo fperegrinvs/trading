@@ -76,7 +76,7 @@ export class DocumentSearchService {
       pagesize: size,
       bookmarked: bookmark,
       sort: sortBy || "docidx",
-      sort_direction: sortDirection || "desc", 
+      sort_direction: sortDirection || "desc",
       ...searchProps
     }
 
@@ -132,19 +132,21 @@ export class DocumentSearchService {
     return this.subjectSelect.asObservable();
   }
 
-  approveDocument(docId: number): Observable<boolean> {
+  approveDocument(docId: number, message: string): Observable<boolean> {
     const apiPath = `${API_PATH}/searchapi/approve`;
     const body = {
-      document_id: docId
+      document_id: docId,
+      message
     };
 
     return this.http.post<boolean>(apiPath, body);
   }
 
-  rejectDocument(docId: number): Observable<boolean> {
+  rejectDocument(docId: number, message: string): Observable<boolean> {
     const apiPath = `${API_PATH}/searchapi/approve`;
     const body = {
-      document_id: docId
+      document_id: docId,
+      message
     }
 
     return this.http.delete<boolean>(apiPath, {
@@ -193,5 +195,12 @@ export class DocumentSearchService {
           rejected: rejectedCount
         }
       }));
+  }
+
+  getDocumentImage(docId: string, page: number): Observable<any> {
+    const apiPath = `${environment.api_path}/files/image/${docId}/${page}`;
+    return this.http.get(apiPath, {
+      responseType: "blob"
+    });
   }
 }

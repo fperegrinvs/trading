@@ -1,0 +1,21 @@
+:host {
+    ::ng-deep {
+  
+      .adm-modal-body {
+        @apply p-4 m-0;
+      }
+    }
+  }
+  
+  .modal-title {
+    @apply flex justify-between items-center
+    border-b border-gray-400 px-4 py-2;
+  
+    strong {
+      @apply text-lg;
+    }
+  }
+
+  .asterisk {
+    color: red !important;
+}

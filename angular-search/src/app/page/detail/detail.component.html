@@ -19,13 +19,27 @@
         </Table>
         </div>
         <div class="col-md-6">
+          <div class="row">
+            <label class="col-4 flex items-center">Hiển thị:</label>
+            <div class="col-8">
+              <select [(ngModel)]="displayType" class="form-control" (change)="displayChanged()">
+                <option *ngIf="document.pages" [value]="ContentDisplayType.ORIGINAL">Tài liệu gốc</option>
+                <option [value]="ContentDisplayType.TEXT">Văn bản</option>
+                <option *ngIf="document.content_html" [value]="ContentDisplayType.HTML">HTML</option>
+              </select>
+            </div>
+          </div>
+          <div class="content-image" *ngIf="displayType === ContentDisplayType.ORIGINAL">
+            <Pagination [desc]="false" [totalItems]="imagePageCount" [page]="1" [size]="1" (pageChanged)="htmlPageChanged($event)"></Pagination>
+            <img #documentImage class="w-full"/>
+          </div>
           <Toggle [checked]="showContentHtml" *ngIf="document.content_html" class="mt-4 mb-2" title="Hiển thị dạng HTML" (onChanged)="toggleHtml($event)"></Toggle>
           <textarea *ngIf="!showContentHtml" class="form-control" rows="25" [value]="document.content"></textarea>
           <Pagination *ngIf="showContentHtml" [desc]="false" [totalItems]="htmlPageCount" [page]="1" [size]="1" (pageChanged)="htmlPageChanged($event)"></Pagination>
           <iframe #contentHtml class="w-full bg-white border-0" [class.hide]="!showContentHtml"></iframe>
         </div>
       </div>
-      
+
       <div class="downloads mt-4" *ngIf="document.linkdoc">
         <Button
           type="secondary"

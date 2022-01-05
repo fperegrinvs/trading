@@ -66,6 +66,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
         badge: "0"
       });
     }
+
+    if (user?.user.ismanager) {
+      this.menus.push({
+        icon: "bx-list-ol.svg",
+        text: "Quy trình duyệt",
+        path: "/app/workflow"
+      });
+    }
   }
 
   ngOnInit(): void {

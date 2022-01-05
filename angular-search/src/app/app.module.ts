@@ -31,6 +31,7 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatIconModule} from "@angular/material/icon";
+import {MatStepperModule} from "@angular/material/stepper";
 import {TagsModalComponent} from './page/detail/tags.modal/tags.modal.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ApproveComponent } from './page/approve/approve.component';
@@ -39,6 +40,10 @@ import { DocformComponent } from './component/docform/docform.component';
 import { MyDocumentComponent } from './page/my-document/my-document.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
+import { WorkflowComponent } from './page/workflow/workflow.component';
+import { ModalAddComponent } from './page/workflow/modal.add/modal.add.component';
+import { MatAutocompleteModule} from "@angular/material/autocomplete";
+import { ModalAddStageComponent } from './page/workflow/modal.add.stage/modal.add.stage.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +63,10 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     ApproveComponent,
     ApproveModalComponent,
     DocformComponent,
-    MyDocumentComponent
+    MyDocumentComponent,
+    WorkflowComponent,
+    ModalAddComponent,
+    ModalAddStageComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +88,9 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
     MatIconModule,
     MatExpansionModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatStepperModule,
+    MatAutocompleteModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

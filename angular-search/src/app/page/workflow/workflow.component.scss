@@ -1,0 +1,19 @@
+@import "src/globals";
+
+:host ::ng-deep {
+
+    .ng-fa-icon {
+        svg {
+            color: $color-primary !important;
+        }
+    }
+
+    .mat-step-label {
+        @apply w-full;
+    }
+
+    .flow-info {
+        background-color: $color-primary-light;
+        @apply rounded-lg p-4;
+    }
+}

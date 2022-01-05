@@ -98,7 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   isBookmark: boolean = false;
 
   docProps: DocumentMetadata[] = [];
-  myBookmarks: number[] = [];
+  myBookmarks: string[] = [];
 
   bookmarkLoaded$: Subject<boolean> = new Subject<boolean>();
 
@@ -115,7 +115,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private router: Router,
     private datePipe: DatePipe,
     private authService: AuthenticationService
-  ) { 
+  ) {
     this.userInfo = authService.getCookieAuthInfo()?.user;
   }
 

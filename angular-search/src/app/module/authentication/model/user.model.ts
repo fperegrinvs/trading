@@ -11,6 +11,7 @@ export interface User {
   canapprove: boolean,
   cansearch: boolean,
   ismanager: boolean,
+  isadmin: boolean,
   name: string,
   isnew: boolean,
   timeout: number

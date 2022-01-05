@@ -7,6 +7,7 @@ import {DetailComponent} from "./page/detail/detail.component";
 import {UploadComponent} from "./page/upload/upload.component";
 import { ApproveComponent } from './page/approve/approve.component';
 import { MyDocumentComponent } from './page/my-document/my-document.component';
+import { WorkflowComponent } from './page/workflow/workflow.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
       {
         path: "mydoc",
         component: MyDocumentComponent
+      },
+      {
+        path: "workflow",
+        component: WorkflowComponent
       }
     ]
   },

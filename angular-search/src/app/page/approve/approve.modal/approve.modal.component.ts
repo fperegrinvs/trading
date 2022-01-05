@@ -28,6 +28,8 @@ export class ApproveModalComponent implements OnInit {
   tableData: any[] = [];
   validation: string[] = [];
 
+  currentStepIndex: number = -1;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
     private documentService: DocumentSearchService,
@@ -36,8 +38,8 @@ export class ApproveModalComponent implements OnInit {
     private dialogService: MatDialog,
     private dialogRef: MatDialogRef<ApproveModalComponent>,
     private router: Router
-  ) { 
-    
+  ) {
+
   }
 
   private prepareMetaData(): void {
@@ -60,7 +62,7 @@ export class ApproveModalComponent implements OnInit {
               return true;
             }
 
-            if (this.doc[prop.name] && prop.name !== "content") { 
+            if (this.doc[prop.name] && prop.name !== "content") {
               return true;
             }
 
@@ -115,6 +117,12 @@ export class ApproveModalComponent implements OnInit {
     this.prepareMetaData();
     this.prepareTableColumns();
     this.prepareRelatedDocuments();
+
+    this.doc.doc_flows.forEach((el: any, idx: number) => {
+      if (!el.flag && this.currentStepIndex < 0) {
+        this.currentStepIndex = idx;
+      }
+    })
   }
 
   private validateDocumentMeta(doc: any): boolean {
@@ -147,6 +155,9 @@ export class ApproveModalComponent implements OnInit {
       if (this.validateDocumentMeta(this.docForm.getFormData())) {
         Swal.fire({
           title: "Xác nhận duyệt tài liệu?",
+          input: 'text',
+          inputLabel: "Tin nhắn phản hồi",
+          inputPlaceholder: "Không bắt buộc",
           showCancelButton: true
         }).then(res => {
           if (res.isConfirmed) {
@@ -154,10 +165,10 @@ export class ApproveModalComponent implements OnInit {
             const docId = document.docidx ? document.docidx : document.file;
             this.processUploadMeta(document);
             this.documentProcessService.updateDocument(document)
-              .subscribe(res => {
-                if (res.isvalid) {
-                  this.documentService.approveDocument(docId)
-                  .subscribe(res => {
+              .subscribe(updateRes => {
+                if (updateRes.isvalid) {
+                  this.documentService.approveDocument(docId, res.value)
+                  .subscribe(approveRes => {
                     this.dialogRef.close({refresh: true});
                   });
                 }
@@ -172,12 +183,24 @@ export class ApproveModalComponent implements OnInit {
     if (this.docForm) {
       Swal.fire({
         title: "Xác nhận từ chối tài liệu?",
+        input: "text",
+        inputLabel: "Lý do từ chối",
+        inputPlaceholder: "Bắt buộc",
+        inputValidator(inputValue: string): Promise<any> {
+          return new Promise(resolve => {
+            if (!inputValue) {
+              resolve("Vui lòng nhập lý do từ chối")
+            } else {
+              resolve(null);
+            }
+          });
+        },
         showCancelButton: true
       }).then(res => {
         if (res.isConfirmed) {
           const document = this.docForm?.getFormData();
           const docId = document.docidx ? document.docidx : document.file;
-          this.documentService.rejectDocument(docId)
+          this.documentService.rejectDocument(docId, res.value)
             .subscribe(res => {
               if (res) {
                 this.dialogRef.close({refresh: true});

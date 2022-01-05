@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api_path: "https://devcore.adetech.info",
+  api_path: "https://devcore.chinhta123.com",
   home_path: "https://chinhta123.com",
   HOST_LOGIN: 'https://chinhta123.com',
   DOMAIN_COOKIES: 'localhost'

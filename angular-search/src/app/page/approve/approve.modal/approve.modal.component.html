@@ -48,6 +48,11 @@
       </mat-tab-group>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="p-4">
+    <mat-stepper linear #stepper [selectedIndex]="currentStepIndex">
+        <mat-step [editable]="false" [completed]="stage.flag" *ngFor="let stage of doc.doc_flows">
+            <ng-template matStepLabel>{{stage.note}}</ng-template>
+        </mat-step>
+      </mat-stepper>
     <Button type="primary" class="mb-4 mr-2" (onClick)="approve()">Duyệt</Button>
     <Button type="secondary" class="mb-4 mr-2" (onClick)="reject()">Từ chối</Button>
     <Button type="default" class="mb-4" (onClick)="close()">Đóng</Button>

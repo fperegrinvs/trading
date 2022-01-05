@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {DocumentSearchService} from "../../module/document/service/document.search.service";
 import {TableAlignment, TableColumn} from "../../module/common/model/TableColumn";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -11,6 +11,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { TagsModalComponent } from './tags.modal/tags.modal.component';
 import Swal from 'sweetalert2';
 import { DocumentProcessService } from 'src/app/module/document/service/document.process.service';
+import {ContentDisplayType} from "./detail.component.model";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-detail',
@@ -20,6 +22,7 @@ import { DocumentProcessService } from 'src/app/module/document/service/document
 export class DetailComponent implements OnInit, OnDestroy {
 
   @ViewChild("contentHtml") contentHtml: ElementRef | undefined;
+  @ViewChild("documentImage") documentImage: ElementRef | undefined;
 
   subscriptions: Subscription[] = [];
   tableColumns: TableColumn[] = [
@@ -51,6 +54,9 @@ export class DetailComponent implements OnInit, OnDestroy {
   fromPage: string = "";
   showContentHtml: boolean = false;
   htmlPageCount: number = 0;
+  imagePageCount: number = 0;
+  displayType: string = "";
+  currentDocImageSrc: string = "";
 
   constructor(
     private documentService: DocumentSearchService,
@@ -61,13 +67,30 @@ export class DetailComponent implements OnInit, OnDestroy {
     private documentProcessService: DocumentProcessService
   ) { }
 
+  private buildContentImageUrl(docId: string, page: number): void {
+    this.documentService.getDocumentImage(docId, page)
+      .subscribe(res => {
+        this.documentImage!.nativeElement.src = URL.createObjectURL(res);
+      });
+  }
+
   private loadDocument(doc: Document): void {
     const source: any[] = [];
+    const docId = doc._id;
 
     this.documentService.getDocProps()
       .subscribe(props => {
-        this.document = doc;
+        this.document = doc._source;
+
+        if (this.document.pages && this.document.pages.length > 0) {
+          this.displayType = ContentDisplayType.ORIGINAL;
+          this.buildContentImageUrl(docId, 0);
+        } else {
+          this.displayType = ContentDisplayType.TEXT
+        }
+
         this.htmlPageCount = this.document.content_html ? Object.keys(this.document.content_html).length : 0;
+        this.imagePageCount = this.document.pages ? this.document.pages.length : 0;
         props.props.forEach(prop => {
           if (this.document[prop.name] && prop.note && prop.show_in_detail) {
             if (prop.name == "tags") {
@@ -100,7 +123,6 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
 
         this.dataSource = source;
-        console.log(this.dataSource);
       });
 
     this.prepareTableColumns();
@@ -112,7 +134,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.documentService.getDocumentById(res.docId)
           .subscribe((res: any) => {
-            this.loadDocument(res._source);
+            this.loadDocument(res);
             this.permissions = res.permissions;
           });
       });
@@ -227,5 +249,13 @@ export class DetailComponent implements OnInit, OnDestroy {
     doc.open();
     doc.write(this.document.content_html[page]);
     doc.close();
+  }
+
+  get ContentDisplayType() {
+    return ContentDisplayType;
+  }
+
+  displayChanged(): void {
+    console.log(this.displayType);
   }
 }
