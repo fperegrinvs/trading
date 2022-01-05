@@ -57,6 +57,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   imagePageCount: number = 0;
   displayType: string = "";
   currentDocImageSrc: string = "";
+  docId: string = "";
 
   constructor(
     private documentService: DocumentSearchService,
@@ -76,7 +77,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   private loadDocument(doc: Document): void {
     const source: any[] = [];
-    const docId = doc._id;
+    this.docId = doc._id;
 
     this.documentService.getDocProps()
       .subscribe(props => {
@@ -84,7 +85,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
         if (this.document.pages && this.document.pages.length > 0) {
           this.displayType = ContentDisplayType.ORIGINAL;
-          this.buildContentImageUrl(docId, 0);
+          this.buildContentImageUrl(this.docId, 0);
         } else {
           this.displayType = ContentDisplayType.TEXT
         }
@@ -235,11 +236,11 @@ export class DetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleHtml($event: boolean): void {
+  toggleHtml(page: number): void {
     this.showContentHtml = !this.showContentHtml;
     const doc = this.contentHtml?.nativeElement.contentWindow.document;
     doc.open();
-    doc.write(this.document.content_html[0]);
+    doc.write(this.document.content_html[page]);
     doc.close();
   }
 
@@ -256,6 +257,15 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   displayChanged(): void {
-    console.log(this.displayType);
+    if (this.displayType === ContentDisplayType.ORIGINAL) {
+      this.buildContentImageUrl(this.docId, 0);
+    } else if (this.displayType === ContentDisplayType.HTML) {
+      this.toggleHtml(0);
+    }
+  }
+
+  imagePageChanged($event: any): void {
+    const page = +$event - 1;
+    this.buildContentImageUrl(this.docId, page);
   }
 }

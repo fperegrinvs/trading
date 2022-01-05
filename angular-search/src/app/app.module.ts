@@ -44,6 +44,7 @@ import { WorkflowComponent } from './page/workflow/workflow.component';
 import { ModalAddComponent } from './page/workflow/modal.add/modal.add.component';
 import { MatAutocompleteModule} from "@angular/material/autocomplete";
 import { ModalAddStageComponent } from './page/workflow/modal.add.stage/modal.add.stage.component';
+import {MatRadioModule} from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { ModalAddStageComponent } from './page/workflow/modal.add.stage/modal.ad
     MatSlideToggleModule,
     MatCheckboxModule,
     MatStepperModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatRadioModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,
