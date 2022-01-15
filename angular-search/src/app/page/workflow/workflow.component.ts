@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { TableAlignment, TableColumn } from 'src/app/module/common/model/TableColumn';
-import { Workflow, WorkflowStage } from 'src/app/module/document/model/workflow';
-import { DocumentFlowService } from 'src/app/module/document/service/document.flow.service';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {IconDefinition} from '@fortawesome/fontawesome-common-types';
+import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {TableAlignment, TableColumn} from 'src/app/module/common/model/TableColumn';
+import {Workflow, WorkflowStage} from 'src/app/module/document/model/workflow';
+import {DocumentFlowService} from 'src/app/module/document/service/document.flow.service';
 import Swal from 'sweetalert2';
-import { ModalAddStageComponent } from './modal.add.stage/modal.add.stage.component';
-import { ModalAddComponent } from './modal.add/modal.add.component';
+import {ModalAddStageComponent} from './modal.add.stage/modal.add.stage.component';
+import {ModalAddComponent} from './modal.add/modal.add.component';
 import {AuthenticationService} from "../../module/authentication/service/authentication.service";
 
 @Component({
@@ -29,6 +29,13 @@ export class WorkflowComponent implements OnInit {
     {
       id: "name",
       text: "Tên quy trình",
+      headerAlign: TableAlignment.LEFT,
+      cellAlign: TableAlignment.LEFT,
+      active: true
+    },
+    {
+      id: "company",
+      text: "Thuộc đơn vị",
       headerAlign: TableAlignment.LEFT,
       cellAlign: TableAlignment.LEFT,
       active: true
@@ -59,7 +66,8 @@ export class WorkflowComponent implements OnInit {
           name: flow.name,
           desc: flow.description,
           stages: flow.stages,
-          global: flow.global
+          global: flow.global,
+          company: flow.company
         });
       });
 

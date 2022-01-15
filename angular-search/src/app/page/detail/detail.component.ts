@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { DocumentProcessService } from 'src/app/module/document/service/document.process.service';
 import {ContentDisplayType} from "./detail.component.model";
 import {environment} from "../../../environments/environment";
+import {EditModalComponent} from "./edit.modal/edit.modal.component";
 
 @Component({
   selector: 'app-detail',
@@ -130,14 +131,18 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.prepareTableData();
   }
 
+  private fetchDocument(docId: string): void {
+    this.documentService.getDocumentById(docId)
+      .subscribe((res: any) => {
+        this.loadDocument(res);
+        this.permissions = res.permissions;
+      });
+  }
+
   ngOnInit(): void {
     this.route.params
       .subscribe(res => {
-        this.documentService.getDocumentById(res.docId)
-          .subscribe((res: any) => {
-            this.loadDocument(res);
-            this.permissions = res.permissions;
-          });
+          this.fetchDocument(res.docId);
       });
 
       this.route.queryParams.subscribe(res => {
@@ -164,7 +169,6 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   backToSearch(): void {
-    console.log(this.fromPage);
     if (this.fromPage === "search") {
       this.router.navigate(["app", "search"]);
     } else {
@@ -267,5 +271,18 @@ export class DetailComponent implements OnInit, OnDestroy {
   imagePageChanged($event: any): void {
     const page = +$event - 1;
     this.buildContentImageUrl(this.docId, page);
+  }
+
+  toggleUpdateMode(): void {
+    this.modalService.open(EditModalComponent, {
+      data: {
+        doc: this.document
+      },
+      width: "100%"
+    }).afterClosed().subscribe(refresh => {
+      if (refresh) {
+        this.fetchDocument(this.docId);
+      }
+    });
   }
 }

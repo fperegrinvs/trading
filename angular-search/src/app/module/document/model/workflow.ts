@@ -4,6 +4,7 @@ export interface Workflow {
     description: string;
     global: boolean;
     stages: WorkflowStage[];
+    company: string;
 }
 
 export interface WorkflowStage {

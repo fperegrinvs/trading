@@ -13,6 +13,7 @@ import { DocumentProcessService } from 'src/app/module/document/service/document
 import { Router } from '@angular/router';
 import { isNumber } from 'lodash';
 import { filter } from 'rxjs/operators';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-my-document',
@@ -31,11 +32,19 @@ export class MyDocumentComponent implements OnInit {
   }
 
   clickFn = (data: any) => {
-    this.router.navigate(["/app", "detail", data.docidx], {
-      queryParams: {
-        "from": "mydoc"
-      }
-    });
+    const id = data.docidx ? data.docidx : data.file;
+    const status = data.statusNum;
+    if (status === DocumentStatus.WAITING || status === DocumentStatus.REJECTED) {
+      // redirect to ocr
+      const redirectPath = `${environment.OCR_PATH}?fileId=${id}`;
+      window.open(redirectPath, "_blank");
+    } else {
+      this.router.navigate(["/app", "detail", id], {
+        queryParams: {
+          "from": "mydoc"
+        }
+      });
+    }
   }
 
   tableColumns: TableColumn[] = [
@@ -80,7 +89,7 @@ export class MyDocumentComponent implements OnInit {
     rejected: false
   };
 
-  filters: number[] = [0];
+  filters: number[] = [1];
   filterStorageKey: string = "myDocumentFilters";
 
   constructor(
@@ -132,7 +141,7 @@ export class MyDocumentComponent implements OnInit {
     const savedFilters = localStorage.getItem(this.filterStorageKey);
     if (!savedFilters) {
       this.settings.new = true;
-      return [0];
+      return [1];
     }
 
     const obj = JSON.parse(savedFilters) as number[];
@@ -140,7 +149,7 @@ export class MyDocumentComponent implements OnInit {
     if (obj.includes(DocumentStatus.WAITING)) {
       this.settings.new = true;
     }
-    
+
     if (obj.includes(DocumentStatus.APPROVED)) {
       this.settings.approved = true;
     }

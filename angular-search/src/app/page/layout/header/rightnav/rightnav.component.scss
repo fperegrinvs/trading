@@ -150,3 +150,25 @@ ul.navbar-nav {
     outline: none;
   }
 }
+
+.dropdown-toggle {
+
+  &.hide-caret {
+
+    &::after {
+      display:none !important;
+    }
+  }
+}
+
+.module-item {
+  @apply flex;
+}
+
+.module-icon-wrapper {
+  @apply p-2 rounded;
+}
+
+.module-text {
+  @apply pl-4;
+}

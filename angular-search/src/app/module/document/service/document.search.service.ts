@@ -119,7 +119,7 @@ export class DocumentSearchService {
     return this.currentDocument;
   }
 
-  getDocumentById(docId: number): any {
+  getDocumentById(docId: string): Observable<any> {
     const docSearchUrl = `${API_PATH}/document`;
 
     const params = new HttpParams()

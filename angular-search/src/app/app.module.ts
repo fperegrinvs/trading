@@ -45,6 +45,7 @@ import { ModalAddComponent } from './page/workflow/modal.add/modal.add.component
 import { MatAutocompleteModule} from "@angular/material/autocomplete";
 import { ModalAddStageComponent } from './page/workflow/modal.add.stage/modal.add.stage.component';
 import {MatRadioModule} from "@angular/material/radio";
+import { EditModalComponent } from './page/detail/edit.modal/edit.modal.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import {MatRadioModule} from "@angular/material/radio";
     MyDocumentComponent,
     WorkflowComponent,
     ModalAddComponent,
-    ModalAddStageComponent
+    ModalAddStageComponent,
+    EditModalComponent
   ],
   imports: [
     BrowserModule,

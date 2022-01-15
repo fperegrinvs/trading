@@ -1,26 +1,26 @@
 @import "src/globals";
 
 :host {
-    @apply block static;
+  @apply block static;
 
-    ::ng-deep {
+  ::ng-deep {
 
-      .adm-modal-body {
-        @apply p-4 m-0;
-      }
+    .adm-modal-body {
+      @apply p-4 m-0;
     }
   }
+}
 
 .asterisk {
-    color: red !important;
+  color: red !important;
 }
 
 .mat-tab-group ::ng-deep {
 
-    .mat-ink-bar {
-      background-color: $color-primary !important;
-    }
+  .mat-ink-bar {
+    background-color: $color-primary !important;
   }
+}
 
 iframe {
   height: 500px;
