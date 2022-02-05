@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {Document} from "../../module/document/model/document";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
-import { faEdit, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, IconDefinition, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { TagsModalComponent } from './tags.modal/tags.modal.component';
 import Swal from 'sweetalert2';
@@ -59,6 +59,14 @@ export class DetailComponent implements OnInit, OnDestroy {
   displayType: string = "";
   currentDocImageSrc: string = "";
   docId: string = "";
+  pdfBase64: string = "";
+  sectionToggle: any = {
+    metadata: true,
+    content: true
+  }
+  faExpand: IconDefinition = faExpand;
+  faCompress: IconDefinition = faCompress;
+  isPDFFullscreen: boolean = false;
 
   constructor(
     private documentService: DocumentSearchService,
@@ -76,6 +84,17 @@ export class DetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  private fetchPdfContent(id: string): void {
+    this.documentService.getPdfContent(id)
+      .subscribe(res => {
+        if (res.success) {
+          this.pdfBase64 = res.data;
+        } else {
+          this.buildContentImageUrl(id, 0);
+        }
+      });
+  }
+
   private loadDocument(doc: Document): void {
     const source: any[] = [];
     this.docId = doc._id;
@@ -86,7 +105,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
         if (this.document.pages && this.document.pages.length > 0) {
           this.displayType = ContentDisplayType.ORIGINAL;
-          this.buildContentImageUrl(this.docId, 0);
+          this.fetchPdfContent(this.docId);
         } else {
           this.displayType = ContentDisplayType.TEXT
         }
@@ -284,5 +303,9 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.fetchDocument(this.docId);
       }
     });
+  }
+
+  togglePDFFullscreen(): void {
+    this.isPDFFullscreen = !this.isPDFFullscreen;
   }
 }

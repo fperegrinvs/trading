@@ -4,8 +4,10 @@
       <Button class="mr-2" type="primary" icon="white/bx-arrow-back.svg" (onClick)="backToSearch()">Trở lại</Button>
       <Button (click)="deleteDocument()" *ngIf="permissions.candelete" class="mr-2" type="secondary" icon="bx-trash.svg">Xoá tài liệu</Button>
       <Button *ngIf="permissions.canedit" (click)="toggleUpdateMode()" class="mr-2" type="secondary" icon="bx-edit-alt.svg">Sửa</Button>
+      <mat-checkbox [(ngModel)]="sectionToggle.metadata" class="mr-2 ml-4">Metadata</mat-checkbox>
+      <mat-checkbox [(ngModel)]="sectionToggle.content">Nội dung</mat-checkbox>
       <div class="row">
-        <div class="col-md-6">
+        <div *ngIf="sectionToggle.metadata" [class.col-md-6]="sectionToggle.content" [class.col-md-12]="!sectionToggle.content">
           <Table [columns]="tableColumns"
             [pagination]="false"
             [dataSource]="dataSource"
@@ -18,7 +20,7 @@
             </ng-template>
         </Table>
         </div>
-        <div class="col-md-6">
+        <div *ngIf="sectionToggle.content" [class.col-md-6]="sectionToggle.metadata" [class.col-md-12]="!sectionToggle.metadata">
           <div class="row">
             <label class="col-2 flex items-center">Hiển thị:</label>
             <div class="col-10">
@@ -30,7 +32,16 @@
             </div>
           </div>
           <div class="content-image" *ngIf="displayType === ContentDisplayType.ORIGINAL">
-            <Pagination [desc]="false" [totalItems]="imagePageCount" [page]="1" [size]="1" (pageChanged)="imagePageChanged($event)"></Pagination>
+            <div class="pdf-wrapper" [class.fullscreen]="isPDFFullscreen" *ngIf="pdfBase64">
+              <ngx-extended-pdf-viewer class="pdf-viewer" theme="dark" [base64Src]="pdfBase64" [useBrowserLocale]="true"></ngx-extended-pdf-viewer>
+              <div class="pdf-controller p-1">
+                <button class="btn-fullscreen" (click)="togglePDFFullscreen()">
+                  <span *ngIf="!isPDFFullscreen"><fa-icon [icon]="faExpand"></fa-icon> Phóng to</span>
+                  <span *ngIf="isPDFFullscreen"><fa-icon [icon]="faCompress"></fa-icon> Thu nhỏ</span>
+                </button>
+              </div>
+            </div>
+            <Pagination *ngIf="!pdfBase64" [desc]="false" [totalItems]="imagePageCount" [page]="1" [size]="1" (pageChanged)="imagePageChanged($event)"></Pagination>
             <img #documentImage class="w-full"/>
           </div>
           <div class="content-html">

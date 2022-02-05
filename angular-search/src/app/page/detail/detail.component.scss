@@ -1,8 +1,42 @@
 iframe {
     height: 500px;
     border: none !important;
-    
+
     &.hide {
         height: 0 !important;
     }
+}
+
+.pdf-controller {
+  background: #474747;
+}
+
+.pdf-wrapper {
+  @apply flex flex-col;
+}
+
+.pdf-viewer {
+  @apply flex-1;
+}
+
+.btn-fullscreen {
+  background: #fffc;
+  @apply p-1 rounded;
+  font-size: 12px;
+}
+
+.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 999999999;
+
+
+  .pdf-viewer ::ng-deep {
+    .zoom {
+      height: 100% !important;
+    }
+  }
 }

@@ -46,6 +46,7 @@ import { MatAutocompleteModule} from "@angular/material/autocomplete";
 import { ModalAddStageComponent } from './page/workflow/modal.add.stage/modal.add.stage.component';
 import {MatRadioModule} from "@angular/material/radio";
 import { EditModalComponent } from './page/detail/edit.modal/edit.modal.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { EditModalComponent } from './page/detail/edit.modal/edit.modal.componen
     MatCheckboxModule,
     MatStepperModule,
     MatAutocompleteModule,
-    MatRadioModule
+    MatRadioModule,
+    NgxExtendedPdfViewerModule
   ],
   providers: [DatePipe, {
     provide: HTTP_INTERCEPTORS,

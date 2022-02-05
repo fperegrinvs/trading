@@ -203,4 +203,9 @@ export class DocumentSearchService {
       responseType: "blob"
     });
   }
+
+  getPdfContent(docId: string): Observable<any> {
+    const apiPath = `${environment.api_path}/files/pdfcontent/${docId}`;
+    return this.http.get(apiPath);
+  }
 }
