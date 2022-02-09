@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {IconDefinition} from '@fortawesome/fontawesome-common-types';
-import {faEdit, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faTrashAlt, faArrowDown} from '@fortawesome/free-solid-svg-icons';
 import {TableAlignment, TableColumn} from 'src/app/module/common/model/TableColumn';
 import {Workflow, WorkflowStage} from 'src/app/module/document/model/workflow';
 import {DocumentFlowService} from 'src/app/module/document/service/document.flow.service';
@@ -46,6 +46,7 @@ export class WorkflowComponent implements OnInit {
   selectedFlow: any = {};
   faEdit: IconDefinition = faEdit;
   faTrash: IconDefinition = faTrashAlt;
+  faArrowDown: IconDefinition = faArrowDown;
   isAdminRole: boolean = false;
 
   constructor(
