@@ -36,7 +36,7 @@
             <fa-icon [icon]="faArrowDown" size="lg" class="py-2"></fa-icon>
             <div class="step">
               <strong>Bước {{stage.order}}</strong>
-              <span (click)="removeStage(stage)" class="float-right">
+              <span (click)="removeStage(stage)" class="float-right cursor-pointer">
                   <fa-icon [icon]="faTrash"></fa-icon>
               </span>
               <div *ngIf="stage.users.length > 0">
