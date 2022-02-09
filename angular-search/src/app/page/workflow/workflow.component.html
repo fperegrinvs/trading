@@ -31,32 +31,27 @@
                 {{selectedFlow.desc}}
             </p>
         </div>
-        <div class="stepper">
-            <mat-stepper orientation="vertical">
-                <mat-step *ngFor="let stage of selectedFlow.stages">
-                    <ng-template matStepLabel>Bước {{stage.order}}
-                        <span (click)="removeStage(stage)" class="float-right">
-                            <fa-icon [icon]="faTrash"></fa-icon>
-                        </span>
-                        <!--<span (click)="removeStage(stage)" class="float-right mr-2">
-                            <fa-icon [icon]="faEdit"></fa-icon>
-                        </span>-->
-                    </ng-template>
-                    <ng-template matStepContent>
-                        <div *ngIf="stage.users.length > 0">
-                            <strong>Cá nhân duyệt:</strong><br/>
-                            <ul>
-                                <li *ngFor="let user of stage.users">- {{user.name}}</li>
-                            </ul>
-                        </div>
-                        <div *ngIf="stage.users.length == 0">
-                            <strong>Đơn vị:</strong><br/>
-                            {{stage.note}}
-                        </div>
-                    </ng-template>
-                </mat-step>
-                </mat-stepper>
-                <Button type="primary" class="float-right" (onClick)="addStage()">Thêm bước</Button>
+        <div class="stepper flex flex-column items-center">
+          <ng-container *ngFor="let stage of selectedFlow.stages; let i = index">
+            <fa-icon [icon]="faArrowDown" size="lg" class="py-2"></fa-icon>
+            <div class="step">
+              <strong>Bước {{stage.order}}</strong>
+              <span (click)="removeStage(stage)" class="float-right">
+                  <fa-icon [icon]="faTrash"></fa-icon>
+              </span>
+              <div *ngIf="stage.users.length > 0">
+                <strong>Cá nhân duyệt:</strong><br/>
+                <ul>
+                  <li *ngFor="let user of stage.users">- {{user.name}}</li>
+                </ul>
+              </div>
+              <div *ngIf="stage.users.length == 0">
+                <strong>Đơn vị:</strong><br/>
+                {{stage.note}}
+              </div>
+            </div>
+          </ng-container>
+          <Button type="primary" class="mt-4" (onClick)="addStage()">Thêm bước</Button>
         </div>
     </div>
 </div>
