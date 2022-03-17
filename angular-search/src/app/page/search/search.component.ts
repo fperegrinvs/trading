@@ -189,7 +189,7 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
           });
 
-          item.highlight = this.searchTerm ? x.highlight.content.join("<br/>") : "";
+          item.highlight = this.searchTerm ? x.highlight?.content.join("<br/>") : "";
           if (this.isBookmark) {
             item.bookmarked = true;
           } else item.bookmarked = this.myBookmarks.indexOf(x._id) >= 0;
