@@ -11,6 +11,7 @@
               name="username"
               placeholder="Tên đăng nhập"
               type="text"
+              [(ngModel)]="loginInfo.username"
             />
           </div>
           <div class="mt-7">
@@ -19,6 +20,8 @@
               name="password"
               placeholder="Mật khẩu"
               type="password"
+              [(ngModel)]="loginInfo.password"
+              (keyup.enter)="login()" 
             />
           </div>
           <div class="mt-7">

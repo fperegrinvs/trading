@@ -1,0 +1,42 @@
+.testDropdown {
+    margin: unset;
+    padding: unset;
+}
+.testDropdown > li {
+    padding: unset;
+}
+.page-header {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.testDialog > div.el-dialog__body {
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+input {
+    cursor: pointer;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-weight: lighter;
+    color:#666666; 
+}
+::-moz-placeholder { /* Firefox 19+ */
+    font-weight: lighter;
+    color:#666666;
+}
+::-ms-input-placeholder { /* IE 10+ */    
+    font-weight: lighter;
+    color:#666666;
+}
+::-moz-placeholder { /* Firefox 18- */
+    font-weight: lighter;
+    color:#666666;
+}
+::placeholder {
+    font-weight: lighter;
+    color:#666666;
+}

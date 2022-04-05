@@ -7,7 +7,8 @@ export const environment = {
   api_path: "https://devcore.chinhta123.com",
   home_path: "https://chinhta123.com",
   HOST_LOGIN: 'https://chinhta123.com',
-  DOMAIN_COOKIES: 'localhost'
+  DOMAIN_COOKIES: 'localhost',
+  OCR_PATH: "https://layout.chinhta123.com/app",
 };
 
 /*

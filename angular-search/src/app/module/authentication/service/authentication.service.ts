@@ -2,6 +2,10 @@ import {Injectable} from "@angular/core";
 import { CookieAuth } from "../model/cookie.auth";
 import {CookieService} from "ngx-cookie-service";
 import { environment } from "src/environments/environment";
+import { BehaviorSubject, Observable } from "rxjs";
+import { User } from "../model/user.model";
+import { HttpClient } from "@angular/common/http";
+import { tap } from "rxjs/operators";
 
 const DOMAIN = environment.DOMAIN_COOKIES;
 
@@ -10,10 +14,18 @@ const DOMAIN = environment.DOMAIN_COOKIES;
 })
 export class AuthenticationService {
 
-  constructor(
-    private cookieService: CookieService
-  ) {
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
 
+  private _token: any;
+  private _tokenTimer: any;
+
+  constructor(
+    private cookieService: CookieService,
+    private http: HttpClient,
+  ) {
+    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')!));
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
   public getCookieAuthInfo(): CookieAuth | null {
@@ -58,6 +70,51 @@ export class AuthenticationService {
     this.cookieService.delete('token', '/', DOMAIN);
     this.cookieService.delete('expiration', '/', DOMAIN);
     this.cookieService.delete('user', '/', DOMAIN);
+  }
+
+  login(username: string, password: string) {
+    // console.log('aloooo')
+    // const url = environment.api_path + "/api-token-auth"
+    const url = "https://devcore.chinhta123.com/api-token-auth";
+    // console.log(username, password);
+    return this.http
+      .post<User>(url, {username: username, password: password})
+      .pipe(
+        tap((res: User) => {
+          if (res.isvalid) {
+            const token = res.token;
+
+            this._token = token;
+            // console.log(res);
+            if (token) {
+              const expiresInDuration = res.timeout;
+              let dateExpiresInDuration: any = null;
+              if (expiresInDuration) {
+                this.setAuthTimer(expiresInDuration);
+                const now = new Date();
+                let expirationDate = new Date(
+                  now.getTime() + expiresInDuration * 100
+                );
+                dateExpiresInDuration = expirationDate;
+              }
+              this.saveAuthData(token, dateExpiresInDuration, res);
+              this.currentUserSubject.next(res)
+            }
+          }
+        })
+      )
+  }
+
+  private setAuthTimer(duration: number) {
+    this._tokenTimer = setTimeout(() => {
+      this.logout();
+    }, duration * 1000);
+  }
+
+  private saveAuthData(token: string, expirationDate: Date, user: User) {
+    this.cookieService.set("token", token);
+    this.cookieService.set("expiration", expirationDate?.toISOString());
+    this.cookieService.set("user", JSON.stringify(user));
   }
 
   logout(): void {
