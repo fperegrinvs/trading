@@ -4,11 +4,11 @@
             <div class="row">
                 <div class="col-12 page-header">
                     <img src="@/assets/icons/primary/bx-search-alt.svg">
-                    <h1>Tìm kiếm tài liệu</h1>
+                    <h1 style="text-transform: none;">Tìm kiếm tài liệu</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-3">
+                <div v-if="!leftFilter" class="col-lg-3">
                     <el-card class="box-card testCard">
                         <div slot="header" class="clearfix">
                             <span>
@@ -46,14 +46,14 @@
                                 Thống kê
                                 </span>
                         </div>
-                        <el-button @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Loại tài liệu</el-button>
-                        <el-button @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Người ký</el-button>
-                        <el-button @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Nơi ban hành</el-button>
-                        <el-button @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Ngày ban hành</el-button>
+                        <el-button class="font-normal" @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Loại tài liệu</el-button>
+                        <el-button class="font-normal" @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Người ký</el-button>
+                        <el-button class="font-normal" @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Nơi ban hành</el-button>
+                        <el-button class="font-normal" @click="handleButtonClick" style="width: 100%; text-align: unset;" icon="el-icon-s-data">Ngày ban hành</el-button>
                     </el-card>
                 </div>
-                <div class="col-lg-9 flex flex-col">
-                    <el-card class="box-card">
+                <div :class="leftFilter ? 'col-lg-12 flex flex-col' : 'col-lg-9 flex flex-col'">
+                    <el-card class="box-card" v-if="!topFilter">
                         <el-button style="float: right; padding: 3px 0"><img src="@/assets/icons/bx-chevrons-left.svg" class="mr-2 top-toggle"></el-button>
                         <div class="inline-block">
                             <el-date-picker style="width: 205.4px;"
@@ -119,7 +119,93 @@
                         </div>                        
                     </el-card>
                     <el-card class="flex-1 main-table mt-2">
+                        <!-- <el-table
+                            ref="multipleTable"
+                            :data="tableData"
+                            style="width: 100%"
+                            @selection-change="handleSelectionChange">
+                            <el-table-column
+                                type="selection"
+                                width="55">
+                            </el-table-column>
+                            <el-table-column
+                                label="Date"
+                                width="120">
+                            <template slot-scope="scope">{{ scope.row.date }}</template>
+                            </el-table-column>
+                            <el-table-column
+                                property="name"
+                                label="Name"
+                                width="120">
+                            </el-table-column>
+                            <el-table-column
+                                property="address"
+                                label="Address"
+                                show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table> -->
+                        <div class="block mb-2 text-right">
+                            <el-button class="testButton" @click="leftFilterFunction($event)" :class="{clicked: leftFilter}"><img src="@/assets/icons/bxs-dock-left.svg"></el-button>
+                            <el-button class="testButton" @click="topFilterFunction($event)" :class="{clicked: topFilter}"><img src="@/assets/icons/bxs-dock-top.svg"></el-button>
+                            <el-dropdown :hide-on-click="false">
+                                <!-- <span class="el-dropdown-link">
+                                    Dropdown List<i class="el-icon-arrow-down el-icon--right"></i>
+                                </span> -->
+                                <el-button class="testButton"><img src="@/assets/icons/bx-slider-alt.svg"></el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <!-- <el-dropdown-item>Action 1</el-dropdown-item>
+                                    <el-dropdown-item>Action 2</el-dropdown-item>
+                                    <el-dropdown-item>Action 3</el-dropdown-item>
+                                    <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                                    <el-dropdown-item divided>Action 5</el-dropdown-item> -->
+                                    <el-dropdown-item v-for="item in hideColumns" :key="item.property">
+                                        <el-checkbox v-model="item.checked">{{item.label}}</el-checkbox>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                            
+                        </div>
+                        <!-- <p>{{flag}}</p> -->
+                        <el-table class="testTable" :class="{testTable2: flag}" :row-class-name="tableRowClassName" :data="tableData" style="width: 100%;" max-height="500">
+                            <el-table-column v-if="flag" type="expand">
+                                <template slot-scope="props">
+                                    <p class="testPTag" v-for="(content, index) in props.row.highlight.content" :key="index" v-html="content"></p>
+                                    <!-- <div class="row secondary-row">
+                                        <template v-for="content in props.row.highlight.content" v-html="content">
+                                            
+                                        </template>
+                                    </div> -->
+                                </template>
+                            </el-table-column>
 
+
+                            <el-table-column
+                                width="55">
+                                <template slot-scope="scope">
+                                    <el-button @click="handleFavoriteClick(scope)" icon="el-icon-star-on" size="small"></el-button>
+                                    <!-- <el-button>
+                                        <i class="el-icon-star-on"></i>
+                                    </el-button> -->
+                                </template>
+                            </el-table-column>
+                            <template v-for="item in tableColumns">
+                                <el-table-column v-if="!realityHideColumns.includes(item.property)" sortable :width="item.width" :property="item.property" :label="item.label" :key="item.property">
+                                </el-table-column>
+                            </template>
+                            
+                            
+                        </el-table>
+                        <el-pagination class="testPagination"
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page.sync="currentPage1"
+                                :page-size="pageSize"
+                                layout="slot, total, prev, pager, next"
+                                :total="totalRow">
+                                <!-- <template v-total> -->
+                                    <!-- <p>hello</p> -->
+                                <!-- </template> -->
+                        </el-pagination>
                     </el-card>
                 </div>
             </div>
@@ -140,6 +226,17 @@
             <el-button @click="outerVisible = false">Cancel</el-button>
             </div>
         </el-dialog>
+        <!-- <el-dialog
+            title="Tips"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+            <span>This is a message</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+            </span>
+        </el-dialog> -->
     </Layout>
 </template>
 <script>
@@ -205,6 +302,18 @@ export default {
             ]
         },
         label: '',
+        multipleSelection: [],
+        tableColumns: [],
+        tableData: [],
+        tableHeight: 1237,
+        currentPage1: 1,
+        totalRow: 500,
+        pageSize: 20,
+        dialogVisible: false,
+        leftFilter: false,
+        topFilter: false,
+        hideColumns: [],
+        realityHideColumns: [],
       }
     },
     computed: {
@@ -215,8 +324,11 @@ export default {
             chuDe: state => state.search.chuDe,
             thucTheTen: state => state.search.thucTheTen,
             nhan: state => state.search.nhan,
-
-
+            danhSachTimKiem: state => state.search.danhSachTimKiem,
+            thuocTinhBang: state => state.search.thuocTinhBang.items,
+            listFavorite: state => state.search.listFavorite,
+            flag: state => state.search.flag,
+            
 
 
 
@@ -224,10 +336,11 @@ export default {
             nguoiKy: state => state.search.nguoiKy,
             noiBanHanh: state => state.search.noiBanHanh,
             ngayBanHanh: state => state.search.ngayBanHanh,
-        })
+        }),
+        
     },
     methods: {
-        ...mapActions('search', ['getCategory', 'getStat']),
+        ...mapActions('search', ['getCategory', 'getStat', 'getSearchAPI', 'getSearchProps', 'postFavorite', 'deleteFavorite', 'getFavorite']),
         handleButtonClick(event) {
             switch (event.currentTarget.textContent) {
                 case "Loại tài liệu":
@@ -319,7 +432,72 @@ export default {
             var g = Math.floor(Math.random() * 255);
             var b = Math.floor(Math.random() * 255);
             return "rgb(" + r + "," + g + "," + b + ")";
-        }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        handleSizeChange(val) {
+            console.log(`${val} items per page`);
+        },
+        handleCurrentChange(val) {
+            // console.log(`current page: ${val}`);
+            this.getSearchAPI({text:"",page:val,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        },
+        handleFavoriteClick(val) {
+            // this.postFavorite(val.row.docidx);
+            console.log(val);
+            console.log(document.querySelector('.col-lg-9.flex.flex-col'))
+            // document.querySelector(`td.${val.column.id}`).parentElement.classList.add('favorite-row');
+            // console.log(document.querySelector(`td.${val.column.id}`));
+            // console.log(this.$el.querySelector(`td.${val.column.id}`));
+            let stringDocidx = val.row.docidx.toString()
+            if (this.listFavorite.includes(stringDocidx)) {
+                this.$confirm('Xác nhận bỏ đánh dấu tài liệu này?')
+                    .then(_ => {
+                        // alert('yes')
+                        let tempIndex = this.listFavorite.indexOf(stringDocidx);
+                        this.listFavorite.splice(tempIndex, 1);
+                        this.deleteFavorite(stringDocidx)
+                    })
+                    .catch(_ => {
+                        // alert('no')
+                    });
+                // this.dialogVisible = true;
+                
+            }
+            else {
+                this.listFavorite.push(stringDocidx)
+                this.postFavorite(stringDocidx)
+            }
+            
+            // console.log(val.row.docidx)
+            // console.log(val.$index)
+            // this.tableRowClassName({row: val.row, rowIndex: val.$index})
+            // console.log(this.$refs.tableRef);
+            // this.$refs.tableRef.rowClassName({row: val.row, rowIndex: val.$index})
+        },
+        tableRowClassName({row, rowIndex}) {
+            // console.log(this.listFavorite)
+            if (this.listFavorite.includes(row.docidx.toString())) {
+                return 'favorite-row';
+            }
+            return '';
+        },
+        // testClass(val) {
+        //     console.log
+        //     if (this.listFavorite.includes(val.row.docidx)) {
+        //         return 'favorite-button-clicked'
+        //     }
+        //     return 'testttttt'
+        // },
+        topFilterFunction(event) {
+            this.topFilter = ! this.topFilter;
+            event.currentTarget.classList.toggle('clicked');
+        },
+        leftFilterFunction(event) {
+            this.leftFilter = ! this.leftFilter;
+            event.currentTarget.classList.toggle('clicked');
+        },
     },
     watch: {
         value3: function (val) {
@@ -715,6 +893,49 @@ export default {
                 default:
                     break;
             }
+        },
+        thuocTinhBang: function(val) {
+            let tempVal = val.slice(0,6)
+            tempVal.forEach(ele => {
+                if (ele.name != 'promulgationDate' && ele.name != "subject") {
+                    this.tableColumns.push({
+                        property: ele.name,
+                        label: ele.note,
+                        width: "125"
+                    })
+                    this.hideColumns.push({property: ele.name, label: ele.note, checked: false});
+                }
+                else if (ele.name == "subject") {
+                    this.tableColumns.push({
+                        property: ele.name,
+                        label: ele.note
+                    })
+                    this.hideColumns.push({property: ele.name, label: ele.note, checked: false});
+                }
+            })
+        },
+        hideColumns: {
+            deep: true,
+            handler(val) {
+                val.forEach(ele => {
+                    if (ele.checked && !this.realityHideColumns.includes(ele.property)) {
+                        this.realityHideColumns.push(ele.property);                  
+                    }
+                    else if (!ele.checked && this.realityHideColumns.includes(ele.property)) {
+                        this.realityHideColumns.splice(this.realityHideColumns.indexOf(ele.property), 1);
+                    }
+                })
+                // console.log(this.realityHideColumns);
+            }
+        },
+        danhSachTimKiem: function(val) {
+            this.tableData = val.hits.map(ele => ele._source);
+            console.log('hellloooooo')
+            console.log(this.tableData);
+            this.totalRow = val.total_row;
+            this.currentPage1 = val.page;
+            this.pageSize = val.pagesize
+            this.tableHeight = 1000
         }
     },
     created() {
@@ -724,6 +945,9 @@ export default {
         this.getCategory({level1: 9, showall: true, limit: 100});
         this.getCategory({level1: 3, showall: true, limit: 100});
         this.getCategory({level1: 4, showall: true, limit: 100});
+        this.getSearchAPI({text:"",page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        this.getSearchProps();
+        this.getFavorite();
     }
 }
 </script>
@@ -746,4 +970,11 @@ export default {
     display: inline-block;
     width: 130px;
 }
+.el-table .warning-row {
+    background: oldlace;
+  }
+
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
 </style>

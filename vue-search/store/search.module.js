@@ -7,8 +7,10 @@ const state = {
     chuDe: {},
     nhan: {},
     thucTheTen: {},
-
-
+    danhSachTimKiem: {},
+    thuocTinhBang: {},
+    listFavorite: [],
+    flag: false,
 
 
 
@@ -113,7 +115,64 @@ const actions = {
             default:
                 break;
         }        
-    }
+    },
+    getSearchAPI({commit}, {text = "", page, pagesize, bookmarked, sort, sort_direction}) {
+        commit('getSearchAPI');
+        // if (text == "") {
+        //     this.flag = false;
+        // }
+        // else {
+        //     this.flag = true;
+        // }
+        // console.log(text);
+        // console.log(this.flag);
+        if (text != "") {
+            searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+                .then(
+                    data => commit('getSearchAPISuccessVersion2', data),
+                    error => commit('getSearchAPIFailureVersion2', {error: error.toString()})
+                )
+        }
+        else {
+            searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+                .then(
+                    data => commit('getSearchAPISuccess', data),
+                    error => commit('getSearchAPIFailure', {error: error.toString()})
+                )
+        }
+    },
+    getSearchProps({commit}) {
+        commit('getSearchProps');
+        searchService.getProps()
+            .then(
+                data => commit('getSearchPropsSuccess', data),
+                error => commit('getSearchPropsFailure', { error: error.toString() })
+            )
+    },
+    postFavorite({commit}, id) {
+        commit('postFavorite');
+        searchService.postFavorite(id)
+            .then(
+                data => commit('postFavoriteSuccess'),
+                error => commit('postFavoriteFailure', { error: error.toString() })
+            )
+    },
+    deleteFavorite({commit}, id) {
+        commit('deleteFavorite');
+        searchService.deleteFavorite(id)
+            .then(
+                data => commit('deleteFavoriteSuccess'),
+                error => commit('deleteFavoriteFailure', { error: error.toString() })
+            )
+    },
+    getFavorite({commit}) {
+        commit('getFavorite');
+        searchService.getFavorite()
+            .then(
+                data => commit('getFavoriteSuccess', data),
+                error => commit('getFavoriteFailure', { error: error.toString() })
+            )
+    },
 }
 
 const mutations = {
@@ -201,6 +260,69 @@ const mutations = {
     },
     layNgayBanHanhThatBai(state, error) {
         state.status = "layNgayBanHanhThatBai";
+        state.error = error
+    },
+    getSearchAPI(state) {
+        state.status = "getSearchAPILoading";
+    },
+    getSearchAPISuccess(state, data) {
+        state.status = "getSearchAPISuccess";
+        state.danhSachTimKiem = data;
+        state.flag = false;
+    },
+    getSearchAPIFailure(state, error) {
+        state.status = "getSearchAPIFailure";
+        state.error = error
+    },
+    getSearchAPISuccessVersion2(state, data) {
+        state.status = "getSearchAPISuccess";
+        state.danhSachTimKiem = data;
+        state.flag = true;
+    },
+    getSearchAPIFailureVerion2(state, error) {
+        state.status = "getSearchAPIFailure";
+        state.error = error;
+    },
+    getSearchProps(state) {
+        state.status = "getSearchProps";
+    },
+    getSearchPropsSuccess(state, data) {
+        state.status = "getSearchPropsSuccess";
+        state.thuocTinhBang = data
+    },
+    getSearchPropsFailure(state, error) {
+        state.status = "getSearchPropsFailure";
+        state.error = error
+    },
+    postFavorite(state) {
+        state.status = "postFavorite";
+    },
+    postFavoriteSuccess(state, data) {
+        state.status = "postFavoriteSuccess";
+    },
+    postFavoriteFailure(state, error) {
+        state.status = "postFavoriteFailure";
+        state.error = error
+    },
+    deleteFavorite(state) {
+        state.status = "deleteFavorite";
+    },
+    deleteFavoriteSuccess(state, data) {
+        state.status = "deleteFavoriteSuccess";
+    },
+    deleteFavoriteFailure(state, error) {
+        state.status = "deleteFavoriteFailure";
+        state.error = error
+    },
+    getFavorite(state) {
+        state.status = "getFavorite";
+    },
+    getFavoriteSuccess(state, data) {
+        state.status = "getFavoriteSuccess";
+        state.listFavorite = data;
+    },
+    getFavoriteFailure(state, error) {
+        state.status = "getFavoriteFailure";
         state.error = error
     },
 }

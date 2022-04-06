@@ -22,7 +22,7 @@
                       <div  class="input-group-prepend">
                       </div>
                       <!-- <input  type="text" placeholder="Tìm kiếm ..." class="form-control ng-untouched ng-pristine ng-valid" ng-reflect-options="[object Object]" ng-reflect-model=""> -->
-                      <el-input prefix-icon="el-icon-search" placeholder="Tim kiếm ..."></el-input>
+                      <el-input @keypress.enter.native.prevent="onEnter" prefix-icon="el-icon-search" v-model="input" placeholder="Tìm kiếm ..."></el-input>
                       <div  class="input-group-append">
                         <button  type="button" class="btn header-search-close-btn">
                         </button>
@@ -37,7 +37,7 @@
         <div  class="header-body-right">
           <div  >
             <ul  class="navbar-nav">
-              <li  ngbdropdown="" class="nav-item dropdown">
+              <li class="nav-item dropdown">
                 <el-dropdown trigger="click">
                     <a>
                         <img  src="@/assets/icons/bxs-grid-alt.svg" class="rounded-circle">
@@ -152,8 +152,20 @@
 </div>
 </template>
 <script>
+import {mapActions} from 'vuex';
 export default {
-    
+    data() {
+      return {
+        input: '',
+      }
+    },
+    methods: {
+      ...mapActions('search', ['getSearchAPI']),
+      onEnter() {
+        console.log(this.input);
+        this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+      }
+    }
 }
 </script>
 <style scoped>

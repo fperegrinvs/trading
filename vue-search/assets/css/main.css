@@ -1,3 +1,9 @@
+body::-webkit-scrollbar {
+    width: 0 !important
+}
+body { overflow: -moz-scrollbars-none; }
+body { -ms-overflow-style: none; }
+
 .testDropdown {
     margin: unset;
     padding: unset;
@@ -39,4 +45,76 @@ input {
 ::placeholder {
     font-weight: lighter;
     color:#666666;
+}
+    .el-input__inner::-webkit-input-placeholder {
+        color: black;
+        font-size: 14px;
+    }
+
+    .el-input__inner:-moz-placeholder {
+        color: black;
+        font-size: 14px;
+    }
+
+    .el-input__inner:-ms-input-placeholder {
+        color: black;
+        font-size: 14px;
+    }
+
+.el-table .cell {
+    word-break: break-word;
+}
+
+.el-table__row.favorite-row > td:first-child > div > button {
+    color: yellow;
+}
+.el-table__row.favorite-row > td:first-child > div > button:hover {
+    color: #409EFF;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+}
+/* .favorite-button-clicked {
+    color: yellow;
+} */
+.testTable .el-button:hover {
+    color: #409EFF;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+}
+/* .testTable .el-button:focus {
+    color: yellow;
+    outline: none;
+    border: 1px solid #DCDFE6;
+    background-color: unset;
+} */
+.testTable .el-button:focus:hover {
+    color: #409EFF;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+}
+.testTable .el-button:focus {
+    color: #409EFF;
+    border-color: unset;
+    background-color: unset;
+    outline: none;
+}
+.testTable .favorite-row .el-button:focus {
+    background-color: unset;
+    border-color: unset;
+    outline: none;
+}
+.testTable .el-button--small {
+    padding: 5px 5px;
+}
+.testTable .el-icon-star-on {
+    font-size: 20px;
+}
+.testButton.clicked {
+    background-color: #ecf5ff;
+}
+p.testPTag em {
+    color: red;
+}
+.testTable2 tr {
+    background-color: #FFE5BF;
 }
