@@ -41,8 +41,8 @@
                                         </template>
                                         <template v-else-if="scope.row.metadata == 'Nhãn'">
                                             <el-tag
-                                                :key="tag"
-                                                v-for="tag in dynamicTags"
+                                                :key="tag + ' ' + index"
+                                                v-for="(tag, index) in dynamicTags"
                                                 closable
                                                 :disable-transitions="false"
                                                 @close="handleClose(tag)">
@@ -124,17 +124,48 @@
                 </div>
             </div>
         </div>
-        <el-dialog :title="'Chỉnh sửa tài liệu: ' + currentDoc._source.signNumber" :visible.sync="dialogTableVisible">
+        <!-- <p v-if="currentDoc._source">{{currentDoc._source.signNumber}}</p> -->
+        <el-dialog v-if="currentDoc._source" :title="'Chỉnh sửa tài liệu: ' + currentDoc._source.signNumber" :visible.sync="dialogTableVisible">
             <!-- <el-table :data="gridData">
                 <el-table-column property="date" label="Date" width="150"></el-table-column>
                 <el-table-column property="name" label="Name" width="200"></el-table-column>
                 <el-table-column property="address" label="Address"></el-table-column>
             </el-table> -->
             <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="User" name="first">User</el-tab-pane>
-                <el-tab-pane label="Config" name="second">Config</el-tab-pane>
-                <el-tab-pane label="Role" name="third">Role</el-tab-pane>
-                <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
+                <el-tab-pane name="first">
+                    <!-- <el-badge slot="label" :value="3" class="item"> -->
+                        <!-- <el-button size="small">replies</el-button> -->
+                        <span slot="label">
+                            Tập tin đính kèm<el-badge class="mark" :value="currentDoc._source.attachments.length" />
+                        </span>
+                    <!-- </el-badge> -->
+                    
+                    <el-dropdown trigger="click" @command="handleCommand" class="testDropdownDialogDetail" :key="index + ' ' + item.name" v-for="(item, index) in currentDoc._source.attachments">
+                        <el-button >
+                            {{item.downname}}<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item :command="'download' + '/' + item.type + '/' + item.name" icon="el-icon-download">Tải xuống</el-dropdown-item>
+                            <el-dropdown-item :command="'delete' + '/' + item.name" icon="el-icon-delete">Xóa</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <el-upload
+                        class="upload-demo mt-2" style="margin-left: 5px;"
+                        ref="upload"
+                        drag
+                        action="https://devcore.chinhta123.com/attachment/"
+                        :headers="headers"
+                        :on-preview="handlePreview"
+                        :on-remove="handleRemove"
+                        :file-list="fileList"
+                        :before-upload="handleUploadBefore"
+                        multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+                        <!-- <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div> -->
+                    </el-upload>
+                    <el-button @click="handleButtonUpload" type="primary" icon="el-icon-upload">Tải lên</el-button>
+                </el-tab-pane>
             </el-tabs>
         </el-dialog>
     </Layout>
@@ -142,6 +173,7 @@
 <script>
 import Layout from '../layout/index.vue'
 import Vue from 'vue'
+import { authHeader } from '../../_helpers'
 import {mapActions, mapState} from 'vuex'
 Vue.component('Layout', Layout)
 export default {
@@ -160,12 +192,14 @@ export default {
             height: 500,
             dialogTableVisible: false,
             activeName: 'first',
-
+            fileList: [],
+            headers: authHeader(),
         }
     },
     methods: {
         ...mapActions('document', ['getDocById', 'getDocProps']),
         ...mapActions('search', ['postTag', 'deleteTag', 'getSearchAPI']),
+        ...mapActions('attachment', ['deleteAttachment', 'addAttachment']),
         handleClose(tag) {
             this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
             this.deleteTag({tag: [tag], docId: this.currentDoc._id});
@@ -209,7 +243,82 @@ export default {
         },
         handleClick(tab, event) {
             console.log(tab, event);
-        }
+        },
+        // downloadAttachment() {
+        //     console.log('download')
+        // },
+        // deleteAttachment() {
+        //     console.log('delete')
+        // },
+        handlePreview(file) {
+            console.log(file);
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handleCommand(command) {
+            // this.$message('click on item ' + command);
+            let tempList = command.split('/');
+            if (tempList[0] == "download") {
+                let url = `https://devcore.chinhta123.com/download?id=${tempList[1]}/${tempList[2]}&docid=${this.currentDoc._id}`;
+                window.open(url, "_blank");
+            }
+            else if (tempList[0] == "delete") {
+                this.deleteAttachment({attachment: tempList[1], id: this.currentDoc._id});
+                // this.getDocById(this.currentDoc._id);
+            }
+        },
+        handleButtonUpload() {
+            let obs = [];
+            // console.log(this.$refs.upload.uploadFiles);
+            // console.log(this.fileList);
+            this.$refs.upload.uploadFiles.forEach(file => {
+                obs.push(this.getBase64(file.raw));
+            });
+            // console.log(obs);
+            let attachments = [];
+
+            Promise.all(obs)
+                .then(res => {
+                    res.forEach((base64, idx) => {
+                        let nameParts = this.$refs.upload.uploadFiles[idx].raw.name.split(".");
+                        attachments.push({
+                            downname: this.$refs.upload.uploadFiles[idx].raw.name,
+                            data: base64,
+                            type: nameParts[nameParts.length - 1]
+                        });
+                    });
+
+                    this.addAttachment({documentId: this.currentDoc._id, attachments: attachments});
+                    if (this.status == 'addAttachmentSuccess') {
+                        console.log('success');
+                    }
+                    // this.getDocById(this.currentDoc._id);
+                    // console.log(attachments);
+                    this.$refs.upload.uploadFiles = [];
+                })
+        
+        },
+        handleUploadBefore(file) {
+            // console.log(file.name);
+        },
+
+
+        getBase64(file) {
+            return new Promise((resolve => {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    resolve((reader.result.toString())?.replace(/^.+;base64,/gi, ""));
+                };
+                reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                };
+            }));
+        },
+
+
+
     },
     created() {        
         this.getDocById(this.$route.params.id);
@@ -221,6 +330,7 @@ export default {
             docProps: state => state.document.docProps,
             currentDoc: state => state.document.currentDoc,
             danhSachCacVanBanLienQuan: state => state.search.danhSachTimKiem,
+            status: state => state.attachment.status,
 
         }),
     },
@@ -242,6 +352,7 @@ export default {
                 {'content': "Nội dung"}
             ];
             let tempTableData = [];
+            this.dynamicTags = [];
             tempData.forEach((obj) => {
                 Object.keys(obj).forEach((key) => {
                     if (key != "effectiveDate" && key != "tags" && key != "content") {
@@ -265,10 +376,17 @@ export default {
             // console.log(this.currentDoc);
             // console.log(tempTableData);
             this.tableData = tempTableData;
+            // console.log(this.currentDoc);
         },
         danhSachCacVanBanLienQuan: function(val) {
             this.tableDataRelevant = val.hits.map(ele => ele._source);
-        }
+        },
+        status(val) {
+            if (val == 'addAttachmentSuccess' || val == 'deleteAttachmentSuccess') {
+                this.getDocById(this.currentDoc._id);
+                // console.log(val);
+            }
+        },
     }
 }
 </script>

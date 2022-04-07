@@ -140,3 +140,10 @@ p.testPTag em {
     margin-left: 10px;
     vertical-align: bottom;
   }
+  .mark {
+      background-color: unset;
+  }
+  .testDropdownDialogDetail {
+      margin-left: 5px;
+      margin-top: 5px;
+  }

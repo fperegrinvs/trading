@@ -306,7 +306,8 @@ export class EditModalComponent implements OnInit {
     this.files.splice(idx, 1);
   }
 
-  private getBase64(file: File): Promise<string> {
+  private getBase64(file: File): Promise<string> {    
+    // console.log(file);
     return new Promise<string>((resolve => {
       var reader = new FileReader();
       reader.readAsDataURL(file);
@@ -337,7 +338,7 @@ export class EditModalComponent implements OnInit {
     this.files.forEach(file => {
       obs.push(this.getBase64(file));
     });
-
+    console.log(obs);
     const attachments: Attachment[] = [];
 
     Promise.all(obs)
@@ -357,7 +358,7 @@ export class EditModalComponent implements OnInit {
               this.resetDocAttachments();
             }
           });
-
+        console.log(attachments);
         this.files = [];
       });
   }
