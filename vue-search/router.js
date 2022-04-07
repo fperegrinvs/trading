@@ -1,17 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-// import Dashboard from './pages/dashboard'
-// import SHGiaiDoanKS from './pages/sohoahskt/giaidoanks.vue'
-// import SHGiaiDoanKT from './pages/sohoahskt/giaidoankt.vue'
-// import SHGiaiDoanSauPHBCKT from './pages/sohoahskt/giaidoansauphbckt'
 import LoginPage from './pages/login/index.vue'
 import SearchPage from './pages/search/index.vue'
-// import ChucVuPage from './pages/danhmuc/chucvu.vue'
-// import CuocKiemToanPage from './pages/danhmuc/cuockiemtoan.vue'
-// import DonViPage from './pages/danhmuc/donvi.vue'
-// import LinhVucKiemToanPage from './pages/danhmuc/linhvuckiemtoan.vue'
-// import PhongBanPage from './pages/danhmuc/phongban.vue'
+import DetailPage from './pages/detail/index.vue'
 
 Vue.use(Router);
 
@@ -23,19 +15,13 @@ export const router = new Router({
   mode: 'history',
   routes: [
     { path: '/login', component: LoginPage },
-    { path: '/search', component: SearchPage },
-    // {path: '/dashboard', component: Dashboard},
+    { path: '/search', component: SearchPage, name: 'search' },
+    { path: '/detail/:id', component: DetailPage, name: 'detail' },
 
-    // {path: '/sohoahskt/giaidoanks', component: SHGiaiDoanKS},
-    // {path: '/sohoahskt/giaidoankt', component: SHGiaiDoanKT},
-    // {path: '/sohoahskt/giaidoansauphbckt', component: SHGiaiDoanSauPHBCKT},
-    // {path: '/danhmuc/chucvu', component: ChucVuPage},
-    // {path: '/danhmuc/cuockiemtoan', component: CuocKiemToanPage},
-    // {path: '/danhmuc/donvi', component: DonViPage},
-    // {path: '/danhmuc/linhvuckiemtoan', component: LinhVucKiemToanPage},
-    // {path: '/danhmuc/phongban', component: PhongBanPage},
 
-    // { path: '*', redirect: '/dashboard'},
+
+
+    { path: '*', redirect: '/search'},
   ]
 });
 
@@ -47,6 +33,9 @@ router.beforeEach((to, from, next) => {
   if (authRequired && !loggedIn) {
     return next('/login');
   }
-
+  // if (from.name == 'detail' && to.name == 'search') {
+  //   console.log(from)
+  //   console.log(to)
+  // }
   next();
 })

@@ -118,3 +118,25 @@ p.testPTag em {
 .testTable2 tr {
     background-color: #FFE5BF;
 }
+.testTable tr {
+    cursor: pointer;
+}
+.el-button.testButtonDetail + .el-button.testButtonDetail {
+    margin-left: unset;
+    margin-top: 0.25rem;
+}
+.el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }

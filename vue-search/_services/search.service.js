@@ -7,7 +7,9 @@ export const searchService = {
     getProps,
     postFavorite,
     deleteFavorite,
-    getFavorite
+    getFavorite,
+    postTag,
+    deleteTag,
 }
 
 function getCategory(level1, showall = true, limit) {
@@ -34,6 +36,34 @@ function getProps() {
         headers: authHeader()
     }
     return fetch(`${process.env.apiUrl}/searchapi/props`,
+            requestOptions).then(handleResponse)
+}
+
+function postTag(tag, docId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authHeader().Authorization,
+
+        },
+        body: JSON.stringify({ tags: tag, document_id: docId })
+    }
+    return fetch(`${process.env.apiUrl}/searchapi/tagging`,
+            requestOptions).then(handleResponse)
+}
+
+function deleteTag(tag, docId) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authHeader().Authorization,
+
+        },
+        body: JSON.stringify({ tags: tag, document_id: docId })
+    }
+    return fetch(`${process.env.apiUrl}/searchapi/tagging`,
             requestOptions).then(handleResponse)
 }
 
@@ -75,7 +105,7 @@ function getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction) {
         body: JSON.stringify({ text: text, page: page, pagesize: pagesize, bookmarked: bookmarked, sort: sort, sort_direction: sort_direction })
     }
     if (text != "") {
-        console.log('abcdcddccd')
+        // console.log('abcdcddccd')
         return fetch(`${process.env.apiUrl}/searchapi`,
             requestOptions).then(handleResponseVersion2) 
     }
@@ -117,9 +147,9 @@ function handleResponseVersion2(response) {
             return Promise.reject(error);
         }
         const tempData = text && JSON.parse(text);
-        console.log(tempData);
+        // console.log(tempData);
         let tempNewData = tempData;
-        console.log(tempData['hits'])
+        // console.log(tempData['hits'])
         let tempHits = []
         tempData['hits'].map(ele => {
             console.log('inside map')
@@ -130,7 +160,7 @@ function handleResponseVersion2(response) {
             tempHits.push(tempEle);
         })
         tempNewData.hits = tempHits;
-        console.log(tempNewData);
+        // console.log(tempNewData);
         return tempNewData;
     });
 }

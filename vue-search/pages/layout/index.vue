@@ -160,12 +160,25 @@ export default {
       }
     },
     methods: {
-      ...mapActions('search', ['getSearchAPI']),
+      ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
       onEnter() {
-        console.log(this.input);
-        this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        // console.log(this.input);
+        if (this.$router.currentRoute.path != '/search') {
+          this.$router.push({name: 'search', query: {text: this.input}});
+          // this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+          // this.setSearchFromDetail(this.input);
+        }
+        else {
+          this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        }
+        // 
       }
-    }
+    },
+    created() {
+      if (this.$route.query.text) {
+        this.input = this.$route.query.text;
+      }
+    },
 }
 </script>
 <style scoped>

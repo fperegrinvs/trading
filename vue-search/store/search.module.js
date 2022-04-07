@@ -11,6 +11,7 @@ const state = {
     thuocTinhBang: {},
     listFavorite: [],
     flag: false,
+    searchFromDetail: '',
 
 
 
@@ -32,6 +33,10 @@ const state = {
 }
 
 const actions = {
+    setSearchFromDetail({commit}, value) {
+        console.log(value);
+        commit('setSearchFromDetail', value);
+    },
     getCategory({commit}, {level1, showall, limit}) {
         commit('getCategory');
         switch (level1) {
@@ -173,9 +178,28 @@ const actions = {
                 error => commit('getFavoriteFailure', { error: error.toString() })
             )
     },
+    postTag({commit}, {tag, docId}) {
+        commit('postTag');
+        searchService.postTag(tag, docId)
+            .then(
+                res => commit('postTagSuccess', res),
+                error => commit('postTagFailure', { error: error.toString() })
+            )
+    },
+    deleteTag({commit}, {tag, docId}) {
+        commit('deleteTag');
+        searchService.deleteTag(tag, docId)
+            .then(
+                res => commit('deleteTagSuccess', res),
+                error => commit('deleteTagFailure', { error: error.toString() })
+            )
+    },
 }
 
 const mutations = {
+    setSearchFromDetail(state, value) {
+        state.searchFromDetail = value;
+    },
     getCategory(state) {
         state.status = "getCategoryLoading";
     },
@@ -323,6 +347,26 @@ const mutations = {
     },
     getFavoriteFailure(state, error) {
         state.status = "getFavoriteFailure";
+        state.error = error
+    },
+    postTag(state) {
+        state.status = "postTagLoading";
+    },
+    postTagSuccess(state, res) {
+        state.status = "postTagSuccess";
+    },
+    postTagFailure(state, error) {
+        state.status = "postTagFailure";
+        state.error = error
+    },
+    deleteTag(state) {
+        state.status = "deleteTagLoading";
+    },
+    deleteTagSuccess(state, res) {
+        state.status = "deleteTagSuccess";
+    },
+    deleteTagFailure(state, error) {
+        state.status = "deleteTagFailure";
         state.error = error
     },
 }

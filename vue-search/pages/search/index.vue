@@ -166,7 +166,7 @@
                             
                         </div>
                         <!-- <p>{{flag}}</p> -->
-                        <el-table class="testTable" :class="{testTable2: flag}" :row-class-name="tableRowClassName" :data="tableData" style="width: 100%;" max-height="500">
+                        <el-table @row-click="handleRowClick" class="testTable" :class="{testTable2: flag}" :row-class-name="tableRowClassName" :data="tableData" style="width: 100%;" max-height="500">
                             <el-table-column v-if="flag" type="expand">
                                 <template slot-scope="props">
                                     <p class="testPTag" v-for="(content, index) in props.row.highlight.content" :key="index" v-html="content"></p>
@@ -199,13 +199,15 @@
                                 @size-change="handleSizeChange"
                                 @current-change="handleCurrentChange"
                                 :current-page.sync="currentPage1"
+                                :page-sizes="[10, 20, 50]"
                                 :page-size="pageSize"
-                                layout="slot, total, prev, pager, next"
+                                layout="slot, total, sizes, prev, pager, next"
                                 :total="totalRow">
                                 <!-- <template v-total> -->
                                     <!-- <p>hello</p> -->
                                 <!-- </template> -->
                         </el-pagination>
+                        <!-- <p>{{currentPage1}}</p> -->
                     </el-card>
                 </div>
             </div>
@@ -328,6 +330,7 @@ export default {
             thuocTinhBang: state => state.search.thuocTinhBang.items,
             listFavorite: state => state.search.listFavorite,
             flag: state => state.search.flag,
+            searchFromDetail: state => state.search.searchFromDetail,
             
 
 
@@ -437,16 +440,17 @@ export default {
             this.multipleSelection = val;
         },
         handleSizeChange(val) {
-            console.log(`${val} items per page`);
+            // console.log(`${val} items per page`);
+            this.getSearchAPI({text:"",page:this.currentPage1,pagesize:val,bookmarked:false,sort:"docidx",sort_direction:"desc"});
         },
         handleCurrentChange(val) {
             // console.log(`current page: ${val}`);
-            this.getSearchAPI({text:"",page:val,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+            this.getSearchAPI({text:"",page:val,pagesize:this.pageSize,bookmarked:false,sort:"docidx",sort_direction:"desc"});
         },
         handleFavoriteClick(val) {
             // this.postFavorite(val.row.docidx);
-            console.log(val);
-            console.log(document.querySelector('.col-lg-9.flex.flex-col'))
+            // console.log(val);
+            // console.log(document.querySelector('.col-lg-9.flex.flex-col'))
             // document.querySelector(`td.${val.column.id}`).parentElement.classList.add('favorite-row');
             // console.log(document.querySelector(`td.${val.column.id}`));
             // console.log(this.$el.querySelector(`td.${val.column.id}`));
@@ -498,6 +502,9 @@ export default {
             this.leftFilter = ! this.leftFilter;
             event.currentTarget.classList.toggle('clicked');
         },
+        handleRowClick(row) {
+            this.$router.push({name: 'detail', params: {id: row.docidx}, query: {from: 'search'}});
+        }
     },
     watch: {
         value3: function (val) {
@@ -930,13 +937,15 @@ export default {
         },
         danhSachTimKiem: function(val) {
             this.tableData = val.hits.map(ele => ele._source);
-            console.log('hellloooooo')
-            console.log(this.tableData);
             this.totalRow = val.total_row;
             this.currentPage1 = val.page;
             this.pageSize = val.pagesize
             this.tableHeight = 1000
-        }
+        },
+        searchFromDetail: function(val) {
+            console.log(val);
+            this.getSearchAPI({text:val, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc"});
+        },
     },
     created() {
         this.getCategory({level1: 2, showall: true, limit: 100});
@@ -945,7 +954,12 @@ export default {
         this.getCategory({level1: 9, showall: true, limit: 100});
         this.getCategory({level1: 3, showall: true, limit: 100});
         this.getCategory({level1: 4, showall: true, limit: 100});
-        this.getSearchAPI({text:"",page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        if (this.$route.query.text) {
+            this.getSearchAPI({text:this.$route.query.text,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        }
+        else {
+            this.getSearchAPI({text:"",page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+        }        
         this.getSearchProps();
         this.getFavorite();
     }

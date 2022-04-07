@@ -126,6 +126,9 @@ export class DetailComponent implements OnInit, OnDestroy {
                 editable: prop.name === "tags"
               });
             } else {
+              // if (prop.name == "linkdoc") {
+              //   console.log(prop);
+              // }
               source.push({
                 metadata: prop.note?.replace(/\(.+\)/gi, "").trim(),
                 content: this.document[prop.name],
@@ -144,6 +147,8 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
 
         this.dataSource = source;
+        // console.log(this.dataSource);
+        // console.log(this.document);
       });
 
     this.prepareTableColumns();
@@ -232,6 +237,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   downloadFile(url: string): void {
+    console.log(url);
     window.open(url, "_blank");
   }
 
