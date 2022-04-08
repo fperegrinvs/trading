@@ -2,7 +2,7 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
   server: {
-    port: 3098
+    port: 3094
   },
   env: {
     // apiUrl: "https://devcore.deepnlp.net",

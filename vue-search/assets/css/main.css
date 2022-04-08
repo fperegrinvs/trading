@@ -3,6 +3,9 @@ body::-webkit-scrollbar {
 }
 body { overflow: -moz-scrollbars-none; }
 body { -ms-overflow-style: none; }
+body {
+    padding-right: unset !important;
+}
 
 .testDropdown {
     margin: unset;
@@ -20,7 +23,7 @@ body { -ms-overflow-style: none; }
     text-transform: uppercase;
 }
 .testDialog > div.el-dialog__body {
-    max-height: 50vh;
+    max-height: 60vh;
     overflow-y: scroll;
 }
 input {
@@ -66,6 +69,9 @@ input {
 }
 
 .el-table__row.favorite-row > td:first-child > div > button {
+    color: yellow;
+}
+.el-table__row.favorite-row > td:nth-child(2) > div > button {
     color: yellow;
 }
 .el-table__row.favorite-row > td:first-child > div > button:hover {

@@ -94,7 +94,7 @@ function getFavorite() {
             requestOptions).then(handleResponse)
 }
 
-function getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction) {
+function getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction, publisherName = undefined, documentName = undefined) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -102,8 +102,30 @@ function getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction) {
             'Authorization': authHeader().Authorization,
 
         },
-        body: JSON.stringify({ text: text, page: page, pagesize: pagesize, bookmarked: bookmarked, sort: sort, sort_direction: sort_direction })
-    }
+        body: JSON.stringify({ text: text, page: page, pagesize: pagesize, bookmarked: bookmarked, sort: sort, sort_direction: sort_direction, publisherName: publisherName, documentName: documentName })
+    };
+    // if (!publisherName) {
+    //     requestOptions = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': authHeader().Authorization,
+    
+    //         },
+    //         body: JSON.stringify({ text: text, page: page, pagesize: pagesize, bookmarked: bookmarked, sort: sort, sort_direction: sort_direction })
+    //     }
+    // }
+    // else {
+    //     requestOptions = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': authHeader().Authorization,
+    
+    //         },
+    //         body: JSON.stringify({ text: text, page: page, pagesize: pagesize, bookmarked: bookmarked, sort: sort, sort_direction: sort_direction, publisherName: publisherName })
+    //     }
+    // }
     if (text != "") {
         // console.log('abcdcddccd')
         return fetch(`${process.env.apiUrl}/searchapi`,

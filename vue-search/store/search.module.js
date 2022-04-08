@@ -34,7 +34,7 @@ const state = {
 
 const actions = {
     setSearchFromDetail({commit}, value) {
-        console.log(value);
+        // console.log(value);
         commit('setSearchFromDetail', value);
     },
     getCategory({commit}, {level1, showall, limit}) {
@@ -121,7 +121,7 @@ const actions = {
                 break;
         }        
     },
-    getSearchAPI({commit}, {text = "", page, pagesize, bookmarked, sort, sort_direction}) {
+    getSearchAPI({commit}, {text = "", page, pagesize, bookmarked, sort, sort_direction, publisherName = undefined, documentName = undefined}) {
         commit('getSearchAPI');
         // if (text == "") {
         //     this.flag = false;
@@ -132,18 +132,36 @@ const actions = {
         // console.log(text);
         // console.log(this.flag);
         if (text != "") {
-            searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+            // if (!publisherName) {
+            //     searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+            //     .then(
+            //         data => commit('getSearchAPISuccessVersion2', data),
+            //         error => commit('getSearchAPIFailureVersion2', {error: error.toString()})
+            //     )
+            // }
+            // else {
+                searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction, publisherName, documentName)
                 .then(
                     data => commit('getSearchAPISuccessVersion2', data),
                     error => commit('getSearchAPIFailureVersion2', {error: error.toString()})
                 )
+            // }
         }
         else {
-            searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+            // if (!publisherName) {
+            //     searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction)
+            //     .then(
+            //         data => commit('getSearchAPISuccess', data),
+            //         error => commit('getSearchAPIFailure', {error: error.toString()})
+            //     )
+            // }
+            // else {
+                searchService.getSearchAPI(text, page, pagesize, bookmarked, sort, sort_direction, publisherName, documentName)
                 .then(
                     data => commit('getSearchAPISuccess', data),
                     error => commit('getSearchAPIFailure', {error: error.toString()})
                 )
+            // }
         }
     },
     getSearchProps({commit}) {

@@ -39,6 +39,9 @@
                                         <template v-if="scope.row.metadata == 'Link document'">
                                             <el-button @click="downloadFile(item)" class="testButtonDetail" v-for="(item, index) in scope.row.content" :key="index" icon="el-icon-download">{{item.split('/').pop().toString()}}<i class="el-icon-document"></i></el-button>
                                         </template>
+                                        <template v-else-if="scope.row.metadata == 'Tập tin đính kèm'">
+                                            <el-button @click="downloadFile(item)" class="testButtonDetail" v-for="(item, index) in scope.row.content" :key="index" icon="el-icon-download">{{item.downname}}<i class="el-icon-document"></i></el-button>
+                                        </template>
                                         <template v-else-if="scope.row.metadata == 'Nhãn'">
                                             <el-tag
                                                 :key="tag + ' ' + index"
@@ -150,7 +153,7 @@
                         </el-dropdown-menu>
                     </el-dropdown>
                     <el-upload
-                        class="upload-demo mt-2" style="margin-left: 5px;"
+                        class="upload-demo mt-2" style="margin-left: 5px; text-align:center;"
                         ref="upload"
                         drag
                         action="https://devcore.chinhta123.com/attachment/"
@@ -164,7 +167,7 @@
                         <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
                         <!-- <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div> -->
                     </el-upload>
-                    <el-button @click="handleButtonUpload" type="primary" icon="el-icon-upload">Tải lên</el-button>
+                    <el-button class="float-right" @click="handleButtonUpload" type="primary" icon="el-icon-upload">Tải lên</el-button>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -349,7 +352,8 @@ export default {
                 {'status': "Trạng thái"},
                 {'effectiveDate': "Ngày hiệu lực"},
                 {'linkdoc': "Link document"},
-                {'content': "Nội dung"}
+                {'content': "Nội dung"},
+                // {'attachments': "Tập tin đính kèm"},
             ];
             let tempTableData = [];
             this.dynamicTags = [];
@@ -362,11 +366,18 @@ export default {
                         let tempList = new Date(this.currentDoc['_source'][key]).toLocaleDateString().split('/');
                         tempTableData.push({metadata: obj[key], content: (tempList[1] + "/" + tempList[0] + "/" + tempList[2]) });
                     }
-                    else if (key == "tags" && this.currentDoc['_source'][key]) {
-                        tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
-                        for (let i = 0; i < this.currentDoc['_source'][key].length; i++) {                            
-                            this.dynamicTags.push(this.currentDoc['_source'][key][i]);
-                        }                        
+                    else if (key == "tags") {
+                        if (this.currentDoc['_source'][key]) {
+                            // console.log(this.currentDoc['_source'][key])
+                            tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
+                            for (let i = 0; i < this.currentDoc['_source'][key].length; i++) {                            
+                                this.dynamicTags.push(this.currentDoc['_source'][key][i]);
+                            }     
+                        }
+                        else {
+                            // console.log(this.currentDoc['_source'][key])
+                            tempTableData.push({metadata: obj[key], content: []})
+                        }
                     }
                     else if (key == "content") {
                         this.textarea = this.currentDoc['_source'][key];

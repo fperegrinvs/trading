@@ -24,7 +24,7 @@
                             v-for="item in donViBanHanh.data"
                             :key="item.name"
                             :label="item.name"                            
-                            :value="item.value">
+                            :value="item.name">
                             </el-option>                            
                         </el-select>
                         <el-select collapse-tags autocomplete multiple style="width: 100%;" v-model="value2" filterable placeholder="Loại tài liệu">
@@ -32,7 +32,7 @@
                             v-for="item in loaiTaiLieu.data"
                             :key="item.name"
                             :label="item.name"                            
-                            :value="item.value">
+                            :value="item.name">
                             </el-option>                            
                         </el-select>
                     </el-card>
@@ -212,7 +212,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog custom-class="testDialog" title="Thống kê" :visible.sync="outerVisible">
+        <el-dialog custom-class="testDialog" title="Thống kê" :visible.sync="outerVisible" top="12vh">
             <span class="demo-input-label"><i class="el-icon-s-data" style="margin-right: 5px;"></i>{{label}}</span>
             <el-select :default-first-option="true" v-model="value3" placeholder="Select">
                 <el-option
@@ -502,11 +502,22 @@ export default {
             this.leftFilter = ! this.leftFilter;
             event.currentTarget.classList.toggle('clicked');
         },
-        handleRowClick(row) {
-            this.$router.push({name: 'detail', params: {id: row.docidx}, query: {from: 'search'}});
+        handleRowClick(row, column) {
+            // console.log(row);
+            if (column.label == "Trích yếu") {
+                this.$router.push({name: 'detail', params: {id: row.docidx}, query: {from: 'search'}});
+            }
+            
         }
     },
     watch: {
+        value2: function(val) {
+            this.getSearchAPI({text:this.searchFromDetail, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc", publisherName: this.value, documentName: val});
+        },
+        value: function(val) {
+            // console.log(val)            
+            this.getSearchAPI({text:this.searchFromDetail, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc", publisherName: val, documentName: this.value2});
+        },
         value3: function (val) {
             switch (val) {
                 case "15 loại tài liệu nổi bật":
@@ -943,7 +954,7 @@ export default {
             this.tableHeight = 1000
         },
         searchFromDetail: function(val) {
-            console.log(val);
+            // console.log(val);
             this.getSearchAPI({text:val, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc"});
         },
     },

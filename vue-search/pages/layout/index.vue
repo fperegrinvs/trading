@@ -162,6 +162,7 @@ export default {
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
       onEnter() {
+        this.setSearchFromDetail(this.input);
         // console.log(this.input);
         if (this.$router.currentRoute.path != '/search') {
           this.$router.push({name: 'search', query: {text: this.input}});
@@ -169,7 +170,7 @@ export default {
           // this.setSearchFromDetail(this.input);
         }
         else {
-          this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
+          // this.getSearchAPI({text:this.input,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
         }
         // 
       }
