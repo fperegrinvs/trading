@@ -100,46 +100,30 @@
       </div>
       <ul >
         <li  attooltipposition="right" class="mat-tooltip-trigger ng-star-inserted" ng-reflect-message="Tìm kiếm" aria-describedby="cdk-describedby-message-0" cdk-describedby-host="">
-          <a  ng-reflect-router-link="/app/search" href="/app/search">
+          <!-- <a  ng-reflect-router-link="/app/search" href="/app/search">
             <img  src="@/assets/icons/primary/bx-search-alt.svg">
-            <!--bindings={}-->
-          </a>
+          </a> -->
+          <router-link :to="{ name: 'search' }">
+            <img  src="@/assets/icons/primary/bx-search-alt.svg">
+          </router-link>
         </li>
         <!--container-->
         <li  attooltipposition="right" class="mat-tooltip-trigger ng-star-inserted" ng-reflect-message="Các mục đánh dấu" aria-describedby="cdk-describedby-message-1" cdk-describedby-host="">
-          <a  ng-reflect-router-link="/app/bookmark" href="/app/bookmark">
+          <!-- <a  ng-reflect-router-link="/app/bookmark" href="/app/bookmark">
             <img  src="@/assets/icons/gray/bxs-star.svg">
-            <!--bindings={}-->
-          </a>
+          </a> -->
+          <router-link :to="{ name: 'bookmarked' }">
+            <img  src="@/assets/icons/gray/bxs-star.svg">
+          </router-link>
         </li>
         <!--container-->
         <li  attooltipposition="right" class="mat-tooltip-trigger ng-star-inserted" ng-reflect-message="Tài liệu của tôi" aria-describedby="cdk-describedby-message-2" cdk-describedby-host="">
-          <a  ng-reflect-router-link="/app/mydoc" href="/app/mydoc">
+          <!-- <a  ng-reflect-router-link="/app/mydoc" href="/app/mydoc"> -->
+          <router-link :to="{ name: 'manage' }">
             <img  src="@/assets/icons/gray/bxs-user-detail.svg">
-            <!--bindings={}-->
-          </a>
+          </router-link>
+            
         </li>
-        <!--container-->
-        <li  attooltipposition="right" class="mat-tooltip-trigger ng-star-inserted" ng-reflect-message="Duyệt tài liệu" aria-describedby="cdk-describedby-message-3" cdk-describedby-host="">
-          <a  ng-reflect-router-link="/app/approve" href="/app/approve">
-            <img  src="@/assets/icons/gray/bx-list-check.svg">
-            <span  class="badge badge-danger ng-star-inserted">2</span>
-            <!--bindings={
-  "ng-reflect-ng-if": "true"
-}-->
-          </a>
-        </li>
-        <!--container-->
-        <li  attooltipposition="right" class="mat-tooltip-trigger ng-star-inserted" ng-reflect-message="Quy trình duyệt" aria-describedby="cdk-describedby-message-4" cdk-describedby-host="">
-          <a  ng-reflect-router-link="/app/workflow" href="/app/workflow">
-            <img  src="@/assets/icons/gray/bx-list-ol.svg">
-            <!--bindings={}-->
-          </a>
-        </li>
-        <!--container-->
-        <!--bindings={
-  "ng-reflect-ng-for-of": "[object Object],[object Object"
-}-->
       </ul>
     </div>
   </div>

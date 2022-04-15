@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap');
+
 body::-webkit-scrollbar {
     width: 0 !important
 }
@@ -153,3 +158,271 @@ p.testPTag em {
       margin-left: 5px;
       margin-top: 5px;
   }
+
+  .input-home {
+      margin-top: 15px;
+  }
+
+  .input-home > input {
+      height: 56px;
+  }
+
+  .input-home > input.el-input__inner::-webkit-input-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+  }
+
+  .input-home > input.el-input__inner:-moz-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+}
+
+.input-home > input.el-input__inner:-ms-input-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+}
+
+.input-home .el-icon-search {
+    color: #484848;
+    font-size: 19px;
+    margin-right: 11px;
+}
+
+.input-header-bar-new > input.el-input__inner::-webkit-input-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 24px;
+  }
+
+  .input-header-bar-new > input.el-input__inner:-moz-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 24px;
+}
+
+.input-header-bar-new > input.el-input__inner:-ms-input-placeholder {
+    color: #595959;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+line-height: 24px;
+}
+
+.input-header-bar-new .el-icon-search {
+    color: #484848;
+    font-size: 19px;
+}
+
+/* .select-params-component > div {
+    width: 146px;
+    height: 24px;
+} */
+
+.select-params-component > div > input {
+    height: unset;
+    border: unset;
+}
+
+.select-params-component > div > input.el-input__inner::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.select-params-component > div > input.el-input__inner::-moz-placeholder { /* Firefox 19+ */
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.select-params-component > div > input.el-input__inner:-ms-input-placeholder { /* IE 10+ */
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+  }
+
+.select-params-component > div > input.el-input__inner:-moz-placeholder { /* Firefox 18- */
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.select-params-component > div > input.el-input__inner {
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+color: #000000;
+}
+
+.select-params-component > div > span > span > i.el-icon-arrow-up {
+    line-height: 25px;
+    font-size: 8px !important;
+}
+
+.select-params-component > div.el-input--prefix > input.el-input__inner {
+    /* padding-left: 35px;
+    padding-right: 25px; */
+    padding-left: 28px;
+    padding-right: 20px;
+}
+
+.select-params-component > div > input.el-select__input {
+    margin-left: 25px;
+}
+
+.select-params-component > div.is-focus > span.el-input__prefix > img {
+    filter: invert(59%) sepia(34%) saturate(4280%) hue-rotate(337deg) brightness(82%) contrast(89%);
+}
+
+.select-params-component.need-to-highlight > div > span.el-input__prefix > img {
+    filter: invert(59%) sepia(34%) saturate(4280%) hue-rotate(337deg) brightness(82%) contrast(89%);
+}
+
+.date-picker-params-component.el-date-editor.el-input {
+    width: 149px;
+}
+
+.date-picker-params-component.el-input--prefix > input.el-input__inner {
+    border: unset;
+    height: unset;
+    line-height: 24px;
+    padding-right: 25px;
+}
+
+.date-picker-params-component > span > i {
+    line-height: 24px;    
+    font-size: 20px;
+}
+
+.date-picker-params-component > span.el-input__suffix > span.el-input__suffix-inner > i.el-input__icon {
+    color: #C0C4CC;
+    font-size: 14px;
+    transition: transform .3s;
+    transform: rotateZ(180deg);
+    cursor: pointer;
+    font-family: element-icons!important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: baseline;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-right: 5px;
+    font-size: 8px;
+    line-height: 25px;
+}
+
+.date-picker-params-component > span.el-input__suffix > span.el-input__suffix-inner > i.el-input__icon:before {
+    content: "\e6e1";
+}
+
+.date-picker-params-component > span.el-input__suffix > span.el-input__suffix-inner > i.el-input__icon:after {
+    content: '';
+    height: 100%;
+    width: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.date-picker-params-component.el-input--prefix > input.el-input__inner::-webkit-input-placeholder {
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.date-picker-params-component.el-input--prefix > input.el-input__inner::-moz-placeholder {
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.date-picker-params-component.el-input--prefix > input.el-input__inner:-ms-input-placeholder {
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.date-picker-params-component.el-input--prefix > input.el-input__inner:-moz-placeholder {
+    color: #000000;
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+}
+
+.el-tag.el-tag--info:first-child {
+    margin-left: 10px;
+}
+
+.el-tag.el-tag--info {
+    background: #F0F0F0;
+    border-radius: 16px;
+}
+
+.el-tag.el-tag--info .el-tag__close {
+    color: #C86135;
+}
+
+.el-table__row > td:first-child > div {
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 19.5px;
+/* identical to box height, or 20px */
+
+letter-spacing: -0.01em;
+
+color: #000000;
+padding-left: unset;
+}
+.el-table .el-table__cell {
+    padding: 8px 0;
+}
