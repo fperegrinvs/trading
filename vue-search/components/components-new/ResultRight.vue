@@ -4,9 +4,15 @@
         <h1 class="title">
         <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ thị trường mở -->
         {{title}}
-        <img src="@/assets/icons-figma/bx-star.svg" style="display: inline-block;" alt="">
+        <template v-if="listFavorite.includes(currentDoc._id)">
+            <img @click="removeFavorite(currentDoc._id)" style="display: inline-block;" src="@/assets/icons-figma/bx-star-hover.svg" alt="">
+        </template>
+        <template v-else>
+            <img @click="addFavorite(currentDoc._id)" src="@/assets/icons-figma/bx-star.svg" style="display: inline-block;" alt="">
+        </template>
+        
         </h1>
-        <div class="icon" style="display: inline-block; float: right;">
+        <div class="icon" style="display: inline-block; float: right;">            
             <img src="@/assets/icons-figma/bx-x.svg" alt="">
         </div>    
     </div>
@@ -15,11 +21,21 @@
         <p class="text-1">
             phát hiện từ khóa
         </p>
-        <!-- <div class="occours">
-            <div class="items">
-
-            </div>
-        </div> -->
+        <div class="occours">
+            <el-carousel height="175px" :autoplay="false" indicator-position="outside">
+                <template v-if="currentDoc.highlight">
+                    <el-carousel-item v-for="(item, index) in currentDoc.highlight.content" :key="index + 'previewer'">
+                        <h3 @click="h3Click" v-html="item"></h3>
+                    </el-carousel-item>
+                </template>
+                <template v-else>
+                    <el-carousel-item v-for="item in 4" :key="item">
+                        <h3 @click="h3Click" v-html="item"></h3>
+                    </el-carousel-item>
+                </template>
+                
+            </el-carousel>
+        </div>
     </div>
     <div class="metadata">
         <p class="text-2">Metadata</p>
@@ -72,7 +88,7 @@
         </el-table>
     </div>
 
-    <div class="files-wrapper">
+    <!-- <div class="files-wrapper">
         <p class="text-files">
             Tập tin đính kèm
         </p>
@@ -80,7 +96,17 @@
             <template v-if="currentDoc._source">
                 <attachment-file :data="item" v-for="(item, index) in currentDoc._source.attachments" :key="index + 'attachment-file'" />
             </template>
-            <!-- <attachment-file v-for="index in 6" :key="index + 'test files'"/> -->
+            
+        </div>
+    </div> -->
+    <div class="files-wrapper">
+        <p class="text-files">
+            Tập tin đính kèm
+        </p>
+        <div class="files-wrapper-level-2">
+            <template v-if="currentDoc">
+                <attachment-file :data="item" v-for="(item, index) in currentDoc.attachments" :key="index + 'attachment-file'" />
+            </template>
             
         </div>
     </div>
@@ -115,7 +141,7 @@
     
 </template>
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 import AttachmentFile from './AttachmentFile.vue';
 export default {
   components: { AttachmentFile },
@@ -127,13 +153,96 @@ export default {
             title: 'Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ thị trường mở'
         }
     },
+    mounted() {
+        
+        
+        // if (this.currentDoc.highlight) {
+            let arrowLeft = document.querySelector('.el-carousel__arrow.el-carousel__arrow--left > i')
+            let arrowRight = document.querySelector('.el-carousel__arrow.el-carousel__arrow--right > i')
+
+            arrowLeft.style.display = "none";
+            arrowRight.style.display = "none";
+            
+            let imgTagLeft = document.createElement("img")
+            imgTagLeft.style.transform = "rotate(-180deg)";
+            imgTagLeft.setAttribute("src", "bx-chevron-right.svg")
+            this.insertAfter(imgTagLeft, arrowLeft)
+
+            let imgTagRight = document.createElement("img")
+            imgTagRight.setAttribute("src", "bx-chevron-right.svg")
+            this.insertAfter(imgTagRight, arrowRight)
+        // }
+        
+
+
+        
+    },
     computed: {
         ...mapState({
-            currentDoc: state => state.document.currentDoc,
+            // currentDoc: state => state.document.currentDoc,
+            currentDoc: state => state.document.currentDocCopyFromHTML,
+            listFavorite: state => state.search.listFavorite,
         })
     },
     watch: {
+        // currentDoc() {
+        //     let tempData = [
+        //         {'signNumber': "Số hiệu"},
+        //         {'subject': "Trích yếu"},
+        //         {'publisherName': "Đơn vị ban hành"},
+        //         {'documentName': "Loại tài liệu"},
+        //         {'signer': "Người ký"},
+        //         {'documentId': "Mã tài liệu"},
+        //         {'subject': "Test"},
+        //         // {'tags': "Nhãn"},
+        //         // {'categories': "Danh mục"},
+        //         {'promulgationDateStr': "Ngày ban hành"},
+        //         // {'status': "Trạng thái"},
+        //         // {'effectiveDate': "Ngày hiệu lực"},
+        //         // {'linkdoc': "Link document"},
+        //         // {'content': "Nội dung"},
+        //         // {'attachments': "Tập tin đính kèm"},
+        //     ];
+        //     let tempTableData = [];
+        //     this.dynamicTags = [];
+        //     tempData.forEach((obj) => {
+        //         Object.keys(obj).forEach((key) => {
+        //             if (key != "effectiveDate" && key != "tags" && key != "content" && key != 'subject') {
+        //                 tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
+        //             }
+        //             else if (key == "effectiveDate") {
+        //                 let tempList = new Date(this.currentDoc['_source'][key]).toLocaleDateString().split('/');
+        //                 tempTableData.push({metadata: obj[key], content: (tempList[1] + "/" + tempList[0] + "/" + tempList[2]) });
+        //             }
+        //             else if (key == "tags") {
+        //                 if (this.currentDoc['_source'][key]) {
+        //                     // console.log(this.currentDoc['_source'][key])
+        //                     tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
+        //                     for (let i = 0; i < this.currentDoc['_source'][key].length; i++) {                            
+        //                         this.dynamicTags.push(this.currentDoc['_source'][key][i]);
+        //                     }     
+        //                 }
+        //                 else {
+        //                     // console.log(this.currentDoc['_source'][key])
+        //                     tempTableData.push({metadata: obj[key], content: []})
+        //                 }
+        //             }
+        //             else if (key == "content") {
+        //                 this.textarea = this.currentDoc['_source'][key];
+        //             }
+        //             else if (key == 'subject') {
+        //                 // console.log('sbjs')
+        //                 this.title = this.currentDoc['_source'][key];
+        //             }
+        //         })
+        //     })
+        //     // console.log(this.currentDoc);
+        //     // console.log(tempTableData);
+        //     this.tableData = tempTableData;
+        //     // console.log(this.currentDoc);
+        // },
         currentDoc() {
+            console.log(this.currentDoc);
             let tempData = [
                 {'signNumber': "Số hiệu"},
                 {'subject': "Trích yếu"},
@@ -156,18 +265,18 @@ export default {
             tempData.forEach((obj) => {
                 Object.keys(obj).forEach((key) => {
                     if (key != "effectiveDate" && key != "tags" && key != "content" && key != 'subject') {
-                        tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
+                        tempTableData.push({metadata: obj[key], content: this.currentDoc[key]})
                     }
                     else if (key == "effectiveDate") {
-                        let tempList = new Date(this.currentDoc['_source'][key]).toLocaleDateString().split('/');
+                        let tempList = new Date(this.currentDoc[key]).toLocaleDateString().split('/');
                         tempTableData.push({metadata: obj[key], content: (tempList[1] + "/" + tempList[0] + "/" + tempList[2]) });
                     }
                     else if (key == "tags") {
-                        if (this.currentDoc['_source'][key]) {
+                        if (this.currentDoc[key]) {
                             // console.log(this.currentDoc['_source'][key])
-                            tempTableData.push({metadata: obj[key], content: this.currentDoc['_source'][key]})
-                            for (let i = 0; i < this.currentDoc['_source'][key].length; i++) {                            
-                                this.dynamicTags.push(this.currentDoc['_source'][key][i]);
+                            tempTableData.push({metadata: obj[key], content: this.currentDoc[key]})
+                            for (let i = 0; i < this.currentDoc[key].length; i++) {                            
+                                this.dynamicTags.push(this.currentDoc[key][i]);
                             }     
                         }
                         else {
@@ -176,11 +285,11 @@ export default {
                         }
                     }
                     else if (key == "content") {
-                        this.textarea = this.currentDoc['_source'][key];
+                        this.textarea = this.currentDoc[key];
                     }
                     else if (key == 'subject') {
                         // console.log('sbjs')
-                        this.title = this.currentDoc['_source'][key];
+                        this.title = this.currentDoc[key];
                     }
                 })
             })
@@ -191,6 +300,31 @@ export default {
         },
     },
     methods: {
+        ...mapActions('search', ['postFavorite', 'deleteFavorite']),
+        h3Click() {
+            this.$router.push({name: 'pdf'});
+        },
+        insertAfter(newNode, existingNode) {
+            existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+        },
+        addFavorite(docidx) {
+            let stringDocidx = docidx.toString()
+            this.listFavorite.push(stringDocidx)
+            this.postFavorite(stringDocidx)
+        },
+        removeFavorite(docidx) {
+            let stringDocidx = docidx.toString()
+            this.$confirm('Xác nhận bỏ đánh dấu tài liệu này?')
+                .then(_ => {
+                    // alert('yes')
+                    let tempIndex = this.listFavorite.indexOf(stringDocidx);
+                    this.listFavorite.splice(tempIndex, 1);
+                    this.deleteFavorite(stringDocidx)
+                })
+                .catch(_ => {
+                    // alert('no')
+                });
+        },
     },
 }
 </script>
@@ -282,6 +416,7 @@ letter-spacing: -0.01em;
 
 color: #272525;
 width: 593px;
+width: 650px;
 
 /* Inside auto layout */
 

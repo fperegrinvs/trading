@@ -7,6 +7,7 @@ export default {
   env: {
     // apiUrl: "https://devcore.deepnlp.net",
     apiUrl: "https://devcore.chinhta123.com",
+    apiUrlVersion2: "https://searchapi.chinhta123.com",
     fakeBackend: 'http://localhost:3098'
   },
   // Global page headers: https://go.nuxtjs.dev/config-head

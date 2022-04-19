@@ -6,8 +6,10 @@ import SearchPage from './pages/search/index.vue'
 import SearchPageNew from './pages/search-new/index.vue'
 import DetailPage from './pages/detail/index.vue'
 import ManagePage from './pages/manage/index.vue'
+import ManageWorkspacePage from './pages/manage/workspace'
 import HomePage from './pages/home/index.vue'
 import PdfPage from './pages/pdf/index.vue'
+import SavedPage from './pages/saved/index.vue'
 
 Vue.use(Router);
 
@@ -25,7 +27,8 @@ export const router = new Router({
     { path: '/home', component: HomePage, name: 'home' },
     { path: '/search-new', component: SearchPageNew, name: 'search-new' },
     { path: '/pdf', component: PdfPage, name: 'pdf' },
-
+    { path: '/manage/workspace', component: ManageWorkspacePage, name: 'workspace' },
+    { path: '/saved', component: SavedPage, name: 'saved' },
 
 
 

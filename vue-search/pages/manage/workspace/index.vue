@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Layout from '../layout/index.vue'
+import Layout from '../../layout/index.vue'
 import Vue from 'vue'
 import {mapState, mapActions} from 'vuex'
 Vue.component('Layout', Layout)

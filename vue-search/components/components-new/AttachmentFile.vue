@@ -1,4 +1,5 @@
 <template>
+<div class="wrap-attachment-file">
     <div class="attachment-file">
         <div class="file">
             <img src="@/assets/icons-figma/file.svg" alt="">
@@ -14,6 +15,8 @@
             </p>
         </div>
     </div>
+</div>
+    
 </template>
 <script>
 export default {
@@ -22,20 +25,25 @@ export default {
 }
 </script>
 <style scoped>
+.wrap-attachment-file {
+    display: inline-block;
+}
 .file {
     display: inline-block;
-    margin-top: 5px;
+    /* margin-top: 5px; */
 }
 .preview {
     display: inline-block;
 }
 .attachment-file {
+    padding: 3px;
     width: 200px;
     background: #F8F0F0;
 border-radius: 4px;
     margin-top: 12px;
     margin-right: 12px;
-    display: inline-block
+    /* display: inline-block */
+    display: flex;
      /* flex: 1 0 30%;  */
      /* explanation below */
   /* margin: 5px;

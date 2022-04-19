@@ -22,10 +22,10 @@
             
             <h1 class="title" @click="handleClickTitle($event)">
                 <template v-if="listFavorite.includes(data.docidx.toString())">
-                    <img class="icon-bx-star" src="@/assets/icons-figma/bx-star-hover.svg" style="display: inline; margin-right: 10px;" alt="">
+                    <img @click="removeFavorite(data.docidx)" class="icon-bx-star" src="@/assets/icons-figma/bx-star-hover.svg" style="display: inline; margin-right: 10px;" alt="">
                 </template>
                 <template v-else>
-                    <img class="icon-bx-star" src="@/assets/icons-figma/bx-star.svg" style="display: inline; margin-right: 10px;" alt="">
+                    <img @click="addFavorite(data.docidx)" class="icon-bx-star" src="@/assets/icons-figma/bx-star.svg" style="display: inline; margin-right: 10px;" alt="">
                 </template>
                 <!-- <img class="icon-bx-star" src="@/assets/icons-figma/bx-star.svg" style="display: inline; margin-right: 10px;" alt=""> -->
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015... -->
@@ -57,11 +57,31 @@ export default {
     name: 'result-component',
     props: ["data"],
     methods: {
-        ...mapActions('document', ['getDocById', 'getDocProps']),
+        ...mapActions('document', ['getDocById', 'getDocProps', 'setCurrentDoc']),
+        ...mapActions('search', ['postFavorite', 'deleteFavorite']),
         handleClickTitle(event) {
             console.log(this.data);
-            this.getDocById(this.data.docidx);
-        }
+            // this.getDocById(this.data.docidx);
+            this.setCurrentDoc(this.data);
+        },
+        addFavorite(docidx) {
+            let stringDocidx = docidx.toString()
+            this.listFavorite.push(stringDocidx)
+            this.postFavorite(stringDocidx)
+        },
+        removeFavorite(docidx) {
+            let stringDocidx = docidx.toString()
+            this.$confirm('Xác nhận bỏ đánh dấu tài liệu này?')
+                .then(_ => {
+                    // alert('yes')
+                    let tempIndex = this.listFavorite.indexOf(stringDocidx);
+                    this.listFavorite.splice(tempIndex, 1);
+                    this.deleteFavorite(stringDocidx)
+                })
+                .catch(_ => {
+                    // alert('no')
+                });
+        },
     },
     computed: {
         ...mapState({

@@ -4,6 +4,7 @@ const state = {
     status: '',
     docProps: {},
     error: {},
+    currentDocCopyFromHTML: {},
 }
 
 const actions = {
@@ -20,10 +21,16 @@ const actions = {
             data => commit('getDocPropsSuccess', data),
             error => commit('getDocPropsFailure', { error: error.toString() })
         )
+    },
+    setCurrentDoc({commit}, data) {
+        commit('setCurrentDoc', data);        
     }
 }
 
 const mutations = {
+    setCurrentDoc(state, data) {
+        state.currentDocCopyFromHTML = data;
+    },
     getDocById(state) {
         state.status = 'getDocByIdLoading';
     },

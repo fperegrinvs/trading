@@ -14,7 +14,24 @@ const actions = {
                 user => {
                     commit('loginSuccess', user);
 
-                    router.push('/search');
+                    router.push('/home');
+                },
+                error => {
+                    commit('loginFailure', error);
+                    dispatch('alert/error', error, { root: true });
+                }
+            );
+    },
+    loginVersion2({ dispatch, commit }, { username, password }) {
+        commit('loginVersion2Request', { username });
+    
+        accountService.loginVersion2(username, password)
+            .then(
+                user => {
+                    console.log(user);
+                    commit('loginSuccess', user);
+
+                    router.push('/home');
                 },
                 error => {
                     commit('loginFailure', error);
@@ -25,6 +42,10 @@ const actions = {
 }
 const mutations = {
     loginRequest(state, user) {
+        state.status = { loggingIn: true };
+        state.user = user;
+    },
+    loginVersion2Request(state, user) {
         state.status = { loggingIn: true };
         state.user = user;
     },

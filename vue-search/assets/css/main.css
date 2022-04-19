@@ -426,3 +426,74 @@ padding-left: unset;
 .el-table .el-table__cell {
     padding: 8px 0;
 }
+
+.el-carousel__item {
+    text-align: center;
+}
+
+.el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    /* line-height: 175px; */
+    margin: 0;
+    padding: 50px;
+  }
+
+  .el-carousel__item > h3 > em {
+    background: #FFFF00;
+    mix-blend-mode: multiply;
+    border-radius: 4px;
+  }
+
+  /* .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  } */
+
+  .el-carousel__arrow {
+      height: 24px;
+      width: 24px;
+  }
+
+  .el-carousel__arrow--left {
+      left: 1px;
+  }
+
+  .el-carousel__arrow--right {
+    right: 1px;
+}
+
+.el-carousel__button {
+    height: 10px;
+    width: 10px;
+    border-radius: 100%;
+}
+
+.el-carousel__indicator.is-active button {
+    opacity: unset;
+    background-color: #C86135;
+}
+
+.el-carousel__indicators--outside button {
+    opacity: unset;
+    background-color: #C4C4C4;
+}
+
+.li-user > div > span {
+    font-family: 'Noto Sans SC';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+color: #ffffff;
+}
+
+.test-input-sidebar-left > input {
+    line-height: 36px;
+height: 36px;
+width: 174px;
+}

@@ -39,9 +39,9 @@ export default {
         ...mapState('account', ['status'])
     },
     methods: {
-        ...mapActions('account', ['login']),
+        ...mapActions('account', ['login', 'loginVersion2']),
         handleSubmit: function() {
-            this.login({username: this.username, password: this.password});
+            this.loginVersion2({username: this.username, password: this.password});
         }
     }
 }

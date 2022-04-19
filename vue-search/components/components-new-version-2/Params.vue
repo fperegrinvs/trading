@@ -3,28 +3,63 @@
         <p class="text-1">
             Lọc kết quả
         </p>
-        <el-date-picker class="date-picker-params-component"
+        <ul class="test-ul-saved-page">
+            <li class="test-li-saved-page">
+                 <el-date-picker class="date-picker-params-component"
+                v-model="value"
+                type="date"
+                placeholder="Ngày ban hành" suffix-icon="el-icon-date">
+                </el-date-picker>
+                <!-- <div class="divider-new"></div> -->
+                <!-- <el-divider direction="vertical"></el-divider> -->
+            </li>
+            <li class="test-li-saved-page">
+                <el-select :class="value2.length > 0 ? 'need-to-highlight' : ''" @change="handleChangeSelect" popper-class="test-select-params-component" ref="test-select" style="    width: 170px;
+            height: 24px;" multiple filterable class="select-params-component test-select-dvbh" v-model="value2"
+            placeholder="Đơn vị ban hành">
+                    <template slot="prefix">
+                        <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
+                    </template>
+
+                    <el-option
+                        v-for="item in donViBanHanh.data"
+                        :key="item.name"
+                        :label="item.name"                            
+                        :value="item.name">
+                    </el-option>
+                    
+                    
+                </el-select>
+                <!-- <div class="divider-new"></div> -->
+                <!-- <el-divider direction="vertical"></el-divider> -->
+            </li>
+            <li class="test-li-saved-page">
+                <el-select style="    width: 115px;
+    height: 24px;" multiple filterable :class="value3.length > 0 ? 'need-to-highlight' : ''" class="select-params-component test-select-nk" v-model="value3" placeholder="Người ký">
+                    <template slot="prefix">
+                        <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
+                    </template>
+                    <el-option
+                        v-for="item in nguoiKyHienThiOTrangChinh.data"
+                        :key="item.name"
+                        :label="item.name"                            
+                        :value="item.name">
+                    </el-option>
+                </el-select>
+            </li>
+        </ul>
+        <!-- <el-date-picker class="date-picker-params-component"
             v-model="value"
             type="date"
             placeholder="Ngày ban hành" suffix-icon="el-icon-date">
-            <!-- <template slot="suffix">
-                <i class="el-icon-arrow-down"></i>
-            </template> -->
         </el-date-picker>
         <div class="divider-1"></div>
         <el-select :class="value2.length > 0 ? 'need-to-highlight' : ''" @change="handleChangeSelect" popper-class="test-select-params-component" ref="test-select" style="    width: 170px;
     height: 24px;" multiple filterable class="select-params-component test-select-dvbh" v-model="value2"
      placeholder="Đơn vị ban hành">
             <template slot="prefix">
-                <!-- <i class="el-icon-date icon-params-component"></i> -->
                 <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
             </template>
-            <!-- <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option> -->
 
             <el-option
                 v-for="item in donViBanHanh.data"
@@ -39,15 +74,8 @@
         <el-select style="    width: 115px;
     height: 24px;" multiple filterable :class="value3.length > 0 ? 'need-to-highlight' : ''" class="select-params-component test-select-nk" v-model="value3" placeholder="Người ký">
             <template slot="prefix">
-                <!-- <i class="el-icon-date icon-params-component"></i> -->
                 <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
             </template>
-            <!-- <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            </el-option> -->
             <el-option
                 v-for="item in nguoiKyHienThiOTrangChinh.data"
                 :key="item.name"
@@ -59,15 +87,8 @@
         <el-select style="    width: 103px;
     height: 24px;" multiple filterable class="select-params-component test-select-cd" :class="value4.length > 0 ? 'need-to-highlight' : ''" v-model="value4" placeholder="Chủ đề">
             <template slot="prefix">
-                <!-- <i class="el-icon-date icon-params-component"></i> -->
                 <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
             </template>
-            <!-- <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            </el-option> -->
             <el-option
                 v-for="item in chuDe.data"
                 :key="item.name"
@@ -79,15 +100,8 @@
         <el-select style="    width: 94px;
     height: 24px;" multiple filterable class="select-params-component test-select-n" :class="value5.length > 0 ? 'need-to-highlight' : ''" v-model="value5" placeholder="Nhãn">
             <template slot="prefix">
-                <!-- <i class="el-icon-date icon-params-component"></i> -->
                 <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
             </template>
-            <!-- <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            </el-option> -->
             <el-option
                 v-for="item in nhan.data"
                 :key="item.name"
@@ -99,23 +113,16 @@
         <el-select style="    width: 138px;
     height: 24px;" multiple filterable class="select-params-component test-select-ttt" :class="value6.length > 0 ? 'need-to-highlight' : ''" v-model="value6" placeholder="Thực thể tên">
             <template slot="prefix">
-                <!-- <i class="el-icon-date icon-params-component"></i> -->
                 <img src="@/assets/icons-figma/bx-select-multiple.svg" alt="">
             </template>
-            <!-- <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            </el-option> -->
             <el-option 
                 v-for="item in thucTheTen.data"
                 :key="item.name"
                 :label="item.name"                            
                 :value="item.name">
             </el-option>
-        </el-select>
-        <span style="/* Auto layout */
+        </el-select> -->
+        <!-- <span style="/* Auto layout */
 
 display: flex;
 flex-direction: row;
@@ -153,7 +160,7 @@ top: 62px;">
                 <span class="el-select__tags-text">{{item}}</span>
                 <i class="el-tag__close el-icon-close"></i>                
             </span>
-        </span>
+        </span> -->
     </div>
 </template>
 <script>
@@ -283,6 +290,16 @@ export default {
 }
 </script>
 <style scoped>
+li.test-li-saved-page + li.test-li-saved-page  { border-left: 1px solid rgba(0, 0, 0, 0.1); }
+.test-ul-saved-page {
+    display: flex;
+}
+.divider-new {
+    display: inline-block;
+    height: 16px;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.1);
+}
 .params {
     /* Auto layout */
 
@@ -294,6 +311,7 @@ padding: 8px 16px;
 position: absolute;
 height: 40px;
 left: 0px;
+left: 256px;
 right: 0px;
 top: 72px;
 
@@ -302,10 +320,10 @@ box-shadow: inset 0px -1px 0px #E5E5E5;
 }
 .text-1 {
     position: static;
-width: 147px;
+/* width: 147px;
 height: 24px;
 left: 16px;
-top: 8px;
+top: 8px; */
 
 font-family: 'Noto Sans';
 font-style: normal;

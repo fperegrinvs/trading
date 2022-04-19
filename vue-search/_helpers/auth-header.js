@@ -8,3 +8,13 @@ export function authHeader() {
         return {};
     }
 }
+
+export function authHeaderVersion2() {
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user && user.data) {
+        return { 'Authorization': 'Bearer ' + user.data };
+    } else {
+        return {};
+    }
+}

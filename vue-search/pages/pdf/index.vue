@@ -1,6 +1,6 @@
 <template>
 <div>
-    <vue-pdf-app ref="vuePdfAppTest" @pages-rendered="pagesRendered" style="height: 100vh;" pdf="/sample.pdf"  @open="openHandler">
+    <vue-pdf-app @pages-rendered="pagesRendered" style="height: 100vh;" pdf="/test.pdf"  @open="openHandler">
     </vue-pdf-app>
     <div style="
         position: absolute;
@@ -17,7 +17,7 @@ align-items: center;
     ">
         <div class="zoom">
             <template v-if="pdfApp">
-                <input type="number" min="1" :max="pdfApp.pagesCount" class="text-zoom" v-model='currentPage'/>
+                <input type="number" min="1" :max="pdfApp.pagesCount" class="text-zoom" v-model='currentPage' @keypress.enter.prevent="onEnter"/>
             </template>
             
         </div>
@@ -49,61 +49,63 @@ align-items: center;
                 <img src="@/assets/icons-figma/bx-zoom-in.svg" alt="">
             </el-button>
         </el-button-group>
+        <!-- <el-input placeholder="Please input" v-model="inputSearch" @keypress.enter.native.prevent="onEnterSearch"></el-input> -->
     </div>
+    
 </div>
     
     
 </template>
 <script>
 
-const getSidebar = () => ({
-  viewThumbnail: true,
-  viewOutline: true,
-  viewAttachments: true,
-});
-const getSecondaryToolbar = () => ({
-  secondaryPresentationMode: true,
-  secondaryOpenFile: true,
-  secondaryPrint: true,
-  secondaryDownload: true,
-  secondaryViewBookmark: true,
-  firstPage: true,
-  lastPage: true,
-  pageRotateCw: true,
-  pageRotateCcw: true,
-  cursorSelectTool: true,
-  cursorHandTool: true,
-  scrollVertical: true,
-  scrollHorizontal: true,
-  scrollWrapped: true,
-  spreadNone: true,
-  spreadOdd: true,
-  spreadEven: true,
-  documentProperties: true,
-});
-const getToolbarViewerLeft = () => ({
-  findbar: true,
-  previous: true,
-  next: true,
-  pageNumber: true,
-});
-const getToolbarViewerRight = () => ({
-  presentationMode: true,
-  openFile: true,
-  print: true,
-  download: true,
-  viewBookmark: true,
-});
-const getToolbarViewerMiddle = () => ({
-  zoomOut: true,
-  zoomIn: true,
-  scaleSelectContainer: true,
-});
-const getToolbar = () => ({
-  toolbarViewerLeft: getToolbarViewerLeft(),
-  toolbarViewerRight: getToolbarViewerRight(),
-  toolbarViewerMiddle: getToolbarViewerMiddle(),
-});
+// const getSidebar = () => ({
+//   viewThumbnail: true,
+//   viewOutline: true,
+//   viewAttachments: true,
+// });
+// const getSecondaryToolbar = () => ({
+//   secondaryPresentationMode: true,
+//   secondaryOpenFile: true,
+//   secondaryPrint: true,
+//   secondaryDownload: true,
+//   secondaryViewBookmark: true,
+//   firstPage: true,
+//   lastPage: true,
+//   pageRotateCw: true,
+//   pageRotateCcw: true,
+//   cursorSelectTool: true,
+//   cursorHandTool: true,
+//   scrollVertical: true,
+//   scrollHorizontal: true,
+//   scrollWrapped: true,
+//   spreadNone: true,
+//   spreadOdd: true,
+//   spreadEven: true,
+//   documentProperties: true,
+// });
+// const getToolbarViewerLeft = () => ({
+//   findbar: true,
+//   previous: true,
+//   next: true,
+//   pageNumber: true,
+// });
+// const getToolbarViewerRight = () => ({
+//   presentationMode: true,
+//   openFile: true,
+//   print: true,
+//   download: true,
+//   viewBookmark: true,
+// });
+// const getToolbarViewerMiddle = () => ({
+//   zoomOut: true,
+//   zoomIn: true,
+//   scaleSelectContainer: true,
+// });
+// const getToolbar = () => ({
+//   toolbarViewerLeft: getToolbarViewerLeft(),
+//   toolbarViewerRight: getToolbarViewerRight(),
+//   toolbarViewerMiddle: getToolbarViewerMiddle(),
+// });
 
 import VuePdfApp from "vue-pdf-app";
 import "vue-pdf-app/dist/icons/main.css";
@@ -113,52 +115,52 @@ export default {
     name: 'pdf-page',
     data() {
         return {
-            idConfig: {
-                cursorHandTool: "vuePdfAppCursorHandTool",
-                cursorSelectTool: "vuePdfAppCursorSelectTool",
-                documentProperties: "vuePdfAppDocumentProperties",
-                download: "vuePdfAppDownload",
-                findbar: "vuePdfAppFindbar",
-                findEntireWord: "vuePdfAppFindEntireWord",
-                findHighlightAll: "vuePdfAppFindHighlightAll",
-                findInput: "vuePdfAppFindInput",
-                findMessage: "vuePdfAppFindMessage",
-                findMatchCase: "vuePdfAppFindMatchCase",
-                findNext: "vuePdfAppFindNext",
-                findPrevious: "vuePdfAppFindPrevious",
-                findResultsCount: "vuePdfAppFindResultsCount",
-                firstPage: "vuePdfAppFirstPage",
-                lastPage: "vuePdfAppLastPage",
-                nextPage: "vuePdfAppNextPage",
-                numPages: "vuePdfAppNumPages",
-                openFile: "vuePdfAppOpenFile",
-                pageNumber: "vuePdfAppPageNumber",
-                pageRotateCcw: "vuePdfAppPageRotateCcw",
-                pageRotateCw: "vuePdfAppPageRotateCw",
-                presentationMode: "vuePdfAppPresentationMode",
-                previousPage: "vuePdfAppPreviousPage",
-                print: "vuePdfAppPrint",
-                scrollHorizontal: "vuePdfAppScrollHorizontal",
-                scrollVertical: "vuePdfAppScrollVertical",
-                scrollWrapped: "vuePdfAppScrollWrapped",
-                sidebarToggle: "vuePdfAppSidebarToggle",
-                spreadEven: "vuePdfAppSpreadEven",
-                spreadNone: "vuePdfAppSpreadNone",
-                spreadOdd: "vuePdfAppSpreadOdd",
-                toggleFindbar: "vuePdfAppToggleFindbar",
-                viewAttachments: "vuePdfAppViewAttachments",
-                viewBookmark: "vuePdfAppViewBookmark",
-                viewOutline: "vuePdfAppViewOutline",
-                viewThumbnail: "vuePdfAppViewThumbnail",
-                zoomIn: "vuePdfAppZoomIn",
-                zoomOut: "vuePdfAppZoomOut",
-            },
-            config: {
-                sidebar: getSidebar(),
-                secondaryToolbar: getSecondaryToolbar(),
-                toolbar: getToolbar(),
-                errorWrapper: true,
-            },
+            // idConfig: {
+            //     cursorHandTool: "vuePdfAppCursorHandTool",
+            //     cursorSelectTool: "vuePdfAppCursorSelectTool",
+            //     documentProperties: "vuePdfAppDocumentProperties",
+            //     download: "vuePdfAppDownload",
+            //     findbar: "vuePdfAppFindbar",
+            //     findEntireWord: "vuePdfAppFindEntireWord",
+            //     findHighlightAll: "vuePdfAppFindHighlightAll",
+            //     findInput: "vuePdfAppFindInput",
+            //     findMessage: "vuePdfAppFindMessage",
+            //     findMatchCase: "vuePdfAppFindMatchCase",
+            //     findNext: "vuePdfAppFindNext",
+            //     findPrevious: "vuePdfAppFindPrevious",
+            //     findResultsCount: "vuePdfAppFindResultsCount",
+            //     firstPage: "vuePdfAppFirstPage",
+            //     lastPage: "vuePdfAppLastPage",
+            //     nextPage: "vuePdfAppNextPage",
+            //     numPages: "vuePdfAppNumPages",
+            //     openFile: "vuePdfAppOpenFile",
+            //     pageNumber: "vuePdfAppPageNumber",
+            //     pageRotateCcw: "vuePdfAppPageRotateCcw",
+            //     pageRotateCw: "vuePdfAppPageRotateCw",
+            //     presentationMode: "vuePdfAppPresentationMode",
+            //     previousPage: "vuePdfAppPreviousPage",
+            //     print: "vuePdfAppPrint",
+            //     scrollHorizontal: "vuePdfAppScrollHorizontal",
+            //     scrollVertical: "vuePdfAppScrollVertical",
+            //     scrollWrapped: "vuePdfAppScrollWrapped",
+            //     sidebarToggle: "vuePdfAppSidebarToggle",
+            //     spreadEven: "vuePdfAppSpreadEven",
+            //     spreadNone: "vuePdfAppSpreadNone",
+            //     spreadOdd: "vuePdfAppSpreadOdd",
+            //     toggleFindbar: "vuePdfAppToggleFindbar",
+            //     viewAttachments: "vuePdfAppViewAttachments",
+            //     viewBookmark: "vuePdfAppViewBookmark",
+            //     viewOutline: "vuePdfAppViewOutline",
+            //     viewThumbnail: "vuePdfAppViewThumbnail",
+            //     zoomIn: "vuePdfAppZoomIn",
+            //     zoomOut: "vuePdfAppZoomOut",
+            // },
+            // config: {
+            //     sidebar: getSidebar(),
+            //     secondaryToolbar: getSecondaryToolbar(),
+            //     toolbar: getToolbar(),
+            //     errorWrapper: true,
+            // },
             //value1: slider
             value1: 100,
             options: [
@@ -210,10 +212,27 @@ export default {
             //value: select
             value: 100,
             pdfApp: null,
-            currentPage: 1
+            currentPage: 1,
+            inputSearch: '',
         };
     },
     methods: {
+        onEnterSearch() {
+            // console.log('abcd')
+            this.pdfApp.pdfViewer.findController.executeCommand('find',{
+                caseSensitive: false, 
+                findPrevious: undefined,
+                highlightAll: true, 
+                phraseSearch: true, 
+                query: this.inputSearch
+            })
+        },
+        onEnter() {
+            // console.log('testtt')
+            if (this.currentPage != '' && this.currentPage != '0' && this.currentPage >= 1 && this.currentPage <= this.pdfApp.pagesCount) {
+                this.pdfApp.pdfViewer.currentPageNumber = parseInt(this.currentPage);
+            }
+        },
         handleClickButtonZoomIn() {
             // console.log('zom in')
             document.getElementById('zoomIn').click();
@@ -271,6 +290,7 @@ export default {
             document.getElementById('sidebarContent').style.marginTop = "4px";
             document.getElementById('sidebarContent').style.backgroundColor = "#FCFBFB";
             document.getElementById('sidebarContent').style.boxShadow = "unset";
+            // document.getElementById('sidebarToggle').click()
             // this.createThumbnailNumber();
         },
         createThumbnailNumber () {
@@ -310,13 +330,16 @@ export default {
         },
         pagesRendered (pdfApp) {
             this.pdfApp = pdfApp;
+            console.log(this.pdfApp);
             let testString = 'Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt...'
             document.querySelector('.test-appended-toolbarViewer').innerHTML = `<p class='text-large-title-pdf-header'>${testString} — <strong class='text-small-page-pdf-header'>Trang ${this.pdfApp.page}/${this.pdfApp.pagesCount}</strong></p>`
 
 
             this.currentPage = this.pdfApp.page;
-            this.value = Math.round(this.pdfApp.pdfViewer.currentScaleValue * 100)
-            this.value1 = Math.round(this.pdfApp.pdfViewer.currentScaleValue * 100)
+            // this.value = Math.round(this.pdfApp.pdfViewer.currentScaleValue * 100)
+            // this.value1 = Math.round(this.pdfApp.pdfViewer.currentScaleValue * 100)
+            this.value = Math.round(this.pdfApp.pdfViewer.currentScale * 100)
+            this.value1 = Math.round(this.pdfApp.pdfViewer.currentScale * 100)
 
             let _this = this;
             let _document = document;
@@ -324,7 +347,7 @@ export default {
             pdfApp.eventBus.on('pagechanging', (event) => {
                 _this.currentPage = event.pageNumber
                 
-
+                
                 _document.querySelector('.text-small-page-pdf-header').textContent = `Trang ${_this.currentPage}/${_this.pdfApp.pagesCount}`;
                 // if (this.highLight.X !== null) {
                 //     this.removeCurrentHighLight(this.highLight.X, this.highLight.Y, this.highLight.widthHtml, this.highLight.H, this.highLight.ctxDomCanvasHtml2)
@@ -343,6 +366,19 @@ export default {
                     _this.value1 = pageScale
                 }
             })
+            if (!document.getElementById('outerContainer').classList.contains('sidebarOpen')) {
+                document.getElementById('sidebarToggle').click()
+            }
+            
+            console.log(this.pdfApp)
+                        this.pdfApp.pdfViewer.findController.executeCommand('find', {
+                            caseSensitive: false, 
+                            findPrevious: undefined,
+                            highlightAll: true, 
+                            phraseSearch: true, 
+                            query: "lorem"
+                        });
+            // document.getElementById('sidebarToggle').click()
 
         }
     },
@@ -354,25 +390,27 @@ export default {
         // currentPage() {
         //     if (this.currentPage != '' && this.currentPage != '0' && this.currentPage >= 1 && this.currentPage <= this.pdfApp.pagesCount) {
         //         this.pdfApp.pdfViewer.currentPageNumber = parseInt(this.currentPage);
-        //         document.querySelector('.text-small-page-pdf-header').textContent = `Trang ${this.pdfApp.page}/${this.pdfApp.pagesCount}`;
         //     }
             
         // },
         value1() {
             // this.value = this.value1;
-            if (this.value1 != 0) {
+            if (this.value1 != 0 && this.value1) {
                 this.pdfApp.pdfViewer.currentScaleValue = this.value1 / 100
             }
         },
         value() {
-            if (typeof this.value === 'number') {
-                this.pdfApp.pdfViewer.currentScaleValue = this.value / 100
-            } else {
-                if (this.value != '0') {
-                    this.pdfApp.pdfViewer.currentScaleValue = this.value
+            if (this.value) {
+                if (typeof this.value === 'number') {
+                    this.pdfApp.pdfViewer.currentScaleValue = this.value / 100
+                } else {
+                    if (this.value != '0') {
+                        this.pdfApp.pdfViewer.currentScaleValue = this.value
+                    }
+                    
                 }
-                
             }
+            
         }
     }
 }
@@ -556,7 +594,8 @@ border-radius: 4px;
     border-radius: 4px
 }
 .thumbnailSelectionRing {
-    width: 130px !important;
+    /* width: 130px !important; */
+    width: 144px !important;
     height: 169px !important;
 }
 .thumbnailImage {
