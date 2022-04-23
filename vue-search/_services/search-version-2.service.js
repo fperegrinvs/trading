@@ -15,11 +15,12 @@ function post(by_title, page, size, text) {
         // headers: { 'Content-Type': 'application/json' },
         headers: {
             'Authorization': authHeaderVersion2().Authorization,
+            'Content-Type': 'application/json'
         },
         
-        body: JSON.stringify({by_title, page, size, text})        
+        body: JSON.stringify({by_title: by_title, page: page, size: size, text: text})        
     }
-    return fetch(`${process.env.apiUrlVersion2}/search`,
+    return fetch(`${process.env.apiUrlVersion2}/search/`,
             requestOptions).then(handleResponse)
 }
 

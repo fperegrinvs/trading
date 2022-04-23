@@ -1,6 +1,6 @@
 <template>
 <div>
-    <vue-pdf-app @pages-rendered="pagesRendered" style="height: 100vh;" pdf="/test.pdf"  @open="openHandler">
+    <vue-pdf-app @pages-rendered="pagesRendered" style="height: 100vh;" :pdf="pdfUrl"  @open="openHandler">
     </vue-pdf-app>
     <div style="
         position: absolute;
@@ -109,12 +109,22 @@ align-items: center;
 
 import VuePdfApp from "vue-pdf-app";
 import "vue-pdf-app/dist/icons/main.css";
+// import { authHeaderVersion2 } from "../../_helpers"
+
 import Vue from 'vue'
 Vue.component("vue-pdf-app", VuePdfApp)
+import {mapState, mapActions} from 'vuex'
 export default {
     name: 'pdf-page',
+    computed: {
+        ...mapState({
+            pdfUrl: state => state.searchNewVersion.currentPdfUrl,
+            searchFromDetail: state => state.search.searchFromDetail
+        })
+    },
     data() {
         return {
+            flag: false,
             // idConfig: {
             //     cursorHandTool: "vuePdfAppCursorHandTool",
             //     cursorSelectTool: "vuePdfAppCursorSelectTool",
@@ -214,9 +224,27 @@ export default {
             pdfApp: null,
             currentPage: 1,
             inputSearch: '',
+            pdfSrc: null,
         };
     },
     methods: {
+        ...mapActions("searchNewVersion", ["setCurrentPdfUrl"]),
+        // getPdf () {
+        //     const requestOptions = {
+        //         method: 'POST',
+        //         // headers: { 'Content-Type': 'application/json' },
+        //         headers: {
+        //             'Authorization': authHeaderVersion2().Authorization,
+        //             'Content-Type': 'application/json'
+        //         },
+        //         responseType: 'blob'        
+        //     }
+        //     fetch(`https://searchapi.chinhta123.com/static/58230925-QĐ-BKHCN/925-QĐ-BKHCN.pdf`, requestOptions).then((res) => {
+        //         const blob = new Blob([res.data])
+        //         this.pdfSrc = URL.createObjectURL(blob)
+        //     })
+        // },
+
         onEnterSearch() {
             // console.log('abcd')
             this.pdfApp.pdfViewer.findController.executeCommand('find',{
@@ -282,6 +310,12 @@ export default {
             let div_buttonX = document.createElement('div');
             div_buttonX.innerHTML ="<img src='close.svg'/>";
             div_buttonX.classList.add('test-button-appended-toolbarViewer');
+            let _this = this;
+            div_buttonX.onclick = function() {
+                // _this.flag = true;
+                // _this.setCurrentPdfUrl("");
+                _this.$router.push({name: 'detail'})
+            }
             // div.classList.add('test-appended-toolbarViewer');
             this.insertAfter(div_buttonX, toolbarViewer);
             document.getElementById('toolbarContainer').style.height = "40px";
@@ -331,6 +365,14 @@ export default {
         pagesRendered (pdfApp) {
             this.pdfApp = pdfApp;
             console.log(this.pdfApp);
+            console.log(this.searchFromDetail);
+            // this.pdfApp.pdfViewer.findController.executeCommand('find',{
+            //     caseSensitive: false, 
+            //     findPrevious: undefined,
+            //     highlightAll: true, 
+            //     phraseSearch: true, 
+            //     query: this.searchFromDetail
+            // })
             let testString = 'Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt...'
             document.querySelector('.test-appended-toolbarViewer').innerHTML = `<p class='text-large-title-pdf-header'>${testString} — <strong class='text-small-page-pdf-header'>Trang ${this.pdfApp.page}/${this.pdfApp.pagesCount}</strong></p>`
 
@@ -376,13 +418,14 @@ export default {
                             findPrevious: undefined,
                             highlightAll: true, 
                             phraseSearch: true, 
-                            query: "lorem"
+                            query: this.searchFromDetail
                         });
             // document.getElementById('sidebarToggle').click()
 
         }
     },
     mounted() {
+        // this.getPdf();
         // document.getElementById('outerContainer').classList.add('sidebarOpen');
         this.myCustomFunction();
     },
@@ -571,6 +614,7 @@ text-align: center;
 #thumbnailView {
     overflow: hidden;
 }
+
 .test-button-appended-toolbarViewer {
     float: right;
 }
@@ -587,6 +631,14 @@ border-radius: 4px;
 .pdf-app #thumbnailView {
     padding-top: 17px;
     overflow: hidden;
+}
+.pdf-app #thumbnailView::-webkit-scrollbar {
+    display: none;
+}
+.pdf-app #thumbnailView {
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; 
 }
 .pdf-app .thumbnailImage {
     box-shadow: unset;

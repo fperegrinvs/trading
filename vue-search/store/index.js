@@ -18,6 +18,7 @@ import { document } from './document.module'
 import { attachment } from './attachment.module'
 import { user } from './user.module'
 import { workspace } from './workspace.module'
+import { searchNewVersion } from './search-new-version.module'
 
 Vue.use(Vuex);
 
@@ -32,6 +33,7 @@ export default () => new Vuex.Store({
         document,
         attachment,
         user,
-        workspace
+        workspace,
+        searchNewVersion
     }
 });

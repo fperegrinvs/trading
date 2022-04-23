@@ -21,6 +21,13 @@ const actions = {
             error => commit('getUserFailure', { error: error.toString() })
         )
     },
+    putUser({commit}, data) {
+        commit('putUser');
+        userService.put(data.username, data.password, data.name, data.is_superuser).then(
+            data => commit('putUserSuccess', data),
+            error => commit('putUserFailure', { error: error.toString() })
+        )
+    },
 }
 
 const mutations = {
@@ -44,6 +51,17 @@ const mutations = {
     },
     getUserFailure(state, error) {
         state.status = 'getUserFailure';
+        state.error = error;
+    },
+    putUser(state) {
+        state.status = 'putUser';
+    },
+    putUserSuccess(state, data) {
+        state.status = 'putUserSuccess';
+        state.response = data;
+    },
+    putUserFailure(state, error) {
+        state.status = 'putUserFailure';
         state.error = error;
     },
 }

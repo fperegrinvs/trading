@@ -14,6 +14,7 @@ function post(name, description) {
         // headers: { 'Content-Type': 'application/json' },
         headers: {
             'Authorization': authHeaderVersion2().Authorization,
+            'Content-Type': 'application/json'
         },
         
         body: JSON.stringify({name, description})        
@@ -28,6 +29,7 @@ function postDocToWokspace(id_workspace, id_doc) {
         // headers: { 'Content-Type': 'application/json' },
         headers: {
             'Authorization': authHeaderVersion2().Authorization,
+            'Content-Type': 'application/json'
         },
         
         body: JSON.stringify({document_id: id_doc})        
@@ -68,6 +70,7 @@ function deleteWorkspace(id) {
         // headers: { 'Content-Type': 'application/json' },
         headers: {
             'Authorization': authHeaderVersion2().Authorization,
+            'Content-Type': 'application/json'
         },
         
         body: JSON.stringify({id: id})        
@@ -82,11 +85,12 @@ function deleteDocOfWorkspace(workspace_id, doc_id) {
         // headers: { 'Content-Type': 'application/json' },
         headers: {
             'Authorization': authHeaderVersion2().Authorization,
+            'Content-Type': 'application/json'
         },
         
         body: JSON.stringify({document_id: doc_id})        
     }
-    return fetch(`${process.env.apiUrlVersion2}/workspace/${workspace_id}`,
+    return fetch(`${process.env.apiUrlVersion2}/workspace/${workspace_id}/document`,
             requestOptions).then(handleResponse)
 }
 

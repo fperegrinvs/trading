@@ -151,6 +151,10 @@ export default {
 
 
 
+            currentSearchSaved: state => state.searchNewVersion.currentSearchSaved,
+
+
+
 
             prop: state => state.searchNewVersion.prop,
             propSigner: state => state.searchNewVersion.propSigner,
@@ -199,9 +203,13 @@ export default {
                 }
             })
         },
-        searchFromDetail() {
-            this.text = this.searchFromDetail;
+        currentSearchSaved() {
+            this.text = this.currentSearchSaved;
             console.log(this.text);
+        },
+        searchFromDetail() {
+            // this.text = this.searchFromDetail;
+            // console.log(this.text);
         //     this.getSearchAPI({text:this.text, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc", publisherName: this.value2});
         },
         value2() {

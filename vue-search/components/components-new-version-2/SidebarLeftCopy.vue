@@ -2,28 +2,34 @@
     <div class="sidebar-left">
         <div class="section">
             <h1 class="title">
-                Chuyên mục lưu trữ
+                Loại văn bản
             </h1>
             <div class="categories">
-                <!-- <div v-for="index in 4" :key="index" class="field">
-                    <div class="icon">
-                        <img src="@/assets/icons-figma/bx-folder.svg" alt="">
-                    </div>
-                    <div class="text">
-                        Tất cả văn bản đã lưu
-                    </div>
-                </div> -->
-                <div class="field" :class="{chosen: currentWorkspace.id == item.id}" v-for="(item,index) in dataWorkspace" :key="index + 'dataWorkspace'" @click="chooseCurrentWorkspace(item)">
+                <!-- <div class="field" :class="{chosen: currentWorkspace.id == item.id}" v-for="(item,index) in dataWorkspace" :key="index + 'dataWorkspace'" @click="chooseCurrentWorkspace(item)">
                     <div class="icon">
                         <img src="@/assets/icons-figma/bx-folder.svg" alt="">
                     </div>
                     <div class="text">
                         {{item.name}}
                     </div>
-                </div>
+                </div> -->
+
+                
+                <el-tree
+                    :data="data"
+                    show-checkbox
+                    default-expand-all
+                    node-key="id"
+                    ref="tree"
+                    highlight-current
+                    :props="defaultProps">
+                </el-tree>
+
+
+
             </div>
         </div>
-        <div class="new">
+        <!-- <div class="new">
             <h1 class="title">
                 Thêm chuyên mục mới
             </h1>
@@ -31,7 +37,7 @@
                 <el-input class="test-input-sidebar-left" placeholder="Nhập tên chuyên mục" v-model="input" @keypress.enter.native.prevent="onEnter"></el-input>
                 <el-button class="test-button-sidebar-left">+</el-button>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -41,6 +47,95 @@ export default {
         return {
             input: '',
             currentWorkspaceHTML: '',
+            data: [{
+                id: 1,
+                label: 'Bộ Tài chính',
+                children: [{
+                    id: 4,
+                    label: 'Công văn',
+                },
+                {
+                    id: 1001,
+                    label: 'Nghị định',
+                },
+                {
+                    id: 1002,
+                    label: 'Thông tư liên tịch',
+                },
+                {
+                    id: 1003,
+                    label: 'Chỉ thị',
+                },
+                {
+                    id: 1004,
+                    label: 'Công văn điều hành',
+                }
+                ]
+                }, {
+                id: 2,
+                label: 'Bộ Giao thông vận tải',
+                children: [{
+                    id: 5,
+                    label: 'Level two 2-1'
+                }, {
+                    id: 6,
+                    label: 'Level two 2-2'
+                }]
+                }, {
+                id: 3,
+                label: 'Bộ Công thương',
+                children: [{
+                    id: 2001,
+                    label: 'Công văn',
+                },
+                {
+                    id: 2002,
+                    label: 'Nghị định',
+                },
+                {
+                    id: 2003,
+                    label: 'Thông tư liên tịch',
+                },
+                {
+                    id: 2004,
+                    label: 'Chỉ thị',
+                },
+                {
+                    id: 2005,
+                    label: 'Công văn điều hành',
+                }
+                ]
+            },
+            {
+                id: 3006,
+                label: "Văn phòng chính phủ",
+                children: [{
+                    id: 3001,
+                    label: 'Công văn',
+                },
+                {
+                    id: 3002,
+                    label: 'Nghị định',
+                },
+                {
+                    id: 3003,
+                    label: 'Thông tư liên tịch',
+                },
+                {
+                    id: 3004,
+                    label: 'Chỉ thị',
+                },
+                {
+                    id: 3005,
+                    label: 'Công văn điều hành',
+                }
+                ]
+            }
+            ],
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            }
         }
     },
     computed: {
@@ -90,14 +185,6 @@ export default {
 }
 </script>
 <style scoped>
-.sidebar-left::-webkit-scrollbar {
-    display: none;
-}
-.sidebar-left {
-    overflow-y: scroll;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none; 
-}
 .categories > .field.chosen > .icon > img {
     filter: invert(42%) sepia(20%) saturate(2241%) hue-rotate(336deg) brightness(100%) contrast(81%);
 }
@@ -169,9 +256,6 @@ width: 256px;
 left: 0px;
 top: 72px;
 bottom: 0px;
-
-
-height: 680px;
 
 background: #FFFFFF;
 box-shadow: inset -1px 0px 0px #E5E5E5;

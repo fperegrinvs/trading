@@ -1,22 +1,11 @@
 <template>
-    <LayoutNewVersion2>        
-        <!-- <template v-for="item in tableData" >
-            <result-component :data="item" :key="item._id"/>
-        </template>
-        <template v-slot:layout-for-search-right>
-            <result-right-component />
-        </template> -->
-        <template v-slot:result-workspace>
+    <LayoutForSearchPage>        
+        <!-- <template v-slot:result-workspace>
             <result-workspace />
-        </template>
-        <!-- <template v-if="dataSearchNewVersion.length > 0">
-            <template v-for="item in dataSearchNewVersion.data" >
-                <result-new-version-component :data="item" :key="item._id"/>
-            </template>
         </template> -->
         <template v-slot:params>
             <span style="/* Auto layout */
-
+    /*left: 50px;*/
 display: flex;
 flex-direction: row;
 align-items: flex-start;
@@ -25,74 +14,100 @@ padding: 0px;
 position: absolute;
     width: 100%;
     height: 24px;
-    left: 68px;
-    top: 265px;">
-            <span v-if="currentSearchSaved != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">
-                    {{currentSearchSaved}}
-                </span>
-                <i class="el-tag__close el-icon-close"></i>
-            </span>
-            <!-- <span v-for="index in 4" :key="index" class="el-tag el-tag--info el-tag--small el-tag--light">
+    
+
+    top: 134px;">
+            <span v-if="searchFromDetail != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
                 <span class="el-select__tags-text">
                     {{searchFromDetail}}
                 </span>
                 <i class="el-tag__close el-icon-close"></i>
-            </span> -->
-            <!-- <span v-for="(item, index) in value2" :key="index + 'dvbh'" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">{{item}}</span>
-                <i class="el-tag__close el-icon-close"></i>                
             </span>
-            <span v-for="(item, index) in value3" :key="index + 'nk'" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">{{item}}</span>
-                <i class="el-tag__close el-icon-close"></i>                
-            </span>
-            <span v-for="(item, index) in value4" :key="index + 'cd'" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">{{item}}</span>
-                <i class="el-tag__close el-icon-close"></i>                
-            </span>
-            <span v-for="(item, index) in value5" :key="index + 'n'" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">{{item}}</span>
-                <i class="el-tag__close el-icon-close"></i>                
-            </span>
-            <span v-for="(item, index) in value6" :key="index + 'ttt'" class="el-tag el-tag--info el-tag--small el-tag--light">
-                <span class="el-select__tags-text">{{item}}</span>
-                <i class="el-tag__close el-icon-close"></i>                
-            </span> -->
+            
         </span>
         </template>
-        <template v-for="item in docsOfWorkspace.data" >
-                <result-doc-in-workspace v-if="item.title.toLowerCase().includes(currentSearchSaved.toLowerCase())" :data="item" :key="item._id"/>
+        <template v-for="item in dataSearchNewVersion.data" >
+                <result-new-version-component :data="item" :key="item._id"/>
+                
         </template>
-        <!-- <template v-slot:test-bookmark>
-            <bookmark />
-        </template> -->
-    </LayoutNewVersion2>
+        <div v-if="dataSearchNewVersion.data" class="block" style="position: fixed; bottom: 0px; background-color: #453630;">
+                <el-pagination
+                    @size-change="handleSizeChange2"
+                    @current-change="handleCurrentChange2"
+                    :current-page.sync="dataSearchNewVersion.page"
+                    :page-sizes="[10, 20, 50]"
+                    :page-size="dataSearchNewVersion.size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="dataSearchNewVersion.totalItems">
+                </el-pagination>
+        </div>
+        <template v-slot:result-right>
+            <!-- <h1>Hello</h1> -->
+            <!-- <div id="chart">
+                <ApexCharts v-show="series.length > 0" ref="demoChart" type="bar" height="380" :options="chartOptions" :series="series"/> -->
+
+            <div id="chart">
+            <ApexCharts v-show="currentSeries.length > 0" ref="demoChart" type="bar" height="380" :options="currentChartOptions" :series="currentSeries"/>
+                
+            </div>
+
+            <div id="chartNK">
+                <ApexCharts v-show="currentSeriesNK.length > 0" ref="demoChartNK" type="bar" height="380" :options="currentChartOptionsNK" :series="currentSeriesNK"/>
+            </div>
+
+            
+
+            <!-- <div id="chartNK">
+                <ApexCharts v-show="seriesNK.length > 0" ref="demoChartNK" type="bar" height="380" :options="chartOptionsNK" :series="seriesNK"/>
+            </div> -->
+        </template>
+        <template v-slot:show-time>
+            <el-card v-if="time_taken > 0">
+                <h1>Thời gian gọi search api: {{time_taken}} ms</h1>
+            </el-card>
+        </template>
+    </LayoutForSearchPage>
 </template>
 <script>
 // import PieChart from '../../components/PieChart.vue'
 // import BarChart from '../../components/BarChart.vue'
 // import ResultComponent from '../../components/components-new/Result.vue'
+import TestApexCharts from '../../components/ApexCharts.vue'
 import ResultComponent from '../../components/components-new-version-2/Result.vue'
-import ResultDocInWorkspaceComponent from '../../components/components-new-version-2/ResultDocInWorkspace.vue'
 // import ResultRightComponent from '../../components/components-new/ResultRight.vue'
 import resultWorkspace from '../../components/components-new-version-2/ResultWorkspace.vue'
 import bookmark from '../../components/components-new-version-2/Bookmark.vue'
 import LayoutNewVersion2 from '../layout-new-version-2/index.vue'
+import LayoutForSearchPage from '../layout-new-version-2/layout-for-search-page.vue'
+import pdfPage from '../pdf/index.vue'
 import Vue from 'vue'
-Vue.component('LayoutNewVersion2', LayoutNewVersion2)
+Vue.component('LayoutForSearchPage', LayoutForSearchPage)
 Vue.component('result-workspace', resultWorkspace)
-Vue.component('result-doc-in-workspace', ResultDocInWorkspaceComponent)
 Vue.component('result-new-version-component', ResultComponent)
 Vue.component('bookmark', bookmark)
+Vue.component('pdfPage', pdfPage)
+Vue.component('test-apex-charts', TestApexCharts)
+
+
+
+import ApexCharts from 'vue-apexcharts'
+// Vue.component("apexchart", ApexCharts)
+
+
+
 // Vue.component('BarChart', BarChart)
 // Vue.component('PieChart', PieChart)
 // Vue.component('result-component', ResultComponent)
 // Vue.component('result-right-component', ResultRightComponent)
 import { mapState, mapActions } from 'vuex'
+// import ApexCharts from '../../components/ApexCharts.vue'
 export default {
+  components: { ApexCharts },
     data() {
       return {
+          time_taken: 0,
+        // currentSize: 20,
+        // currentPage4: 1,
         options: [{
           value: 'Option1',
           label: 'Option1'
@@ -156,6 +171,164 @@ export default {
         topFilter: false,
         hideColumns: [],
         realityHideColumns: [],
+
+
+
+
+        statistics: [
+            [],
+            [],
+            []
+        ],
+        testTestHolder2: [],
+        testTestHolder3: [],
+        series: [],
+        seriesNK: [],
+        // series: [{
+        //     name: 'Marine Sprite',
+        //     data: [44, 55, 41, 37, 22, 43, 21]
+        //   }, {
+        //     name: 'Striking Calf',
+        //     data: [53, 32, 33, 52, 13, 43, 32]
+        //   }, {
+        //     name: 'Tank Picture',
+        //     data: [12, 17, 11, 9, 15, 11, 20]
+        //   }, {
+        //     name: 'Bucket Slope',
+        //     data: [9, 7, 5, 8, 6, 9, 4]
+        //   }, {
+        //     name: 'Reborn Kid',
+        //     data: [25, 12, 19, 32, 25, 24, 10]
+        //   }],
+        chartOptions: {
+            // colors: ['#C86135', '#C88635', '#C8AB35', '#C1C835', '#9CC835', '#77C835'],
+            colors: ["#c86135",
+"#cd7049",
+"#d3805d",
+"#d89071",
+"#dea085",
+"#e3b09a",
+"#e9bfae",
+"#eecfc2",
+"#f4dfd6",
+"#f9efea"
+],
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              width: 1,
+              colors: ['#fff']
+            },
+            title: {
+              text: 'Fiction Books Sales'
+            },
+            xaxis: {
+              categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+              labels: {
+                formatter: function (val) {
+                  return val + "K"
+                }
+              }
+            },
+            yaxis: {
+              title: {
+                text: undefined
+              },
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return val + "K"
+                }
+              }
+            },
+            fill: {
+              opacity: 1
+            },
+            legend: {
+              position: 'bottom',
+              horizontalAlign: 'center',
+              offsetX: 40,
+            //   markers: {
+            //       fillColors: ['#C86135', '#C88635', '#C8AB35', '#C1C835', '#9CC835', '#77C835'],
+            //   },
+            }
+        },
+
+        chartOptionsNK: {
+            // colors: ['#C86135', '#C88635', '#C8AB35', '#C1C835', '#9CC835', '#77C835'],
+            colors: ["#c86135",
+"#cd7049",
+"#d3805d",
+"#d89071",
+"#dea085",
+"#e3b09a",
+"#e9bfae",
+"#eecfc2",
+"#f4dfd6",
+"#f9efea"
+],
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            dataLabels: {
+              enabled: false
+            },
+            stroke: {
+              width: 1,
+              colors: ['#fff']
+            },
+            title: {
+              text: 'Fiction Books Sales'
+            },
+            xaxis: {
+              categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+              labels: {
+                formatter: function (val) {
+                  return val + "K"
+                }
+              }
+            },
+            yaxis: {
+              title: {
+                text: undefined
+              },
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return val + "K"
+                }
+              }
+            },
+            fill: {
+              opacity: 1
+            },
+            legend: {
+              position: 'bottom',
+              horizontalAlign: 'center',
+              offsetX: 40
+            }
+        },
+
       }
     },
     computed: {
@@ -171,9 +344,6 @@ export default {
             listFavorite: state => state.search.listFavorite,
             flag: state => state.search.flag,
             searchFromDetail: state => state.search.searchFromDetail,
-
-
-            currentSearchSaved: state => state.searchNewVersion.currentSearchSaved,
             
 
 
@@ -186,15 +356,103 @@ export default {
 
             dataSearchNewVersion: state => state.searchNewVersion.data,
             dataWorkspace: state => state.workspace.workspace,
-            docsOfWorkspace: state => state.workspace.docsOfWorkspace
+            docsOfWorkspace: state => state.workspace.docsOfWorkspace,
+            currentSeries: state => state.searchNewVersion.currentSeries,
+            currentChartOptions: state => state.searchNewVersion.currentChartOptions,
+            currentSeriesNK: state => state.searchNewVersion.currentSeriesNK,
+            currentChartOptionsNK: state => state.searchNewVersion.currentChartOptionsNK,
 
         }),
         
     },
     methods: {
         ...mapActions('search', ['getCategory', 'getStat', 'getSearchAPI', 'getSearchProps', 'postFavorite', 'deleteFavorite', 'getFavorite']),
-        ...mapActions('searchNewVersion', ['postSearch']),
+        ...mapActions('searchNewVersion', ['postSearch', 'setCurrentSeries', 'setCurrentChartOptions', 'setCurrentSeriesNK', 'setCurrentChartOptionsNK', 'setTempListWordSegmentation']),
         ...mapActions('workspace', ['getWorkspace']),
+        handleSizeChange2(val) {
+            // console.log(`${val} items per page`);
+            // this.currentSize = val;
+
+            // var start = new Date().getTime();
+
+            var startTime = performance.now()
+
+
+            this.postSearch({by_title: true, page: this.dataSearchNewVersion.page, size: val, text: this.searchFromDetail})
+
+            var endTime = performance.now()
+            // alert(`Call search api took ${endTime - startTime} milliseconds`)
+
+            this.time_taken = endTime - startTime
+            let _this = this
+            setTimeout(function() {
+                _this.time_taken = 0
+            }, 3000)
+
+            // setTimeout(function() {
+            //     alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // }, 3000)
+            // setTimeout(function() {
+            //     window.close()
+            // }, 3000)
+            // var end = new Date().getTime();
+            // var time = end - start;
+            // alert('Execution time: ' + time);
+        },
+        handleCurrentChange2(val) {
+            // console.log(`current page: ${val}`);
+
+            
+            // var start = new Date().getTime();
+            var startTime = performance.now()
+
+
+
+            this.postSearch({by_title: true, page: val, size: this.dataSearchNewVersion.size, text: this.searchFromDetail})
+
+
+            var endTime = performance.now()
+
+
+            this.time_taken = endTime - startTime
+            let _this = this
+            setTimeout(function() {
+                _this.time_taken = 0
+            }, 3000)
+
+            // setTimeout(function() {
+            //     alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // }, 3000)
+            // setTimeout(function() {
+            //     window.close()
+            // }, 3000)
+
+            // var end = new Date().getTime();
+            // var time = end - start;
+            // alert('Execution time: ' + time);
+            // setTimeout(function(){}, 1000);
+            // console.log(this.dataSearchNewVersion);
+        },
+        handleResponse(response) {
+            return response.text().then(text => {
+                const data = text && JSON.parse(text);
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // auto logout if 401 response returned from api
+                        // logout();
+                        // location.reload(true);
+                        return
+                    }
+
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+                return data;
+            });
+        },
+        insertAfter(newNode, existingNode) {
+            existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+        },
         handleButtonClick(event) {
             switch (event.currentTarget.textContent) {
                 case "Loại tài liệu":
@@ -363,7 +621,329 @@ export default {
     },
     watch: {
         dataSearchNewVersion() {
-            console.log(this.dataSearchNewVersion);
+            this.statistics = [
+                [],[],[],[],[]
+            ];
+            // console.log(this.dataSearchNewVersion);
+            this.dataSearchNewVersion.data.forEach(ele => {
+                if (!this.statistics[3].includes(ele.metadata[0].value)) {
+                    this.statistics[3].push(ele.metadata[0].value)
+                }
+                if (!this.statistics[1].includes(ele.metadata[1].value)) {
+                    this.statistics[1].push(ele.metadata[1].value)
+                }
+                if (!this.statistics[2].includes(ele.metadata[2].value)) {
+                    this.statistics[2].push(ele.metadata[2].value)
+                }
+                let obj = {}
+                // obj[ele.metadata[1].value + '|||' + ele.metadata[2].value] = 1 
+                obj['name'] = ele.metadata[1].value + '|||' + ele.metadata[2].value
+                obj['value'] = 1
+
+                let obj2 = {}
+                obj2['name'] = ele.metadata[0].value + '|||' + ele.metadata[2].value
+                obj2['value'] = 1
+                this.statistics[0].push(obj)
+                this.statistics[4].push(obj2)
+            })
+            // console.log(this.statistics);
+            let testHolder2 = []
+            let testHolder3 = []
+            this.statistics[2].forEach(ele => {
+                testHolder2.push([])
+                testHolder3.push([])
+            }) 
+            
+
+            var holder2 = {};
+
+            this.statistics[4].forEach(function(d) {
+            if (holder2.hasOwnProperty(d.name)) {
+                // console.log(d)
+                holder2[d.name] = holder2[d.name] + d.value;
+            } else {
+                holder2[d.name] = d.value;
+            }
+            });
+            // console.log(holder2);
+            this.statistics[2].forEach((ele, index) => {
+                this.statistics[3].forEach(ele2 => {
+                    if (holder2[ele2 + '|||' + ele]) {
+                        testHolder3[index].push(holder2[ele2 + '|||' + ele])
+                    }
+                    else {
+                        testHolder3[index].push(0)
+                    }
+                })
+            })
+            // console.log(testHolder3)
+            this.testTestHolder3 = []
+            testHolder3.forEach((ele, index) => {
+                let obj = {}
+                obj['name'] = this.statistics[2][index]
+                obj['data'] = ele
+                this.testTestHolder3.push(obj)
+            })
+            // console.log(this.testTestHolder3)
+
+            this.seriesNK = []
+            // this.chartOptions = {}
+            // window.dispatchEvent(new Event('resize'));
+
+            this.seriesNK = this.testTestHolder3
+            this.setCurrentSeriesNK(this.seriesNK);
+
+            let tempChartOptionsNK = {...this.chartOptionsNK, ...{
+                title: {
+                    text: 'Theo Người ký / Loại văn bản',
+                    style: {
+                        fontFamily: 'Noto Sans',
+fontStyle: 'normal',
+fontWeight: "700",
+fontSize: "12px",
+lineHeight: "16px",
+letterSpacing: "-0.01em",
+textTransform: "uppercase",
+
+color: "#272525"
+                    },
+                },
+                xaxis: {
+                    categories: this.statistics[3],
+                    labels: {
+                        formatter: function (val) {
+                        return val + "tài liệu"
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                        return val + "tài liệu"
+                        }
+                    }
+                },
+                // legend: {
+                //     position: 'bottom',
+                //     horizontalAlign: 'center',
+                //     offsetX: 40
+                // }
+            }}
+
+            this.setCurrentChartOptionsNK(tempChartOptionsNK)
+            
+//             this.$refs.demoChartNK.updateOptions({
+//                 title: {
+//                     text: 'Theo Người ký / Loại văn bản',
+//                     style: {
+//                         fontFamily: 'Noto Sans',
+// fontStyle: 'normal',
+// fontWeight: "700",
+// fontSize: "12px",
+// lineHeight: "16px",
+// letterSpacing: "-0.01em",
+// textTransform: "uppercase",
+
+// color: "#272525"
+//                     },
+//                 },
+//                 xaxis: {
+//                     categories: this.statistics[3],
+//                     labels: {
+//                         formatter: function (val) {
+//                         return val + "tài liệu"
+//                         }
+//                     }
+//                 },
+//                 tooltip: {
+//                     y: {
+//                         formatter: function (val) {
+//                         return val + "tài liệu"
+//                         }
+//                     }
+//                 },
+//                 // legend: {
+//                 //     position: 'bottom',
+//                 //     horizontalAlign: 'center',
+//                 //     offsetX: 40
+//                 // }
+//             })
+
+
+
+
+
+
+
+
+
+
+            var holder = {};
+
+            this.statistics[0].forEach(function(d) {
+            if (holder.hasOwnProperty(d.name)) {
+                // console.log(d)
+                holder[d.name] = holder[d.name] + d.value;
+            } else {
+                holder[d.name] = d.value;
+            }
+            });
+            // console.log(holder);
+            this.statistics[2].forEach((ele, index) => {
+                this.statistics[1].forEach(ele2 => {
+                    if (holder[ele2 + '|||' + ele]) {
+                        testHolder2[index].push(holder[ele2 + '|||' + ele])
+                    }
+                    else {
+                        testHolder2[index].push(0)
+                    }
+                })
+            })
+            // console.log(testHolder2)
+            this.testTestHolder2 = []
+            testHolder2.forEach((ele, index) => {
+                let obj = {}
+                obj['name'] = this.statistics[2][index]
+                obj['data'] = ele
+                this.testTestHolder2.push(obj)
+            })
+            // console.log(this.testTestHolder2)
+            this.series = []
+            // this.chartOptions = {}
+            // window.dispatchEvent(new Event('resize'));
+
+            this.series = this.testTestHolder2
+            
+
+            this.setCurrentSeries(this.series)
+            // this.setCurrentChartOptions(this.chartOptions)
+
+//             this.$refs.demoChart.updateOptions({
+//                 title: {
+//                     text: 'Theo Đơn vị ban hành / Loại văn bản',
+//                     style: {
+//                         fontFamily: 'Noto Sans',
+// fontStyle: 'normal',
+// fontWeight: "700",
+// fontSize: "12px",
+// lineHeight: "16px",
+// letterSpacing: "-0.01em",
+// textTransform: "uppercase",
+
+// color: "#272525"
+//                     },
+//                 },
+//                 xaxis: {
+//                     categories: this.statistics[1],
+//                     labels: {
+//                         formatter: function (val) {
+//                         return val + "tài liệu"
+//                         }
+//                     }
+//                 },
+//                 tooltip: {
+//                     y: {
+//                         formatter: function (val) {
+//                         return val + "tài liệu"
+//                         }
+//                     }
+//                 },
+//             })
+            
+            let tempChartOptions = {...this.chartOptions, ...{
+                title: {
+                    text: 'Theo Đơn vị ban hành / Loại văn bản',
+                    style: {
+                        fontFamily: 'Noto Sans',
+fontStyle: 'normal',
+fontWeight: "700",
+fontSize: "12px",
+lineHeight: "16px",
+letterSpacing: "-0.01em",
+textTransform: "uppercase",
+
+color: "#272525"
+                    },
+                },
+                xaxis: {
+                    categories: this.statistics[1],
+                    labels: {
+                        formatter: function (val) {
+                        return val + "tài liệu"
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                        return val + "tài liệu"
+                        }
+                    }
+                },
+            }}
+
+            this.setCurrentChartOptions(tempChartOptions)
+
+            // this.chartOptions = {...this.chartOptions, ...{
+                
+            //     xaxis: {
+            //         categories: this.statistics[1],
+            //         labels: {
+            //             formatter: function (val) {
+            //             return val + "tài liệu"
+            //             }
+            //         }
+            //     },
+            //     tooltip: {
+            //         y: {
+            //             formatter: function (val) {
+            //             return val + "tài liệu"
+            //             }
+            //         }
+            //     },
+            //     legend: {
+            //         position: 'bottom',
+            //         horizontalAlign: 'left',
+            //         offsetX: 40
+            //     }
+            // }
+            // }
+
+
+            var obj2 = [];
+
+            for (var prop in holder) {
+            obj2.push({ name: prop, value: holder[prop] });
+            }
+
+            // console.log(obj2);
+            // this.statistics[1].forEach(ele => {
+            //     this.statistics[2].forEach(ele2 => {
+                    
+            //     })
+            // })
+            let _this = this
+            setTimeout(function() {
+                let eleList = document.querySelectorAll(".apexcharts-canvas");
+                eleList.forEach(eleSingle => {
+                    let eleDiv = document.createElement('div')
+                    eleDiv.classList.add('apexcharts-toolbar')
+                    eleDiv.style.top = "0px";
+                    eleDiv.style.right = "3px";
+                    eleDiv.style.cursor = "pointer";
+                    // eleDiv.textContent = "hello"
+                    eleDiv.innerHTML = "<i class='el-icon-arrow-down'></i>"
+                    eleDiv.onclick = function() {
+                        eleSingle.firstElementChild.classList.toggle("display-none-chart");
+                    };
+                    eleSingle.lastChild.style.display = "none";
+                    _this.insertAfter(eleDiv, eleSingle.lastElementChild)
+                    console.log(eleSingle);
+                })
+                
+                
+            }, 1000)
+            
         },
         value2: function(val) {
             this.getSearchAPI({text:this.searchFromDetail, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc", publisherName: this.value, documentName: val});
@@ -797,7 +1377,6 @@ export default {
                         this.realityHideColumns.splice(this.realityHideColumns.indexOf(ele.property), 1);
                     }
                 })
-                // console.log(this.realityHideColumns);
             }
         },
         danhSachTimKiem: function(val) {
@@ -808,30 +1387,85 @@ export default {
             this.tableHeight = 1000
         },
         searchFromDetail: function(val) {
+            console.log('hellllllooooo')
+            // if (this.searchFromDetail != "") {
+            //     fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.searchFromDetail}`,{method: 'GET'}).then(this.handleResponse).then(res => this.setTempListWordSegmentation(res.response));
+            // }
             console.log(val);
-            // this.getSearchAPI({text:val, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc"});
+
+
+
+
+            // var start = new Date().getTime();
+            var startTime = performance.now()
+
+
+            
             this.postSearch({by_title: true, page: 1, size: 20, text: val})
+
+
+
+            var endTime = performance.now()
+
+            this.time_taken = endTime - startTime
+            let _This = this
+            setTimeout(function() {
+                _This.time_taken = 0
+            }, 3000)
+
+            // alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // setTimeout(function() {
+            //     alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // }, 3000)
+            // setTimeout(function() {
+            //     window.close()
+            // }, 3000)
+            // var end = new Date().getTime();
+            // var time = end - start;
+            // alert('Execution time: ' + time);
+
             setTimeout(function(){}, 1000);
             console.log(this.dataSearchNewVersion);
         },
     },
     created() {
-        // this.getCategory({level1: 2, showall: true, limit: 100});
-        // this.getCategory({level1: 0, showall: true, limit: 100});
-        // this.getCategory({level1: 1, showall: true, limit: 100});
-        // this.getCategory({level1: 9, showall: true, limit: 100});
-        // this.getCategory({level1: 3, showall: true, limit: 100});
-        // this.getCategory({level1: 4, showall: true, limit: 100});
-        // if (this.$route.query.text) {
-        //     this.getSearchAPI({text:this.$route.query.text,page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
-        // }
-        // else {
-        //     this.getSearchAPI({text:"",page:1,pagesize:20,bookmarked:false,sort:"docidx",sort_direction:"desc"});
-        // }        
-        // this.getSearchProps();
-        // this.getFavorite();
         this.getWorkspace();
-    }
+        if (this.searchFromDetail != "") {
+            // var start = new Date().getTime();
+            var startTime = performance.now()
+
+
+            this.postSearch({by_title: true, page: 1, size: 10, text: this.searchFromDetail});
+
+            // var end = new Date().getTime();
+            var endTime = performance.now()
+
+            this.time_taken = endTime - startTime
+            let _this = this
+            setTimeout(function() {
+                _this.time_taken = 0
+            }, 3000)
+
+
+            // alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // setTimeout(function() {
+            //     alert(`Call search api took ${endTime - startTime} milliseconds`)
+            // }, 3000)
+            // setTimeout(function() {
+            //     window.close()
+            // }, 3000)
+            // var time = end - start;
+            // alert('Execution time: ' + time);
+
+        }
+    },
+    mounted() {
+        // select the target element
+        // let e = document.querySelector(".apexcharts-menu");
+        // console.log(e);
+        // // remove the list item
+        // e.style.display = "none";
+    },
 }
 </script>
 <style scoped>

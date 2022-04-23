@@ -1,44 +1,58 @@
 <template>
   <div>
     <!-- <header-bar-component-new /> -->
-    <header-bar-component-new-version-2-saved />
-    <params-component-version-2-saved />
-    <sidebar-left />
-    <div style="position: absolute;
-    top: 112px;
-    left: 256px;
-    height: 140px;">
-    <!-- width: 1282px; -->
-        <slot name="result-workspace"></slot>
-    </div>
-    <div class="layout-for-params" style="position: absolute;
-    left: 224px;
-    width: 620px;">
-        <slot name="params"></slot>
-    </div>
-    <div class="layout-for-search-left" style="position: absolute;
-    top: 300px;
-    left: 270px;
-    width: 652px;
-    height: 453px;">
-    <!-- height: 580px -->
-        <slot></slot>
-    </div>
+    <header-bar-component-new-version-2 />
+    <!-- <params-component-version-2 /> -->
+    
+    
+    <!-- <sidebar-left /> -->
 
 
-    <!-- <div style="    position: absolute;
+    <sidebar-left-copy />
+
+    <!-- <div class="layout-for-search-left" style="position: absolute;
     top: 300px;
-    left: 1038px;
+    left: 378px;
     width: 652px;
-    width: 495px;
     height: 580px;">
-        <slot name="test-bookmark"></slot>
+        <slot></slot>
     </div> -->
+    <div class="layout-for-result-detail" style="
+    padding: 24px 32px 24px 24px;
 
+position: absolute;
+left: 255px;
+right: 0px;
+top: 72px;
+bottom: 0px;
 
+background: #FFFFFF;
+box-shadow: inset 1px 0px 0px #E5E5E5;
+height: 682px;
+width: 785px;">
+        <slot name="result-detail"></slot>
+    </div>
+    <div class="layout-for-result-detail-right" style="
+    position: absolute;
+left: 1041px;
+right: 0px;
+top: 72px;
+bottom: 0px;
+
+background: #FFFFFF;
+box-shadow: inset 1px 0px 0px #E5E5E5;
+padding: 24px 32px 24px 24px;
+
+height: 682px;
+">
+        <slot name="result-detail-right"></slot>
+    </div>
     <!-- <div class="layout-for-search-right" style="position: absolute; top: 112px; left: 767px; height: 640px; background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;">
         <slot name="layout-for-search-right"></slot>
+    </div> -->
+    <!-- <div class="layout-for-pdf">
+        <slot name="layout-for-pdf"></slot>
     </div> -->
   </div>
 </template>
@@ -46,19 +60,13 @@ box-shadow: inset 1px 0px 0px #E5E5E5;">
 import {mapActions} from 'vuex';
 import HeaderBarNew from '../../components/components-new-version-2/HeaderBarNew.vue'
 import ParamsComponentVersion2 from '../../components/components-new-version-2/Params.vue'
-import HeaderBarNewSaved from '../../components/components-new-version-2/HeaderBarNewSaved.vue'
-import ParamsComponentVersion2Saved from '../../components/components-new-version-2/ParamsSaved.vue'
 import SidebarLeft from '../../components/components-new-version-2/SidebarLeft.vue'
+import SidebarLeftCopy from '../../components/components-new-version-2/SidebarLeftCopy.vue'
 import Vue from 'vue'
 Vue.component("header-bar-component-new-version-2", HeaderBarNew)
 Vue.component("params-component-version-2", ParamsComponentVersion2)
-
-
-Vue.component("header-bar-component-new-version-2-saved", HeaderBarNewSaved)
-Vue.component("params-component-version-2-saved", ParamsComponentVersion2Saved)
-
-
 Vue.component("sidebar-left", SidebarLeft)
+Vue.component("sidebar-left-copy", SidebarLeftCopy)
 export default {
     data() {
       return {
@@ -89,6 +97,15 @@ export default {
 }
 </script>
 <style scoped>
+.layout-for-result-detail::-webkit-scrollbar {
+    display: none;
+}
+.layout-for-result-detail {
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+}
+
 .layout-for-search-left::-webkit-scrollbar {
     display: none;
 }

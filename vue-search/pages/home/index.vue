@@ -44,7 +44,7 @@
             <!-- </div> -->
             <p class="text-3">Nổi bật — văn bản pháp quy, về việc sử dụng đất, cải cách giáo dục</p>
         </div>
-        <el-card class="box-card testCard">
+        <!-- <el-card class="box-card testCard">
                 <div slot="header" class="clearfix">
                     <span>
                         <img 
@@ -73,7 +73,7 @@
             <div slot="footer" class="dialog-footer">
             <el-button @click="outerVisible2 = false">Cancel</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -561,7 +561,7 @@ export default {
         },
         onEnter() {
             this.setSearchFromDetail(this.input1);
-            this.$router.push({name: 'search-new'});
+            this.$router.push({name: 'search'});
         },
         handleButtonClick(event) {
             switch (event.currentTarget.textContent) {
@@ -646,7 +646,8 @@ export default {
 </script>
 <style scoped>
 .bg {
-    height: 560px;
+    /* height: 560px; */
+    height: 100vh;
     background: url("@/assets/images/background.png");
     background-size: cover;
     background-position: center;
@@ -657,7 +658,8 @@ export default {
     right: 0%;
     top: 0%;
     bottom: 0%;
-    height: 560px;
+    /* height: 560px; */
+    height: 100vh;
     /* background: url("@/assets/images/background.png");
     background-size: cover;
     background-position: center; */
@@ -696,7 +698,9 @@ height: 111px;
 left: 0px;
 top: 0px;
 
-background: #F8F0F0;
+/* background: #F8F0F0; */
+background-color: unset;
+
 border-radius: 12px;
 
 /* Inside auto layout */
@@ -706,6 +710,12 @@ order: 0;
 align-self: stretch;
 flex-grow: 1;
 margin: 0px 32px;
+
+
+border: 1px solid rgba(255, 255, 255, 0.1);
+box-sizing: border-box;
+border-radius: 6px;
+
 }
 
 .cover {
@@ -814,7 +824,8 @@ line-height: 150%;
 text-align: center;
 letter-spacing: -0.01em;
 
-color: #453630;
+/* color: #453630; */
+color: #fff;
 
 
 /* Inside auto layout */

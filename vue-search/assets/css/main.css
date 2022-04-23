@@ -437,7 +437,8 @@ padding-left: unset;
     opacity: 0.75;
     /* line-height: 175px; */
     margin: 0;
-    padding: 50px;
+    /* padding: 50px; */
+    padding: 25px;
   }
 
   .el-carousel__item > h3 > em {
@@ -496,4 +497,108 @@ color: #ffffff;
     line-height: 36px;
 height: 36px;
 width: 174px;
+}
+
+.bookmark > .categories > .section > .categories > .field > label > span > span {
+    width:18.67px;
+    height: 18.67px;
+}
+
+.bookmark > .categories > .section > .categories > .field > label > span.el-checkbox__input > span::after {
+    top:3px;
+    left: 7px;
+
+}
+.bookmark > .categories > .section > .categories > .field > label > span.el-checkbox__label {
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+/* identical to box height, or 185% */
+
+
+color: #272525;
+}
+.new > div.el-input {
+    width: 186px;
+height: 36px;
+}
+.new > div.el-input > input {
+    width: 186px;
+height: 36px;
+}
+
+.test-dropdown-result-component-new-version-2 {
+    padding: 16px;
+}
+
+.test-dropdown-result-component-new-version-2 > h1 {
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 12px;
+line-height: 24px;
+/* identical to box height, or 200% */
+
+
+color: #000000;
+}
+
+.test-dropdown-result-component-new-version-2 > div > label {
+    display: block;
+}
+
+.test-dropdown-result-component-new-version-2 > div.el-input {
+    width: 186px;
+    height: 36px;
+}
+
+.test-dropdown-result-component-new-version-2 > div > input {
+    width: 186px;
+    height: 36px;
+}
+
+.test-dropdown-result-component-new-version-2 > div.el-checkbox-group > label.el-checkbox > .el-checkbox__label {
+    font-family: 'Noto Sans';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+line-height: 24px;
+/* identical to box height, or 185% */
+
+
+color: #272525;
+}
+
+.test-dropdown-result-component-new-version-2 > div.el-checkbox-group > label.el-checkbox > .el-checkbox__input.is-checked .el-checkbox__inner, .test-dropdown-result-component-new-version-2 > div.el-checkbox-group > label.el-checkbox > .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #C86135;
+    border-color: #C86135;  
+}
+
+.test-dropdown-result-component-new-version-2 .el-checkbox__input.is-checked+.el-checkbox__label {
+    color: #272525;
+}
+
+.categories .el-checkbox__input.is-checked .el-checkbox__inner, .categories .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #C86135;
+    border-color: #C86135; 
+}
+
+.display-none {
+    display: none;
+}
+
+.display-none-chart {
+    display: none;
+}
+
+.content > em {
+    background-color: #FFFF00;
+}
+.el-pagination__total {
+    color: white;
+}
+.el-pagination__jump {
+    color: white;
 }

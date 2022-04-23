@@ -63,8 +63,10 @@ export default {
     },
     methods: {
         ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
+        ...mapActions('searchNewVersion', ['setCurrentSearchSaved']),
         onEnter() {
-            this.setSearchFromDetail(this.input1);
+            // this.setSearchFromDetail(this.input1);
+            this.setCurrentSearchSaved(this.input1);
         },
         handleCommand(command) {
             this.$router.push({name: command});

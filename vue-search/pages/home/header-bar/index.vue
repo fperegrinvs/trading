@@ -17,16 +17,14 @@
                 <div class="divider"></div>
             </li>
             <li class="li-text li-user">
-                <el-dropdown>
+                <el-dropdown @command="handleCommand">
                     <span class="el-dropdown-link">
                         Gia Nguyễn<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>Action 1</el-dropdown-item>
-                        <el-dropdown-item>Action 2</el-dropdown-item>
-                        <el-dropdown-item>Action 3</el-dropdown-item>
-                        <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                        <el-dropdown-item divided>Action 5</el-dropdown-item>
+                        <el-dropdown-item command="saved"><i class="el-icon-s-order"></i>Kho lưu trữ</el-dropdown-item>
+                        <el-dropdown-item command="home"><i class="el-icon-s-home"></i>Trang chủ</el-dropdown-item>
+                        <el-dropdown-item class="el-icon-search" command="search">Tìm kiếm</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </li>
@@ -40,7 +38,11 @@
 </template>
 <script>
 export default {
-    
+    methods: {
+        handleCommand(command) {
+            this.$router.push({name: command});
+        }
+    }
 }
 </script>
 <style scoped>

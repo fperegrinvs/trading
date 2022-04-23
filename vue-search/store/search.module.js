@@ -321,7 +321,7 @@ const mutations = {
         state.danhSachTimKiem = data;
         state.flag = true;
     },
-    getSearchAPIFailureVerion2(state, error) {
+    getSearchAPIFailureVersion2(state, error) {
         state.status = "getSearchAPIFailure";
         state.error = error;
     },
