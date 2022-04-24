@@ -245,6 +245,12 @@ export default {
               title: {
                 text: undefined
               },
+              labels: {
+                  align: 'right',
+                //   maxWidth: 250
+              },
+            //   min: 12,
+            //   max: 12
             },
             tooltip: {
               y: {
@@ -310,6 +316,10 @@ export default {
             yaxis: {
               title: {
                 text: undefined
+              },
+              labels: {
+                  align: 'right',
+                //   maxWidth: 250
               },
             },
             tooltip: {
@@ -385,9 +395,9 @@ export default {
 
             this.time_taken = endTime - startTime
             let _this = this
-            setTimeout(function() {
-                _this.time_taken = 0
-            }, 3000)
+            // setTimeout(function() {
+            //     _this.time_taken = 0
+            // }, 3000)
 
             // setTimeout(function() {
             //     alert(`Call search api took ${endTime - startTime} milliseconds`)
@@ -416,9 +426,9 @@ export default {
 
             this.time_taken = endTime - startTime
             let _this = this
-            setTimeout(function() {
-                _this.time_taken = 0
-            }, 3000)
+            // setTimeout(function() {
+            //     _this.time_taken = 0
+            // }, 3000)
 
             // setTimeout(function() {
             //     alert(`Call search api took ${endTime - startTime} milliseconds`)
@@ -1409,9 +1419,9 @@ color: "#272525"
 
             this.time_taken = endTime - startTime
             let _This = this
-            setTimeout(function() {
-                _This.time_taken = 0
-            }, 3000)
+            // setTimeout(function() {
+            //     _This.time_taken = 0
+            // }, 3000)
 
             // alert(`Call search api took ${endTime - startTime} milliseconds`)
             // setTimeout(function() {
@@ -1441,10 +1451,10 @@ color: "#272525"
             var endTime = performance.now()
 
             this.time_taken = endTime - startTime
-            let _this = this
-            setTimeout(function() {
-                _this.time_taken = 0
-            }, 3000)
+            // let _this = this
+            // setTimeout(function() {
+            //     _this.time_taken = 0
+            // }, 3000)
 
 
             // alert(`Call search api took ${endTime - startTime} milliseconds`)

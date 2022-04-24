@@ -14,6 +14,7 @@ border: 1px solid rgba(0, 0, 0, 0.2);
 border-radius: 4px 4px 0px 0px;
 display: flex;
 align-items: center;
+z-index: 3;
     ">
         <div class="zoom">
             <template v-if="pdfApp">
@@ -311,15 +312,18 @@ export default {
             div_buttonX.innerHTML ="<img src='close.svg'/>";
             div_buttonX.classList.add('test-button-appended-toolbarViewer');
             let _this = this;
+            div_buttonX.style.cursor = "pointer"
             div_buttonX.onclick = function() {
                 // _this.flag = true;
                 // _this.setCurrentPdfUrl("");
-                _this.$router.push({name: 'detail'})
+                // _this.$router.push({name: 'detail'})
+                _this.setCurrentPdfUrl("");
             }
             // div.classList.add('test-appended-toolbarViewer');
             this.insertAfter(div_buttonX, toolbarViewer);
             document.getElementById('toolbarContainer').style.height = "40px";
             document.getElementById('viewerContainer').style.marginTop = "8px";
+            document.getElementById('viewerContainer').style.zIndex = "3";
             document.getElementById('viewerContainer').style.backgroundColor = "#FCFBFB";
             document.getElementById('sidebarContent').style.marginTop = "4px";
             document.getElementById('sidebarContent').style.backgroundColor = "#FCFBFB";

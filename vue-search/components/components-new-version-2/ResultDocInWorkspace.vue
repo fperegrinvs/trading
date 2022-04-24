@@ -38,8 +38,9 @@
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015... -->
                 {{data.title}}
             </h1>
-            <p class="content" @click="handleClickTitle($event)">
-                {{data.title}}
+            <p v-if="tempTitleAfterHandle" class="content" v-html="tempTitleAfterHandle" @click="handleClickTitle($event)">
+            <p v-else class="content" v-html="data.title" @click="handleClickTitle($event)">
+                <!-- {{data.title}} -->
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng
 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ
 thị trường mở -->
@@ -69,6 +70,23 @@ export default {
         ...mapActions('searchNewVersion', ['getDoc',
         'getDocsSimilarityGivenDocId']),
         ...mapActions('workspace', ['getAllDocsOfAllWorkspace', 'postDocToWorkspace', 'getWorkspace', 'deleteDocOfWorkspace']),
+        handleResponse(response) {
+            return response.text().then(text => {
+                const data = text && JSON.parse(text);
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // auto logout if 401 response returned from api
+                        // logout();
+                        // location.reload(true);
+                        return
+                    }
+
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+                return data;
+            });
+        },
         handleClickTitle(event) {
             console.log(this.data);
             // this.getDocById(this.data.docidx);
@@ -140,6 +158,39 @@ export default {
         }
     },
     watch: {
+        currentSearchSaved() {
+            if (this.currentSearchSaved == "") {
+                this.tempTitleAfterHandle = this.data.title;
+            }
+            
+        },
+        async tempListWordSegmentation() {
+            let myTempList = []
+            let myTempList2 = []
+            if (this.tempListWordSegmentation.length > 0) {
+                console.log(this.tempListWordSegmentation)
+                await fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.data.title}`,{method: 'GET'
+                }).then(this.handleResponse).then(response => {
+                    // console.log(response.response)
+                    myTempList = response.response});
+                console.log(myTempList)
+
+
+
+                myTempList.forEach(ele => {
+                    this.tempListWordSegmentation.forEach(ele2 => {
+                        if (ele[0] != "<") {
+                            if (ele.toLowerCase().includes(ele2)) {
+                                let tempIndex = myTempList.indexOf(ele)
+                                myTempList[tempIndex] = `<em>${ele}</em>`
+                            }
+                        }
+                        
+                    })
+                })
+                this.tempTitleAfterHandle = myTempList.join(" ");
+            }
+        },
         data() {
             this.checkedCities = []
             this.checkedTrueFalse = []
@@ -180,6 +231,10 @@ export default {
             dataWorkspace: state => state.workspace.workspace.data,
             allDocsOfAllWorkspace: state => state.workspace.allDocsOfAllWorkspace,
             workspaceStatus: state => state.workspace.status,
+
+            tempListWordSegmentation: state => state.searchNewVersion.tempListWordSegmentation,
+            currentSearchSaved: state => state.searchNewVersion.currentSearchSaved,
+
         }),
         checkBool() {
             this.allDocsOfAllWorkspace.forEach(ele => {
@@ -200,12 +255,78 @@ export default {
             testListCheckbox: [],
             checkedCities: [],
             checkedTrueFalse: [],
+            tempTitleAfterHandle: '',
+            
         }
     },
-    created() {
+    async created() {
+
+
+
+        let myTempList = []
+        let myTempList2 = []
+        if (this.tempListWordSegmentation.length > 0) {
+            console.log(this.tempListWordSegmentation)
+            await fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.data.title}`,{method: 'GET'
+            }).then(this.handleResponse).then(response => {
+                // console.log(response.response)
+                myTempList = response.response});
+            console.log(myTempList)
+
+
+
+            myTempList.forEach(ele => {
+                this.tempListWordSegmentation.forEach(ele2 => {
+                    if (ele[0] != "<") {
+                        if (ele.toLowerCase().includes(ele2)) {
+                            let tempIndex = myTempList.indexOf(ele)
+                            myTempList[tempIndex] = `<em>${ele}</em>`
+                        }
+                    }
+                    
+                })
+            })
+            this.tempTitleAfterHandle = myTempList.join(" ");
+        }
+        if (this.currentSearchSaved == "") {
+            this.tempTitleAfterHandle = this.data.title
+        }
+
+
+
         // console.log(this.allDocsOfAllWorkspace)
         // console.log(this.checkedTrueFalse);
         // console.log(this.checkedCities)
+        
+        // fetch("https://nlp.yeu.ai/api/v1/tok?text=Ngoài thương hiệu, giá cả, thời điểm mua hàng cũng là một yếu tố để có được sản phẩm tốt với giá rẻ.",{method: 'GET',
+        // headers: { 'Content-Type': 'application/json' },
+        // }).then(this.handleResponse).then(response => console.log(response));
+
+
+        // if (this.tempListWordSegmentation.length > 0) {
+        //     console.log(this.tempListWordSegmentation)
+        //     fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.data.title}`,{method: 'GET'
+        //     }).then(this.handleResponse).then(response => console.log(response.response));
+        // }
+
+        // let myTempList = []
+        // let myTempList2 = []
+        // if (this.tempListWordSegmentation.length > 0) {
+        //     console.log(this.tempListWordSegmentation)
+        //     await fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.data.title}`,{method: 'GET'
+        //     }).then(this.handleResponse).then(response => {
+        //         // console.log(response.response)
+        //         myTempList = response.response});
+        //     console.log(myTempList);
+        //     // myTempList.forEach(ele => {
+        //     //     if (this.tempListWordSegmentation.includes(ele.toLowerCase()))
+        //     // })
+        // }
+        // setTimeout(function() {
+        // console.log(this.tempListWordSegmentation)
+
+        // }, 1000)
+
         this.checkedTrueFalse = [];
         this.checkedCities = [];
         console.log(this.data)

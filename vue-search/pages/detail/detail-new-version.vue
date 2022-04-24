@@ -30,9 +30,9 @@
                     </el-table>
             </div>
         </template>
-        <!-- <template v-slot:layout-for-pdf>
+        <template v-slot:layout-for-pdf>
             <pdfPage v-if="pdfUrl" />
-        </template> -->
+        </template>
     </layout-for-detail-page>
 </template>
 <script>
@@ -51,7 +51,7 @@ export default {
     computed: {
         ...mapState({
             currentDoc: state => state.document.currentDocCopyFromHTML,
-            pdfUrl: state => state.searchNewVersion.currentDocUrl,
+            pdfUrl: state => state.searchNewVersion.currentPdfUrl,
         })
     },
     watch: {
@@ -76,17 +76,20 @@ export default {
         console.log('hello')
         console.log(this.currentDoc);
         let tempTableData = [];
-        this.currentDoc.metadata.forEach(ele => {
-            if (ele.key == "signer") {
-                tempTableData.push({metadata: "Người ký", content: ele.value})
-            }
-            else if (ele.key == "publisherName") {
-                tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
-            }
-            else if (ele.key == "documentType") {
-                tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
-            }
-        })
+        if (this.currentDoc.metadata) {
+            this.currentDoc.metadata.forEach(ele => {
+                if (ele.key == "signer") {
+                    tempTableData.push({metadata: "Người ký", content: ele.value})
+                }
+                else if (ele.key == "publisherName") {
+                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+                }
+                else if (ele.key == "documentType") {
+                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+                }
+            })
+        }
+        
         this.tableData = tempTableData;
         console.log(this.tableData);
     },

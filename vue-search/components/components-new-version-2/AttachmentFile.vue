@@ -19,10 +19,15 @@
     
 </template>
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 export default {
     name: 'attachment-file-component',
     props: ['data'],
+    computed: {
+        ...mapState({
+            currentPdfUrl: state => state.searchNewVersion.currentPdfUrl
+        })
+    },
     methods: {
         ...mapActions("searchNewVersion", ["setCurrentPdfUrl", "setCurrentDocUrl"]),
         handleClickName() {
@@ -37,7 +42,9 @@ export default {
             }
             else if (extensionFile == "pdf") {
                 this.setCurrentPdfUrl(this.data.url)
-                this.$router.push({name: "pdf"});
+                console.log(this.data.url)
+                console.log(this.currentPdfUrl)
+                // this.$router.push({name: "pdf"});
 
 
                 // let routeData = this.$router.resolve({name: 'pdf',  query: {url: this.data.url}  });

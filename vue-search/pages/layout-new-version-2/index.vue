@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="btn-back" @click="handleBtnBack">
+        <!-- <h1>Button back</h1> -->
+        <el-button class="test-btn-replace-btn-chrome" icon="el-icon-back"></el-button>
+    </div>
+    <div class="btn-forward" @click="handleBtnForward">
+        <!-- <h1>Button forward</h1> -->
+        <el-button class="test-btn-replace-btn-chrome" icon="el-icon-right"></el-button>
+    </div>
     <!-- <header-bar-component-new /> -->
     <header-bar-component-new-version-2-saved />
     <params-component-version-2-saved />
@@ -67,6 +75,12 @@ export default {
     },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
+      handleBtnBack() {
+          this.$router.go(-1);
+      },
+      handleBtnForward() {
+          this.$router.go(1);
+      },
       onEnter() {
         this.setSearchFromDetail(this.input);
         // console.log(this.input);
@@ -89,6 +103,26 @@ export default {
 }
 </script>
 <style scoped>
+.test-btn-replace-btn-chrome:focus {
+    outline: unset;
+}
+.test-btn-replace-btn-chrome {
+    padding: 4px 16px;
+    border: unset;
+}
+.btn-forward {
+        position: absolute;
+    color: white;
+    z-index: 2;
+    top: 71px;
+    right: 0;    
+}
+.btn-back {
+    position: absolute;
+    color: white;
+    z-index: 2;
+    top: 71px;
+}
 .layout-for-search-left::-webkit-scrollbar {
     display: none;
 }

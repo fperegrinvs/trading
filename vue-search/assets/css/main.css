@@ -602,3 +602,13 @@ color: #272525;
 .el-pagination__jump {
     color: white;
 }
+
+.el-carousel__item.is-active {
+    z-index: unset;
+}
+.highlight-me {
+    background-color: red;
+}
+.check-highlight {
+    background-color: red;
+}

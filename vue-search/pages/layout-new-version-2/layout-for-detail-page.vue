@@ -1,5 +1,13 @@
 <template>
   <div>
+      <div class="btn-back" @click="handleBtnBack">
+        <!-- <h1>Button back</h1> -->
+        <el-button class="test-btn-replace-btn-chrome" icon="el-icon-back"></el-button>
+    </div>
+    <div class="btn-forward" @click="handleBtnForward">
+        <!-- <h1>Button forward</h1> -->
+        <el-button class="test-btn-replace-btn-chrome" icon="el-icon-right"></el-button>
+    </div>
     <!-- <header-bar-component-new /> -->
     <header-bar-component-new-version-2 />
     <!-- <params-component-version-2 /> -->
@@ -34,7 +42,7 @@ width: 785px;">
     </div>
     <div class="layout-for-result-detail-right" style="
     position: absolute;
-left: 1041px;
+left: 1167px;
 right: 0px;
 top: 72px;
 bottom: 0px;
@@ -45,15 +53,16 @@ padding: 24px 32px 24px 24px;
 
 height: 682px;
 ">
+        <!-- left: 1041px; -->
         <slot name="result-detail-right"></slot>
     </div>
     <!-- <div class="layout-for-search-right" style="position: absolute; top: 112px; left: 767px; height: 640px; background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;">
         <slot name="layout-for-search-right"></slot>
     </div> -->
-    <!-- <div class="layout-for-pdf">
+    <div class="layout-for-pdf">
         <slot name="layout-for-pdf"></slot>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -75,6 +84,12 @@ export default {
     },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
+      handleBtnBack() {
+          this.$router.go(-1);
+      },
+      handleBtnForward() {
+          this.$router.go(1);
+      },
       onEnter() {
         this.setSearchFromDetail(this.input);
         // console.log(this.input);
@@ -97,6 +112,26 @@ export default {
 }
 </script>
 <style scoped>
+.test-btn-replace-btn-chrome:focus {
+    outline: unset;
+}
+.test-btn-replace-btn-chrome {
+    padding: 4px 16px;
+    border: unset;
+}
+.btn-forward {
+        position: absolute;
+    color: white;
+    z-index: 2;
+    top: 71px;
+    right: 0;    
+}
+.btn-back {
+    position: absolute;
+    color: white;
+    z-index: 2;
+    top: 71px;
+}
 .layout-for-result-detail::-webkit-scrollbar {
     display: none;
 }

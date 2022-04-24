@@ -63,10 +63,31 @@ export default {
     },
     methods: {
         ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
-        ...mapActions('searchNewVersion', ['setCurrentSearchSaved']),
+        ...mapActions('searchNewVersion', ['setCurrentSearchSaved', 'setTempListWordSegmentation']),
+        handleResponse(response) {
+            return response.text().then(text => {
+                const data = text && JSON.parse(text);
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // auto logout if 401 response returned from api
+                        // logout();
+                        // location.reload(true);
+                        return
+                    }
+
+                    const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+                return data;
+            });
+        },
         onEnter() {
             // this.setSearchFromDetail(this.input1);
             this.setCurrentSearchSaved(this.input1);
+            if (this.input1) {
+                fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.input1}`,{method: 'GET'}).then(this.handleResponse).then(response => this.setTempListWordSegmentation(response.response));
+            }
+            
         },
         handleCommand(command) {
             this.$router.push({name: command});

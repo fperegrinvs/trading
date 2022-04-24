@@ -21,6 +21,9 @@
         <p class="text-1">
             phát hiện từ khóa
         </p>
+        
+        
+
         <div class="occours">
             <el-carousel height="175px" :autoplay="false" indicator-position="outside">
                 <template v-if="currentDoc.highlight">
@@ -37,6 +40,16 @@
             </el-carousel>
         </div>
     </div>
+    <!-- <object
+        data="https://searchapi.chinhta123.com/static/1877420-2013-TT-BLĐTBXH/VanBanGoc_20.2013.TT.BLDTBXH.pdf?search=sửa chữa"
+        type="application/pdf"
+        id="iframe"
+        width="500"
+        height="678"
+        > -->
+    <!-- <iframe id="iframe" src="https://searchapi.chinhta123.com/static/1877420-2013-TT-BLĐTBXH/VanBanGoc_20.2013.TT.BLDTBXH.pdf" height="500" width="678"></iframe> -->
+
+        <!-- </object> -->
     <!-- <div class="metadata">
         <p class="text-2">Metadata</p>
         <el-table
@@ -116,6 +129,7 @@
     
 </template>
 <script>
+import $ from 'jquery'
 import {mapState, mapActions} from 'vuex'
 import AttachmentFile from '../components-new-version-2/AttachmentFile.vue';
 import Vue from 'vue'
@@ -150,7 +164,50 @@ export default {
             imgTagRight.setAttribute("src", "bx-chevron-right.svg")
             this.insertAfter(imgTagRight, arrowRight)
         // }
+
+
+            // console.log(document.getElementById("iframe").contentDocument.body)
         
+            // let _doc  = document
+            // setTimeout(function() {
+            //     var iframe = _doc.getElementById("iframe").contentDocument.body;
+            //     console.log(iframe)
+            //     var tempSearch = 'trình độ'
+            //     var result = new RegExp(tempSearch, 'g');
+            //     iframe.innerHTML = iframe.innerHTML.replace(result,"<b>" +tempSearch+ "</b>" );
+            //     console.log(result);
+            // }, 2000)
+
+
+            // var iframe = document.getElementById("iframe").contentDocument.body;
+            // console.log(iframe)
+            // var tempSearch = 'trình độ'
+            // var result = new RegExp(tempSearch, 'g');
+            // iframe.innerHTML = iframe.innerHTML.replace(result,"<b>" +tempSearch+ "</b>" );
+            // console.log(result);
+
+
+
+            // console.log($("#iframe").contents().text())
+            // if($("#iframe").contents().text().search("sửa chữa")!=-1){
+            //     alert("found");
+            // }
+            // var content = document.getElementById('iframe').contentWindow.document.body.innerHTML;
+            // console.log(content)
+            // var iframeDoc = document.getElementById('iframe').contentWindow.document;
+            // console.log(iframeDoc)
+
+            // var iframe = document.getElementById("iframe").contentWindow.document;
+            // console.log(iframe)
+            // var tempSearch = 'trình độ'
+            // var result = new RegExp(tempSearch, 'g');
+            // iframe.innerHTML = iframe.innerHTML.replace(result,"<b>" +tempSearch+ "</b>" );
+            // alert(result);
+            
+            
+            
+            // $("#iframe").contents().text().search(this.searchFromDetail).wrap("<span class='highlight-me'>")
+
 
 
         
@@ -160,10 +217,25 @@ export default {
             // currentDoc: state => state.document.currentDoc,
             currentDoc: state => state.document.currentDocCopyFromHTML,
             listFavorite: state => state.search.listFavorite,
-            docsSimilar: state => state.searchNewVersion.docsSimilar
+            docsSimilar: state => state.searchNewVersion.docsSimilar,
+
+            pdfUrl: state => state.searchNewVersion.currentPdfUrl,
+            searchFromDetail: state => state.search.searchFromDetail
         })
     },
     watch: {
+        // pdfUrl() {
+        //     if (this.pdfUrl) {
+        //         console.log(document.getElementById("iframe"))
+        //         setTimeout(function() {
+        //             var iframe = document.getElementById("iframe").contentDocument.body;
+        //             console.log(iframe)
+        //             var result = new RegExp(this.searchFromDetail, 'g');
+        //             iframe.innerHTML = iframe.innerHTML.replace(result,"<b>" + search + "</b>" );
+        //         }, 1000)
+                
+        //     }
+        // },
         // currentDoc() {
         //     let tempData = [
         //         {'signNumber': "Số hiệu"},
@@ -286,17 +358,20 @@ export default {
         console.log(this.currentDoc);
         this.title = this.currentDoc.title;
         let tempTableData = [];
-        this.currentDoc.metadata.forEach(ele => {
-            if (ele.key == "signer") {
-                tempTableData.push({metadata: "Người ký", content: ele.value})
-            }
-            else if (ele.key == "publisherName") {
-                tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
-            }
-            else if (ele.key == "documentType") {
-                tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
-            }
-        })
+        if (this.currentDoc.metadata) {
+            this.currentDoc.metadata.forEach(ele => {
+                if (ele.key == "signer") {
+                    tempTableData.push({metadata: "Người ký", content: ele.value})
+                }
+                else if (ele.key == "publisherName") {
+                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+                }
+                else if (ele.key == "documentType") {
+                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+                }
+            })
+        }
+        
         this.tableData = tempTableData;
         console.log(this.tableData);
     },

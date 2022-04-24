@@ -124,7 +124,11 @@ const mutations = {
     },
     setTempListWordSegmentation(state, data) {
         state.status = 'setTempListWordSegmentation';
-        state.tempListWordSegmentation = data;
+        let tempList = []
+        data.forEach(ele => {
+            tempList.push(ele.toLowerCase())
+        })
+        state.tempListWordSegmentation = tempList;
     },
     setCurrentSeriesNK(state, data) {
         state.status = 'setCurrentSeriesNK';

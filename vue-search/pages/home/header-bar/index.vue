@@ -24,7 +24,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="saved"><i class="el-icon-s-order"></i>Kho lưu trữ</el-dropdown-item>
                         <el-dropdown-item command="home"><i class="el-icon-s-home"></i>Trang chủ</el-dropdown-item>
-                        <el-dropdown-item class="el-icon-search" command="search">Tìm kiếm</el-dropdown-item>
+                        <el-dropdown-item command="search"><i class="el-icon-search"></i>Tìm kiếm</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </li>
