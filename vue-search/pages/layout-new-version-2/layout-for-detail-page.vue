@@ -37,7 +37,7 @@ bottom: 0px;
 background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;
 height: 682px;
-width: 785px;">
+width: 913px;">
         <slot name="result-detail"></slot>
     </div>
     <div class="layout-for-result-detail-right" style="

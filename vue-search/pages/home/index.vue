@@ -561,7 +561,7 @@ export default {
         },
         onEnter() {
             this.setSearchFromDetail(this.input1);
-            this.$router.push({name: 'search'});
+            this.$router.push({name: 'search', query: {text: this.input1}});
         },
         handleButtonClick(event) {
             switch (event.currentTarget.textContent) {

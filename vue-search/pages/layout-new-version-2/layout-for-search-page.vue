@@ -12,16 +12,16 @@
     <header-bar-component-new-version-2 />
     <params-component-version-2 />
     <sidebar-left-copy />
-    <div class="layout-for-params" style="position: absolute;
+    <!-- <div class="layout-for-params" style="position: absolute;
     left: 315px;
     width: 620px;">
         <slot name="params"></slot>
-    </div>
+    </div> -->
     <div class="layout-for-search-left" style="position: absolute;
-    top: 172px;
-    left: 270px;
-    width: 652px;
-    height: 580px;">
+    top: 122px;
+    left: 256px;
+    width: 785px;
+    height: 631px;">
         <slot></slot>
     </div>
     <div class="layout-for-result-right" style="
@@ -38,14 +38,14 @@ box-shadow: inset 1px 0px 0px #E5E5E5;
 height: 640px;">
         <slot name="result-right"></slot>
     </div>
-    <div class="show-time" style="position: absolute; top: 115px; left: 35%;">
+    <!-- <div class="show-time" style="position: absolute; top: 115px; left: 35%;">
         <slot name="show-time"></slot>
-    </div>
+    </div> -->
     <!-- <div class="layout-for-search-right" style="position: absolute; top: 112px; left: 767px; height: 640px; background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;">
         <slot name="layout-for-search-right"></slot>
     </div> -->
-    
+    <el-button @click="handleClickBtnHideStatistics" class="test-btn-hide-statistics"><i class="el-icon-arrow-down"></i></el-button>
   </div>
 </template>
 <script>
@@ -67,6 +67,16 @@ export default {
     },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
+      handleClickBtnHideStatistics() {
+          let layoutRight = document.querySelector('.layout-for-result-right')
+          layoutRight.classList.toggle('display-none');
+          if (layoutRight.classList.contains('display-none')) {
+              document.querySelector('.layout-for-search-left').style.width = "1280px";
+          }
+          else {
+              document.querySelector('.layout-for-search-left').style.width = "785px";
+          }
+      },
       handleBtnBack() {
           this.$router.go(-1);
       },

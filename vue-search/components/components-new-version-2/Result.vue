@@ -66,12 +66,13 @@
                 <!-- {{data.highlight}} -->
                 <!-- <template v-html="data.title"></template> -->
             </h1>
-            <p class="content" v-html="data.highlight" @click="handleClickTitle($event)">
+            <p v-if="data.highlight" class="content" v-html="data.highlight" @click="handleClickTitle($event)">
                 <!-- {{data.title}} -->
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng
 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ
 thị trường mở -->
             </p>
+            <p v-else class="content" v-html="data.title" @click="handleClickTitle($event)"></p>
             <div class="last">
                 <!-- Nguyễn Thị Hồng -->
                 {{data.metadata[0].value}}

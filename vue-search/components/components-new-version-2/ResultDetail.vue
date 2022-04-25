@@ -1,5 +1,6 @@
 <template>
-<div style="margin-left: 24px; margin-top: 24px; margin-right: 56px; margin-bottom: 24px;">
+<!-- <div style="margin-left: 24px; margin-top: 24px; margin-right: 56px; margin-bottom: 24px;"> -->
+<div>
     <div class="header">
         <h1 class="title" @click="handleClickTitle">
         <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ thị trường mở -->
@@ -497,7 +498,7 @@ letter-spacing: -0.01em;
 color: #272525;
 width: 593px;
 width: 650px;
-
+width: 800px;
 /* Inside auto layout */
 
 flex: none;
@@ -528,7 +529,7 @@ flex-grow: 0;
 margin: 16px 0px;
 }
 .previewers {
-    width: 625px;
+    /* width: 625px; */
 height: 234px;
 }
 .text-2 {

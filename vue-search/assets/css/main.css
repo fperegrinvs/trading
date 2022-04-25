@@ -595,13 +595,18 @@ color: #272525;
 
 .content > em {
     background-color: #FFFF00;
+    font-style: unset;
 }
-.el-pagination__total {
+
+.el-pagination {
+    text-align: center;
+}
+/* .el-pagination__total {
     color: white;
 }
 .el-pagination__jump {
     color: white;
-}
+} */
 
 .el-carousel__item.is-active {
     z-index: unset;
@@ -611,4 +616,25 @@ color: #272525;
 }
 .check-highlight {
     background-color: red;
+}
+
+.test-show-time.el-card.is-always-shadow {
+    box-shadow: unset;
+    border: unset;
+    margin-left: 45px;
+}
+
+.test-show-time > .el-card__body {
+    padding: 5px;
+    padding-left: 15px;
+}
+.test-btn-hide-statistics:focus {
+    outline: unset;
+}
+.test-btn-hide-statistics {
+    position: absolute;
+    right: 50px;
+    top: 73px;
+    border: unset;
+    padding: 4px 16px;
 }

@@ -19,11 +19,15 @@ const state = {
     currentSeriesNK: [],
     currentChartOptionsNK: {},
     tempListWordSegmentation: [],
-    currentSearchSaved: ''
+    currentSearchSaved: '',
+    currentTimeSearch: 0,
 
 }
 
 const actions = {
+    setCurrentTimeSearch({commit}, data) {
+        commit('setCurrentTimeSearch', data)
+    },
     setCurrentSearchSaved({commit}, data) {
         commit('setCurrentSearchSaved', data)
     },
@@ -118,6 +122,10 @@ const actions = {
 }
 
 const mutations = {
+    setCurrentTimeSearch(state, data) {
+        state.status = 'setCurrentTimeSearch';
+        state.currentTimeSearch = data
+    },
     setCurrentSearchSaved(state, data) {
         state.status = 'setCurrentSearchSaved';
         state.currentSearchSaved = data

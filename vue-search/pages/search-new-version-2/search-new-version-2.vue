@@ -3,7 +3,7 @@
         <!-- <template v-slot:result-workspace>
             <result-workspace />
         </template> -->
-        <template v-slot:params>
+        <!-- <template v-slot:params>
             <span style="/* Auto layout */
     /*left: 50px;*/
 display: flex;
@@ -17,7 +17,13 @@ position: absolute;
     
 
     top: 134px;">
-            <span v-if="searchFromDetail != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+    <span v-if="$route.query.text != undefined && searchFromDetail == ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+                <span class="el-select__tags-text">
+                    {{$route.query.text}}
+                </span>
+                <i class="el-tag__close el-icon-close"></i>
+            </span>
+            <span v-else-if="searchFromDetail != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
                 <span class="el-select__tags-text">
                     {{searchFromDetail}}
                 </span>
@@ -25,12 +31,58 @@ position: absolute;
             </span>
             
         </span>
-        </template>
+        </template> -->
+        <span style="/* Auto layout */
+    /*left: 50px;*/
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+    width: 100%;
+    height: 24px;
+    margin-left: 45px;
+
+    top: 134px;">
+            <!-- {{$route.query.text}} -->
+            <!-- <span v-if="$route.query.text != undefined && searchFromDetail == ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+                        <span class="el-select__tags-text">
+                            {{$route.query.text}}
+                        </span>
+                        <i class="el-tag__close el-icon-close"></i>
+                    </span>
+                    <span v-else-if="searchFromDetail != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+                        <span class="el-select__tags-text">
+                            {{searchFromDetail}}
+                        </span>
+                        <i class="el-tag__close el-icon-close"></i>
+            </span> -->
+
+            <!-- <span v-if="searchFromDetail == ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+                        <span class="el-select__tags-text">
+                            {{$route.query.text}}
+                        </span>
+                        <i class="el-tag__close el-icon-close"></i>
+            </span> -->
+            <span v-if="searchFromDetail != ''" class="el-tag el-tag--info el-tag--small el-tag--light">
+                        <span class="el-select__tags-text">
+                            {{searchFromDetail}}
+                        </span>
+                        <i class="el-tag__close el-icon-close"></i>
+            </span>
+            
+        </span>
+        <el-card class="test-show-time" v-if="currentTimeSearch > 0 &&dataSearchNewVersion.page">
+                <h1>Hiển thị {{dataSearchNewVersion.page * dataSearchNewVersion.size - dataSearchNewVersion.size + 1}} - {{dataSearchNewVersion.totalItems - (dataSearchNewVersion.page * dataSearchNewVersion.size) > 0 ? (dataSearchNewVersion.page * dataSearchNewVersion.size) : dataSearchNewVersion.totalItems}} / {{dataSearchNewVersion.totalItems}} văn bản trong {{
+                Math.round((currentTimeSearch / 1000) * 100000) / 100000
+                }} s
+                </h1>
+        </el-card>
         <template v-for="item in dataSearchNewVersion.data" >
                 <result-new-version-component :data="item" :key="item._id"/>
                 
         </template>
-        <div v-if="dataSearchNewVersion.data" class="block" style="position: fixed; bottom: 0px; background-color: #453630;">
+        <div v-if="dataSearchNewVersion.data" class="block" style="position: relative;">
                 <el-pagination
                     @size-change="handleSizeChange2"
                     @current-change="handleCurrentChange2"
@@ -61,11 +113,14 @@ position: absolute;
                 <ApexCharts v-show="seriesNK.length > 0" ref="demoChartNK" type="bar" height="380" :options="chartOptionsNK" :series="seriesNK"/>
             </div> -->
         </template>
-        <template v-slot:show-time>
-            <el-card v-if="time_taken > 0">
-                <h1>Thời gian gọi search api: {{time_taken}} ms</h1>
+        <!-- <template v-slot:show-time>
+            <el-card v-if="currentTimeSearch > 0 &&dataSearchNewVersion.page">
+                <h1>Hiển thị {{dataSearchNewVersion.page * dataSearchNewVersion.size - dataSearchNewVersion.size + 1}} - {{dataSearchNewVersion.totalItems - (dataSearchNewVersion.page * dataSearchNewVersion.size) > 0 ? (dataSearchNewVersion.page * dataSearchNewVersion.size) : dataSearchNewVersion.totalItems}} / {{dataSearchNewVersion.totalItems}} văn bản trong {{
+                Math.round((currentTimeSearch / 1000) * 100000) / 100000
+                }} s
+                </h1>
             </el-card>
-        </template>
+        </template> -->
     </LayoutForSearchPage>
 </template>
 <script>
@@ -371,14 +426,29 @@ export default {
             currentChartOptions: state => state.searchNewVersion.currentChartOptions,
             currentSeriesNK: state => state.searchNewVersion.currentSeriesNK,
             currentChartOptionsNK: state => state.searchNewVersion.currentChartOptionsNK,
+            currentTimeSearch: state => state.searchNewVersion.currentTimeSearch,
 
         }),
         
     },
     methods: {
-        ...mapActions('search', ['getCategory', 'getStat', 'getSearchAPI', 'getSearchProps', 'postFavorite', 'deleteFavorite', 'getFavorite']),
-        ...mapActions('searchNewVersion', ['postSearch', 'setCurrentSeries', 'setCurrentChartOptions', 'setCurrentSeriesNK', 'setCurrentChartOptionsNK', 'setTempListWordSegmentation']),
+        ...mapActions('search', ['getCategory', 'getStat', 'getSearchAPI', 'getSearchProps', 'postFavorite', 'deleteFavorite', 'getFavorite', 'setSearchFromDetail']),
+        ...mapActions('searchNewVersion', ['postSearch', 'setCurrentSeries', 'setCurrentChartOptions', 'setCurrentSeriesNK', 'setCurrentChartOptionsNK', 'setTempListWordSegmentation',
+        'setCurrentTimeSearch']),
         ...mapActions('workspace', ['getWorkspace']),
+        msToTime(duration) {
+            var milliseconds = parseInt((duration%1000))
+                , seconds = parseInt((duration/1000)%60)
+                // , minutes = parseInt((duration/(1000*60))%60)
+                // , hours = parseInt((duration/(1000*60*60))%24);
+
+            // hours = (hours < 10) ? "0" + hours : hours;
+            // minutes = (minutes < 10) ? "0" + minutes : minutes;
+            // seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            // return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            return seconds + "." + milliseconds;
+        },
         handleSizeChange2(val) {
             // console.log(`${val} items per page`);
             // this.currentSize = val;
@@ -394,6 +464,7 @@ export default {
             // alert(`Call search api took ${endTime - startTime} milliseconds`)
 
             this.time_taken = endTime - startTime
+            this.setCurrentTimeSearch(this.time_taken)
             let _this = this
             // setTimeout(function() {
             //     _this.time_taken = 0
@@ -425,6 +496,7 @@ export default {
 
 
             this.time_taken = endTime - startTime
+            this.setCurrentTimeSearch(this.time_taken)
             let _this = this
             // setTimeout(function() {
             //     _this.time_taken = 0
@@ -1402,6 +1474,19 @@ color: "#272525"
             //     fetch(`https://nlp.yeu.ai/api/v1/tok?text=${this.searchFromDetail}`,{method: 'GET'}).then(this.handleResponse).then(res => this.setTempListWordSegmentation(res.response));
             // }
             console.log(val);
+            // this.$router.replace({ params: {text: val}});
+            if (val != '') {
+                if (window.location.origin.toString().split("?").length > 1) {
+                    history.replaceState({}, null, window.location.origin + `?text=${val}`)
+                }
+                else {
+                    history.replaceState({}, null, window.location.origin + `/search?text=${val}`)
+                }
+            }
+            else {
+                history.replaceState({}, null, window.location.origin + '/search')
+            }
+            
 
 
 
@@ -1415,9 +1500,11 @@ color: "#272525"
 
 
 
+
             var endTime = performance.now()
 
             this.time_taken = endTime - startTime
+            this.setCurrentTimeSearch(this.time_taken)
             let _This = this
             // setTimeout(function() {
             //     _This.time_taken = 0
@@ -1440,7 +1527,23 @@ color: "#272525"
     },
     created() {
         this.getWorkspace();
-        if (this.searchFromDetail != "") {
+        console.log(this.$route.query.text)
+        if (this.$route.query.text && this.dataSearchNewVersion.length == 0) {
+            var startTime = performance.now()
+
+
+            
+            this.postSearch({by_title: true, page: 1, size: 20, text: this.$route.query.text})
+
+
+
+            var endTime = performance.now()
+
+            this.time_taken = endTime - startTime
+            this.setCurrentTimeSearch(this.time_taken)
+            this.setSearchFromDetail(this.$route.query.text)
+        }
+        if (this.searchFromDetail != "" && this.dataSearchNewVersion.length == 0 && this.$route.query.text == "") {
             // var start = new Date().getTime();
             var startTime = performance.now()
 
@@ -1451,6 +1554,7 @@ color: "#272525"
             var endTime = performance.now()
 
             this.time_taken = endTime - startTime
+            this.setCurrentTimeSearch(this.time_taken)
             // let _this = this
             // setTimeout(function() {
             //     _this.time_taken = 0
