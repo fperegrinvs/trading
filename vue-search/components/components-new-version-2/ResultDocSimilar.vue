@@ -74,7 +74,7 @@ export default {
                 _this.setCurrentDoc(_this.currentDocNewVersion.data)
                 
             }, 500)
-            console.log(this.currentDocNewVersion)
+            // console.log(this.currentDocNewVersion)
             this.getDocsSimilarityGivenDocId({size: 10, doc_id: this.data.id});
             // this.$router.push({name: "detail"});
         },
