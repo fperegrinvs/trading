@@ -72,7 +72,7 @@
 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ
 thị trường mở -->
             </p>
-            <p v-else class="content" v-html="data.title" ></p>
+            <p v-else class="content" v-html="data.highlights.join(' ')" ></p>
             <div class="last">
                 <!-- Nguyễn Thị Hồng -->
                 {{data.metadata['signer']}}
