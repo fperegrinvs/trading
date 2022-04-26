@@ -2,6 +2,7 @@
 <div>
     <div class="metas" :class="currentDoc._id == data.id ? 'chosen' : ''">
         <div>
+            <!-- {{data}} -->
             <div class="first">
                 Thông tư
                 <!-- {{data.metadata[2].value}} -->
@@ -68,10 +69,12 @@ export default {
             
             this.getDoc(this.data.id);
             let _this = this;
+
             setTimeout(function() {
                 _this.setCurrentDoc(_this.currentDocNewVersion.data)
+                
             }, 500)
-            
+            console.log(this.currentDocNewVersion)
             this.getDocsSimilarityGivenDocId({size: 10, doc_id: this.data.id});
             // this.$router.push({name: "detail"});
         },

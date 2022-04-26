@@ -758,6 +758,23 @@ export default {
         currentDoc() {
             console.log(this.currentDoc);
             let tempTableData = [];
+            if (Array.isArray(this.currentDoc.metadata)) {
+                tempTableData.push({metadata: "Số hiệu", content: this.currentDoc.signNumber})
+                this.currentDoc.metadata.forEach(ele => {
+                    if (ele.key == "signer") {
+                        tempTableData.push({metadata: "Người ký", content: ele.value})
+                    }
+                    else if (ele.key == "publisherName") {
+                        tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+                    }
+                    else if (ele.key == "documentType") {
+                        tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+                    }
+                    // else if (ele.key == "unique_id") {
+                    //     tempTableData.push({metadata: "Số hiệu", content: ele.value})
+                    // }
+                })
+            }
             // this.currentDoc.metadata.forEach(ele => {
             //     if (ele.key == "signer") {
             //         tempTableData.push({metadata: "Người ký", content: ele.value})
@@ -769,10 +786,14 @@ export default {
             //         tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
             //     }
             // })
-            tempTableData.push({metadata: "Số hiệu", content: this.currentDoc.signNumber})
+            else {
+                tempTableData.push({metadata: "Số hiệu", content: this.currentDoc.signNumber})
             tempTableData.push({metadata: "Người ký", content: this.currentDoc.metadata['signer']})
             tempTableData.push({metadata: "Đơn vị ban hành", content: this.currentDoc.metadata['publisherName']})
             tempTableData.push({metadata: "Loại tài liệu", content: this.currentDoc.metadata['documentType']})
+            }
+            
+            
             this.tableDataDetail = tempTableData;
         },
     
