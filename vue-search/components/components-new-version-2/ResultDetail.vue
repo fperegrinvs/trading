@@ -92,7 +92,7 @@
             Tập tin đính kèm
         </p>
         <div class="files-wrapper-level-2">
-            <template v-if="currentDocFromAPI">
+            <template v-if="currentDocFromAPI.data">
                 <attachment-file :data="item" v-for="(item, index) in currentDocFromAPI.data.attachments" :key="index + 'attachment-file'" />
             </template>
             
