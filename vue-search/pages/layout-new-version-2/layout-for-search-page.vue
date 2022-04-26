@@ -20,22 +20,31 @@
     <div class="layout-for-search-left" style="position: absolute;
     top: 122px;
     left: 256px;
-    width: 785px;
-    height: 631px;">
+    ">
+    <!-- box-shadow: inset -1px 0 0 #e5e5e5, inset 1px -1px 0 0 #e5e5e5;
+    padding:12px;
+    top:110px;
+    height: unset; -->
+
+
+
+<!-- width: 785px; -->
+    <!-- height: 631px; -->
         <slot></slot>
     </div>
-    <div class="layout-for-result-right" style="
+    <div class="layout-for-result-right display-none" style="
     padding: 24px 32px 24px 24px;
 
 position: absolute;
 left: 1041px;
 right: 0px;
-top: 112px;
+top: 111px;
 bottom: 0px;
 
 background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;
-height: 640px;">
+height: 640px;
+height: unset;">
         <slot name="result-right"></slot>
     </div>
     <!-- <div class="show-time" style="position: absolute; top: 115px; left: 35%;">
@@ -46,6 +55,47 @@ box-shadow: inset 1px 0px 0px #E5E5E5;">
         <slot name="layout-for-search-right"></slot>
     </div> -->
     <el-button @click="handleClickBtnHideStatistics" class="test-btn-hide-statistics"><i class="el-icon-arrow-down"></i></el-button>
+
+
+
+
+
+    <div class="layout-for-result-detail display-none" style="
+    padding: 24px 32px 24px 24px;
+
+position: absolute;
+left: 255px;
+right: 0px;
+top: 72px;
+bottom: 0px;
+
+background: #FFFFFF;
+box-shadow: inset 1px 0px 0px #E5E5E5;
+height: 682px;
+height: unset;
+width: 913px;">
+        <slot name="result-detail"></slot>
+    </div>
+
+    <div class="layout-for-result-detail-right display-none" style="
+    position: absolute;
+left: 1167px;
+right: 0px;
+top: 72px;
+bottom: 0px;
+
+background: #FFFFFF;
+box-shadow: inset 1px 0px 0px #E5E5E5;
+padding: 24px 32px 24px 24px;
+
+height: 682px;
+height: unset;
+">
+        <!-- left: 1041px; -->
+        <slot name="result-detail-right"></slot>
+    </div>
+
+
   </div>
 </template>
 <script>
@@ -65,13 +115,38 @@ export default {
         input: '',
       }
     },
+    // computed: {
+    //     ...mapState({
+    //         currentDoc: state => state.document.currentDocCopyFromHTML
+    //     })
+    // },
+    // watch: {
+    //     currentDoc() {
+    //         console.log(this.currentDoc.id);
+    //         if (this.currentDoc.id) {
+    //             document.querySelector('.layout-for-result-detail-right').classList.remove('display-none')
+    //             document.querySelector('.layour-for-result-detail').classList.remove
+    //         }
+    //     },
+    // },
+    mounted() {
+        let height = document.documentElement.clientHeight;
+        console.log(height);
+      document.querySelector('.layout-for-search-left').style.height = (height - 72 - 40 - 11).toString() + "px";
+      let width = document.documentElement.clientWidth;
+      document.querySelector('.layout-for-search-left').style.width = (width - 256).toString() + "px";
+      console.log(document.querySelector('.layout-for-search-left'))
+    },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
       handleClickBtnHideStatistics() {
           let layoutRight = document.querySelector('.layout-for-result-right')
           layoutRight.classList.toggle('display-none');
           if (layoutRight.classList.contains('display-none')) {
-              document.querySelector('.layout-for-search-left').style.width = "1280px";
+            //   document.querySelector('.layout-for-search-left').style.width = "1280px";
+            let width = document.documentElement.clientWidth;
+            document.querySelector('.layout-for-search-left').style.width = (width - 256).toString() + "px";
+            console.log(document.querySelector('.layout-for-search-left'))
           }
           else {
               document.querySelector('.layout-for-search-left').style.width = "785px";
@@ -101,6 +176,7 @@ export default {
       if (this.$route.query.text) {
         this.input = this.$route.query.text;
       }
+      
     },
 }
 </script>

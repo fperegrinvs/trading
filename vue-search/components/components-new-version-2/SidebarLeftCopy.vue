@@ -71,17 +71,8 @@ export default {
                     label: 'Công văn điều hành',
                 }
                 ]
-                }, {
-                id: 2,
-                label: 'Bộ Giao thông vận tải',
-                children: [{
-                    id: 5,
-                    label: 'Level two 2-1'
-                }, {
-                    id: 6,
-                    label: 'Level two 2-2'
-                }]
-                }, {
+                },
+                 {
                 id: 3,
                 label: 'Bộ Công thương',
                 children: [{

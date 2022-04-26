@@ -28,8 +28,10 @@
     top: 300px;
     left: 270px;
     width: 652px;
-    height: 453px;">
+    ">
     <!-- height: 580px -->
+
+    <!-- height: 453px; -->
         <slot></slot>
     </div>
 
@@ -73,8 +75,16 @@ export default {
         input: '',
       }
     },
+    mounted() {
+          console.log('??????')
+          let height = document.documentElement.clientHeight;
+          console.log(height)
+          console.log(document.querySelector('.layout-for-search-left'))
+          document.querySelector('.layout-for-search-left').style.height = (height - 24 - 117 - 40 - 72 - 48).toString() + "px";
+      },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
+      
       handleBtnBack() {
           this.$router.go(-1);
       },

@@ -62,17 +62,17 @@
 
                 <!-- <img class="icon-bx-star" src="@/assets/icons-figma/bx-star.svg" style="display: inline; margin-right: 10px;" alt=""> -->
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015... -->
-                {{data.title}}
+                <div @click="handleClickTitle($event)" style="display: inline;">{{data.title}}</div>
                 <!-- {{data.highlight}} -->
                 <!-- <template v-html="data.title"></template> -->
             </h1>
-            <p v-if="data.highlight" class="content" v-html="data.highlight" @click="handleClickTitle($event)">
+            <p v-if="data.highlight" class="content" v-html="data.highlight">
                 <!-- {{data.title}} -->
                 <!-- Sửa đổi, bổ sung một số điều của Thông tư số 42/2015/TT-NHNN ngày 31 tháng
 12 năm 2015 của Thống đốc Ngân hàng Nhà nước Việt Nam quy định về nghiệp vụ
 thị trường mở -->
             </p>
-            <p v-else class="content" v-html="data.title" @click="handleClickTitle($event)"></p>
+            <p v-else class="content" v-html="data.title" ></p>
             <div class="last">
                 <!-- Nguyễn Thị Hồng -->
                 {{data.metadata[0].value}}
@@ -107,12 +107,19 @@ export default {
             this.inputWorkspace = '';
         },
         handleClickTitle(event) {
+            console.log(event.currentTarget)
             console.log(this.data);
             // this.getDocById(this.data.docidx);
             this.setCurrentDoc(this.data);
             this.getDoc(this.data.id);
             this.getDocsSimilarityGivenDocId({size: 10, doc_id: this.data.id});
-            this.$router.push({name: "detail"});
+            
+            document.querySelector('.layout-for-result-detail-right').classList.remove('display-none');
+            document.querySelector('.layout-for-result-detail').classList.remove('display-none');
+      
+
+
+            // this.$router.push({name: "detail"});
         },
         addFavorite(docidx) {
             let stringDocidx = docidx.toString()
@@ -366,6 +373,7 @@ display: inline-block;
 font-style: normal;
 font-weight: 600;
 font-size: 18px;
+font-size: 15px;
 line-height: 130%;
 /* or 23px */
 

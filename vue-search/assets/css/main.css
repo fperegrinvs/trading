@@ -599,7 +599,8 @@ color: #272525;
 }
 
 .el-pagination {
-    text-align: center;
+    /* text-align: center; */
+    padding-left: 60px;
 }
 /* .el-pagination__total {
     color: white;
@@ -622,11 +623,17 @@ color: #272525;
     box-shadow: unset;
     border: unset;
     margin-left: 45px;
+    margin-left: 60px;
+    width: 400px;
+}
+
+.test-show-time.el-card.is-always-shadow > div > h1 {
+    font-size: 15px;
 }
 
 .test-show-time > .el-card__body {
-    padding: 5px;
-    padding-left: 15px;
+    padding: unset;
+    padding-left: unset;
 }
 .test-btn-hide-statistics:focus {
     outline: unset;
@@ -637,4 +644,96 @@ color: #272525;
     top: 73px;
     border: unset;
     padding: 4px 16px;
+}
+
+@media only screen and (min-width: 1537px) {
+    .bg > .features {
+        left: 20%;
+        width: 915px;
+    }
+}
+
+@media only screen and (min-width: 1546px) {
+    .bg > .features {
+        left: 21%;
+        width: 915px;
+    }
+}
+
+@media only screen and (min-width: 1605px) {
+    .bg > .features {
+        left: 22%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1650px) {
+    .bg > .features {
+        left: 23%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1690px) {
+    .bg > .features {
+        left: 23.5%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1761px) {
+    .bg > .features {
+        left: 24.5%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    .bg > .features {
+        left: 25%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1836px) {
+    .bg > .features {
+        left: 25.5%;
+        /* width: 915px; */
+    }
+}
+
+@media only screen and (min-width: 1901px) {
+    .bg > .features {
+        left: 26%;
+    }
+}
+
+@media only screen and (min-width: 1910px) {
+    .bg > .features {
+        left: 26.5%;
+    }
+}
+
+@media only screen and (min-width: 1995px) {
+    .bg > .features {
+        left: 27%;
+    }
+}
+
+@media only screen and (min-width: 2015px) {
+    .bg > .features {
+        left: 27.5%;
+    }
+}
+
+@media only screen and (min-width: 2047px) {
+    .bg > .features {
+        left: 28%;
+    }
+}
+
+@media only screen and (min-width: 2078px) {
+    .bg > .features {
+        left: 28.5%;
+    }
 }

@@ -37,6 +37,7 @@ bottom: 0px;
 background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;
 height: 682px;
+height: unset;
 width: 913px;">
         <slot name="result-detail"></slot>
     </div>
@@ -52,6 +53,7 @@ box-shadow: inset 1px 0px 0px #E5E5E5;
 padding: 24px 32px 24px 24px;
 
 height: 682px;
+height: unset;
 ">
         <!-- left: 1041px; -->
         <slot name="result-detail-right"></slot>

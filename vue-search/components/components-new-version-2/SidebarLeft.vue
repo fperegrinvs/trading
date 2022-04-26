@@ -172,6 +172,7 @@ bottom: 0px;
 
 
 height: 680px;
+height: unset;
 
 background: #FFFFFF;
 box-shadow: inset -1px 0px 0px #E5E5E5;

@@ -78,6 +78,17 @@ padding: 0px;
                 }} s
                 </h1>
         </el-card>
+        <div v-if="dataSearchNewVersion.data" class="block" style="position: relative;">
+                <el-pagination
+                    @size-change="handleSizeChange2"
+                    @current-change="handleCurrentChange2"
+                    :current-page.sync="dataSearchNewVersion.page"
+                    :page-sizes="[10, 20, 50]"
+                    :page-size="dataSearchNewVersion.size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="dataSearchNewVersion.totalItems">
+                </el-pagination>
+        </div>
         <template v-for="item in dataSearchNewVersion.data" >
                 <result-new-version-component :data="item" :key="item._id"/>
                 
@@ -121,9 +132,43 @@ padding: 0px;
                 </h1>
             </el-card>
         </template> -->
+
+
+
+        <template v-slot:result-detail>
+            <!-- <h1>hello</h1> -->
+            <result-detail />
+        </template>
+        <template v-slot:result-detail-right>
+            <h1 class="title">
+                Thông tin văn bản
+            </h1>
+            <div class="metadata">
+                    <p class="text-2">Metadata</p>
+                    <el-table
+                        :show-header="false"
+                        :data="tableDataDetail"
+                        style="width: 100%">
+                        <el-table-column
+                            prop="metadata"
+                            label="Metadata"
+                            width="200"
+                        >
+                        </el-table-column>
+                        <el-table-column
+                        prop="content"
+                        label="Nội dung">
+                        <template slot-scope="scope">
+                                {{scope.row.content}}
+                        </template>
+                        </el-table-column>
+                    </el-table>
+            </div>
+        </template>
     </LayoutForSearchPage>
 </template>
 <script>
+
 // import PieChart from '../../components/PieChart.vue'
 // import BarChart from '../../components/BarChart.vue'
 // import ResultComponent from '../../components/components-new/Result.vue'
@@ -144,6 +189,9 @@ Vue.component('pdfPage', pdfPage)
 Vue.component('test-apex-charts', TestApexCharts)
 
 
+import resultDetail from '../../components/components-new-version-2/ResultDetail.vue'
+Vue.component('result-detail', resultDetail)
+
 
 import ApexCharts from 'vue-apexcharts'
 // Vue.component("apexchart", ApexCharts)
@@ -160,6 +208,7 @@ export default {
   components: { ApexCharts },
     data() {
       return {
+          tableDataDetail: [],
           time_taken: 0,
         // currentSize: 20,
         // currentPage4: 1,
@@ -427,7 +476,7 @@ export default {
             currentSeriesNK: state => state.searchNewVersion.currentSeriesNK,
             currentChartOptionsNK: state => state.searchNewVersion.currentChartOptionsNK,
             currentTimeSearch: state => state.searchNewVersion.currentTimeSearch,
-
+            currentDoc: state => state.document.currentDocCopyFromHTML,
         }),
         
     },
@@ -702,6 +751,30 @@ export default {
         }
     },
     watch: {
+        currentDoc() {
+            console.log(this.currentDoc);
+            let tempTableData = [];
+            this.currentDoc.metadata.forEach(ele => {
+                if (ele.key == "signer") {
+                    tempTableData.push({metadata: "Người ký", content: ele.value})
+                }
+                else if (ele.key == "publisherName") {
+                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+                }
+                else if (ele.key == "documentType") {
+                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+                }
+            })
+            this.tableDataDetail = tempTableData;
+        },
+    
+        // currentDoc() {
+        //     console.log(this.currentDoc.id);
+        //     if (this.currentDoc.id) {
+        //         document.querySelector('.layout-for-result-detail-right').classList.remove('display-none')
+        //         document.querySelector('.layour-for-result-detail').classList.remove
+        //     }
+        // },
         dataSearchNewVersion() {
             this.statistics = [
                 [],[],[],[],[]

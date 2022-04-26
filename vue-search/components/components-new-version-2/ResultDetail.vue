@@ -13,7 +13,7 @@
         </template>
         
         </h1>
-        <div class="icon" style="display: inline-block; float: right;">            
+        <div @click="handleButtonXDetail" class="icon" style="display: inline-block; float: right; cursor: pointer;">            
             <img src="@/assets/icons-figma/bx-x.svg" alt="">
         </div>    
     </div>
@@ -29,12 +29,12 @@
             <el-carousel height="175px" :autoplay="false" indicator-position="outside">
                 <template v-if="currentDoc.highlight">
                     <el-carousel-item>
-                        <h3 @click="h3Click" v-html="currentDoc.highlight"></h3>
+                        <h3 v-html="currentDoc.highlight"></h3>
                     </el-carousel-item>
                 </template>
                 <template v-else>
                     <el-carousel-item v-for="item in 4" :key="item">
-                        <h3 @click="h3Click" v-html="item"></h3>
+                        <h3 v-html="item"></h3>
                     </el-carousel-item>
                 </template>
                 
@@ -378,6 +378,10 @@ export default {
     },
     methods: {
         ...mapActions('search', ['postFavorite', 'deleteFavorite']),
+        handleButtonXDetail() {
+            document.querySelector('.layout-for-result-detail').classList.add('display-none')
+            document.querySelector('.layout-for-result-detail-right').classList.add('display-none')
+        },
         handleClickTitle() {
             console.log(this.currentDoc)
             console.log(this.tableData)            
