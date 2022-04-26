@@ -165,6 +165,9 @@ padding: 0px;
                     </el-table>
             </div>
         </template>
+        <template v-slot:layout-for-pdf>
+            <pdfPage v-if="pdfUrl" />
+        </template>
     </LayoutForSearchPage>
 </template>
 <script>
@@ -477,6 +480,7 @@ export default {
             currentChartOptionsNK: state => state.searchNewVersion.currentChartOptionsNK,
             currentTimeSearch: state => state.searchNewVersion.currentTimeSearch,
             currentDoc: state => state.document.currentDocCopyFromHTML,
+            pdfUrl: state => state.searchNewVersion.currentPdfUrl,
         }),
         
     },

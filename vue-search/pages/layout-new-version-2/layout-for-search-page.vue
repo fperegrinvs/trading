@@ -71,9 +71,10 @@ bottom: 0px;
 
 background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;
-height: 682px;
-height: unset;
+
 width: 913px;">
+<!-- height: 682px;
+height: unset; -->
         <slot name="result-detail"></slot>
     </div>
 
@@ -87,15 +88,18 @@ bottom: 0px;
 background: #FFFFFF;
 box-shadow: inset 1px 0px 0px #E5E5E5;
 padding: 24px 32px 24px 24px;
-
 height: 682px;
 height: unset;
+
 ">
         <!-- left: 1041px; -->
+        
         <slot name="result-detail-right"></slot>
     </div>
 
-
+    <div class="layout-for-pdf">
+        <slot name="layout-for-pdf"></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -136,6 +140,7 @@ export default {
       let width = document.documentElement.clientWidth;
       document.querySelector('.layout-for-search-left').style.width = (width - 256).toString() + "px";
       console.log(document.querySelector('.layout-for-search-left'))
+        document.querySelector('.layout-for-result-detail').style.height = (height - 72) + "px";
     },
     methods: {
       ...mapActions('search', ['getSearchAPI', 'setSearchFromDetail']),
@@ -181,6 +186,14 @@ export default {
 }
 </script>
 <style scoped>
+.layout-for-result-detail::-webkit-scrollbar {
+    display: none;
+}
+.layout-for-result-detail {
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+}
 .test-btn-replace-btn-chrome:focus {
     outline: unset;
 }
