@@ -4,19 +4,19 @@
         <div>
             <div class="first">
                 <!-- Thông tư -->
-                {{data.metadata[2].value}}
+                {{data.metadata['documentType']}}
                 <div class="text-divider">
                     ·
                 </div>
                 <strong class="text-strong">
-                    09/2021/TT-NHNN
-                    <!-- {{data.signNumber}} -->
+                    <!-- 09/2021/TT-NHNN -->
+                    {{data.signNumber}}
                 </strong>
                 <div class="text-divider">
                     ·
                 </div>
                 <!-- Ngân hàng Nhà nước Việt Nam -->
-                {{data.metadata[1].value}}
+                {{data.metadata['publisherName']}}
             </div>
             
             
@@ -75,7 +75,7 @@ thị trường mở -->
             <p v-else class="content" v-html="data.title" ></p>
             <div class="last">
                 <!-- Nguyễn Thị Hồng -->
-                {{data.metadata[0].value}}
+                {{data.metadata['signer']}}
                 <div class="text-divider">
                     ·
                 </div>

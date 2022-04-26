@@ -511,7 +511,7 @@ export default {
             var startTime = performance.now()
 
 
-            this.postSearch({by_title: true, page: this.dataSearchNewVersion.page, size: val, text: this.searchFromDetail})
+            this.postSearch({by_title: false, page: this.dataSearchNewVersion.page, size: val, text: this.searchFromDetail})
 
             var endTime = performance.now()
             // alert(`Call search api took ${endTime - startTime} milliseconds`)
@@ -542,7 +542,7 @@ export default {
 
 
 
-            this.postSearch({by_title: true, page: val, size: this.dataSearchNewVersion.size, text: this.searchFromDetail})
+            this.postSearch({by_title: false, page: val, size: this.dataSearchNewVersion.size, text: this.searchFromDetail})
 
 
             var endTime = performance.now()
@@ -758,17 +758,21 @@ export default {
         currentDoc() {
             console.log(this.currentDoc);
             let tempTableData = [];
-            this.currentDoc.metadata.forEach(ele => {
-                if (ele.key == "signer") {
-                    tempTableData.push({metadata: "Người ký", content: ele.value})
-                }
-                else if (ele.key == "publisherName") {
-                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
-                }
-                else if (ele.key == "documentType") {
-                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
-                }
-            })
+            // this.currentDoc.metadata.forEach(ele => {
+            //     if (ele.key == "signer") {
+            //         tempTableData.push({metadata: "Người ký", content: ele.value})
+            //     }
+            //     else if (ele.key == "publisherName") {
+            //         tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+            //     }
+            //     else if (ele.key == "documentType") {
+            //         tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+            //     }
+            // })
+            tempTableData.push({metadata: "Số hiệu", content: this.currentDoc.signNumber})
+            tempTableData.push({metadata: "Người ký", content: this.currentDoc.metadata['signer']})
+            tempTableData.push({metadata: "Đơn vị ban hành", content: this.currentDoc.metadata['publisherName']})
+            tempTableData.push({metadata: "Loại tài liệu", content: this.currentDoc.metadata['documentType']})
             this.tableDataDetail = tempTableData;
         },
     
@@ -779,331 +783,7 @@ export default {
         //         document.querySelector('.layour-for-result-detail').classList.remove
         //     }
         // },
-        dataSearchNewVersion() {
-            this.statistics = [
-                [],[],[],[],[]
-            ];
-            // console.log(this.dataSearchNewVersion);
-            this.dataSearchNewVersion.data.forEach(ele => {
-                if (!this.statistics[3].includes(ele.metadata[0].value)) {
-                    this.statistics[3].push(ele.metadata[0].value)
-                }
-                if (!this.statistics[1].includes(ele.metadata[1].value)) {
-                    this.statistics[1].push(ele.metadata[1].value)
-                }
-                if (!this.statistics[2].includes(ele.metadata[2].value)) {
-                    this.statistics[2].push(ele.metadata[2].value)
-                }
-                let obj = {}
-                // obj[ele.metadata[1].value + '|||' + ele.metadata[2].value] = 1 
-                obj['name'] = ele.metadata[1].value + '|||' + ele.metadata[2].value
-                obj['value'] = 1
-
-                let obj2 = {}
-                obj2['name'] = ele.metadata[0].value + '|||' + ele.metadata[2].value
-                obj2['value'] = 1
-                this.statistics[0].push(obj)
-                this.statistics[4].push(obj2)
-            })
-            // console.log(this.statistics);
-            let testHolder2 = []
-            let testHolder3 = []
-            this.statistics[2].forEach(ele => {
-                testHolder2.push([])
-                testHolder3.push([])
-            }) 
-            
-
-            var holder2 = {};
-
-            this.statistics[4].forEach(function(d) {
-            if (holder2.hasOwnProperty(d.name)) {
-                // console.log(d)
-                holder2[d.name] = holder2[d.name] + d.value;
-            } else {
-                holder2[d.name] = d.value;
-            }
-            });
-            // console.log(holder2);
-            this.statistics[2].forEach((ele, index) => {
-                this.statistics[3].forEach(ele2 => {
-                    if (holder2[ele2 + '|||' + ele]) {
-                        testHolder3[index].push(holder2[ele2 + '|||' + ele])
-                    }
-                    else {
-                        testHolder3[index].push(0)
-                    }
-                })
-            })
-            // console.log(testHolder3)
-            this.testTestHolder3 = []
-            testHolder3.forEach((ele, index) => {
-                let obj = {}
-                obj['name'] = this.statistics[2][index]
-                obj['data'] = ele
-                this.testTestHolder3.push(obj)
-            })
-            // console.log(this.testTestHolder3)
-
-            this.seriesNK = []
-            // this.chartOptions = {}
-            // window.dispatchEvent(new Event('resize'));
-
-            this.seriesNK = this.testTestHolder3
-            this.setCurrentSeriesNK(this.seriesNK);
-
-            let tempChartOptionsNK = {...this.chartOptionsNK, ...{
-                title: {
-                    text: 'Theo Người ký / Loại văn bản',
-                    style: {
-                        fontFamily: 'Noto Sans',
-fontStyle: 'normal',
-fontWeight: "700",
-fontSize: "12px",
-lineHeight: "16px",
-letterSpacing: "-0.01em",
-textTransform: "uppercase",
-
-color: "#272525"
-                    },
-                },
-                xaxis: {
-                    categories: this.statistics[3],
-                    labels: {
-                        formatter: function (val) {
-                        return val + "tài liệu"
-                        }
-                    }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function (val) {
-                        return val + "tài liệu"
-                        }
-                    }
-                },
-                // legend: {
-                //     position: 'bottom',
-                //     horizontalAlign: 'center',
-                //     offsetX: 40
-                // }
-            }}
-
-            this.setCurrentChartOptionsNK(tempChartOptionsNK)
-            
-//             this.$refs.demoChartNK.updateOptions({
-//                 title: {
-//                     text: 'Theo Người ký / Loại văn bản',
-//                     style: {
-//                         fontFamily: 'Noto Sans',
-// fontStyle: 'normal',
-// fontWeight: "700",
-// fontSize: "12px",
-// lineHeight: "16px",
-// letterSpacing: "-0.01em",
-// textTransform: "uppercase",
-
-// color: "#272525"
-//                     },
-//                 },
-//                 xaxis: {
-//                     categories: this.statistics[3],
-//                     labels: {
-//                         formatter: function (val) {
-//                         return val + "tài liệu"
-//                         }
-//                     }
-//                 },
-//                 tooltip: {
-//                     y: {
-//                         formatter: function (val) {
-//                         return val + "tài liệu"
-//                         }
-//                     }
-//                 },
-//                 // legend: {
-//                 //     position: 'bottom',
-//                 //     horizontalAlign: 'center',
-//                 //     offsetX: 40
-//                 // }
-//             })
-
-
-
-
-
-
-
-
-
-
-            var holder = {};
-
-            this.statistics[0].forEach(function(d) {
-            if (holder.hasOwnProperty(d.name)) {
-                // console.log(d)
-                holder[d.name] = holder[d.name] + d.value;
-            } else {
-                holder[d.name] = d.value;
-            }
-            });
-            // console.log(holder);
-            this.statistics[2].forEach((ele, index) => {
-                this.statistics[1].forEach(ele2 => {
-                    if (holder[ele2 + '|||' + ele]) {
-                        testHolder2[index].push(holder[ele2 + '|||' + ele])
-                    }
-                    else {
-                        testHolder2[index].push(0)
-                    }
-                })
-            })
-            // console.log(testHolder2)
-            this.testTestHolder2 = []
-            testHolder2.forEach((ele, index) => {
-                let obj = {}
-                obj['name'] = this.statistics[2][index]
-                obj['data'] = ele
-                this.testTestHolder2.push(obj)
-            })
-            // console.log(this.testTestHolder2)
-            this.series = []
-            // this.chartOptions = {}
-            // window.dispatchEvent(new Event('resize'));
-
-            this.series = this.testTestHolder2
-            
-
-            this.setCurrentSeries(this.series)
-            // this.setCurrentChartOptions(this.chartOptions)
-
-//             this.$refs.demoChart.updateOptions({
-//                 title: {
-//                     text: 'Theo Đơn vị ban hành / Loại văn bản',
-//                     style: {
-//                         fontFamily: 'Noto Sans',
-// fontStyle: 'normal',
-// fontWeight: "700",
-// fontSize: "12px",
-// lineHeight: "16px",
-// letterSpacing: "-0.01em",
-// textTransform: "uppercase",
-
-// color: "#272525"
-//                     },
-//                 },
-//                 xaxis: {
-//                     categories: this.statistics[1],
-//                     labels: {
-//                         formatter: function (val) {
-//                         return val + "tài liệu"
-//                         }
-//                     }
-//                 },
-//                 tooltip: {
-//                     y: {
-//                         formatter: function (val) {
-//                         return val + "tài liệu"
-//                         }
-//                     }
-//                 },
-//             })
-            
-            let tempChartOptions = {...this.chartOptions, ...{
-                title: {
-                    text: 'Theo Đơn vị ban hành / Loại văn bản',
-                    style: {
-                        fontFamily: 'Noto Sans',
-fontStyle: 'normal',
-fontWeight: "700",
-fontSize: "12px",
-lineHeight: "16px",
-letterSpacing: "-0.01em",
-textTransform: "uppercase",
-
-color: "#272525"
-                    },
-                },
-                xaxis: {
-                    categories: this.statistics[1],
-                    labels: {
-                        formatter: function (val) {
-                        return val + "tài liệu"
-                        }
-                    }
-                },
-                tooltip: {
-                    y: {
-                        formatter: function (val) {
-                        return val + "tài liệu"
-                        }
-                    }
-                },
-            }}
-
-            this.setCurrentChartOptions(tempChartOptions)
-
-            // this.chartOptions = {...this.chartOptions, ...{
-                
-            //     xaxis: {
-            //         categories: this.statistics[1],
-            //         labels: {
-            //             formatter: function (val) {
-            //             return val + "tài liệu"
-            //             }
-            //         }
-            //     },
-            //     tooltip: {
-            //         y: {
-            //             formatter: function (val) {
-            //             return val + "tài liệu"
-            //             }
-            //         }
-            //     },
-            //     legend: {
-            //         position: 'bottom',
-            //         horizontalAlign: 'left',
-            //         offsetX: 40
-            //     }
-            // }
-            // }
-
-
-            var obj2 = [];
-
-            for (var prop in holder) {
-            obj2.push({ name: prop, value: holder[prop] });
-            }
-
-            // console.log(obj2);
-            // this.statistics[1].forEach(ele => {
-            //     this.statistics[2].forEach(ele2 => {
-                    
-            //     })
-            // })
-            let _this = this
-            setTimeout(function() {
-                let eleList = document.querySelectorAll(".apexcharts-canvas");
-                eleList.forEach(eleSingle => {
-                    let eleDiv = document.createElement('div')
-                    eleDiv.classList.add('apexcharts-toolbar')
-                    eleDiv.style.top = "0px";
-                    eleDiv.style.right = "3px";
-                    eleDiv.style.cursor = "pointer";
-                    // eleDiv.textContent = "hello"
-                    eleDiv.innerHTML = "<i class='el-icon-arrow-down'></i>"
-                    eleDiv.onclick = function() {
-                        eleSingle.firstElementChild.classList.toggle("display-none-chart");
-                    };
-                    eleSingle.lastChild.style.display = "none";
-                    _this.insertAfter(eleDiv, eleSingle.lastElementChild)
-                    console.log(eleSingle);
-                })
-                
-                
-            }, 1000)
-            
-        },
+        
         value2: function(val) {
             this.getSearchAPI({text:this.searchFromDetail, page:1, pagesize:20, bookmarked:false, sort:"docidx", sort_direction:"desc", publisherName: this.value, documentName: val});
         },
@@ -1573,7 +1253,7 @@ color: "#272525"
 
 
             
-            this.postSearch({by_title: true, page: 1, size: 20, text: val})
+            this.postSearch({by_title: false, page: 1, size: 20, text: val})
 
 
 
@@ -1610,7 +1290,7 @@ color: "#272525"
 
 
             
-            this.postSearch({by_title: true, page: 1, size: 20, text: this.$route.query.text})
+            this.postSearch({by_title: false, page: 1, size: 20, text: this.$route.query.text})
 
 
 
@@ -1625,7 +1305,7 @@ color: "#272525"
             var startTime = performance.now()
 
 
-            this.postSearch({by_title: true, page: 1, size: 10, text: this.searchFromDetail});
+            this.postSearch({by_title: false, page: 1, size: 10, text: this.searchFromDetail});
 
             // var end = new Date().getTime();
             var endTime = performance.now()

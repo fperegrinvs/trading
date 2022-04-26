@@ -27,9 +27,12 @@
 
         <div class="occours">
             <el-carousel height="175px" :autoplay="false" indicator-position="outside">
-                <template v-if="currentDoc.highlight">
-                    <el-carousel-item>
-                        <h3 v-html="currentDoc.highlight"></h3>
+                <template v-if="currentDoc.highlights">
+                    <el-carousel-item v-if="typeof(currentDoc.highlights) == 'string'">
+                        <h3 v-html="currentDoc.highlights"></h3>
+                    </el-carousel-item>
+                    <el-carousel-item v-else-if="Array.isArray(currentDoc.highlights)" v-for="(item, index) in currentDoc.highlights" :key="index + 'highlightarray'">
+                        <h3 v-html="item"></h3>
                     </el-carousel-item>
                 </template>
                 <template v-else>
@@ -89,8 +92,8 @@
             Tập tin đính kèm
         </p>
         <div class="files-wrapper-level-2">
-            <template v-if="currentDoc">
-                <attachment-file :data="item" v-for="(item, index) in currentDoc.attachments" :key="index + 'attachment-file'" />
+            <template v-if="currentDocFromAPI">
+                <attachment-file :data="item" v-for="(item, index) in currentDocFromAPI.data.attachments" :key="index + 'attachment-file'" />
             </template>
             
         </div>
@@ -221,7 +224,8 @@ export default {
             docsSimilar: state => state.searchNewVersion.docsSimilar,
 
             pdfUrl: state => state.searchNewVersion.currentPdfUrl,
-            searchFromDetail: state => state.search.searchFromDetail
+            searchFromDetail: state => state.search.searchFromDetail,
+            currentDocFromAPI: state => state.searchNewVersion.currentDoc,
         })
     },
     watch: {
@@ -340,17 +344,24 @@ export default {
             // console.log(this.currentDoc);
             // console.log(tempTableData);
             // this.tableData = tempTableData;
-            this.currentDoc.metadata.forEach(ele => {
-                if (ele.key == "signer") {
-                    tempTableData.push({metadata: "Người ký", content: ele.value})
-                }
-                else if (ele.key == "publisherName") {
-                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
-                }
-                else if (ele.key == "documentType") {
-                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
-                }
-            })
+
+
+
+            // this.currentDoc.metadata.forEach(ele => {
+            //     if (ele.key == "signer") {
+            //         tempTableData.push({metadata: "Người ký", content: ele.value})
+            //     }
+            //     else if (ele.key == "publisherName") {
+            //         tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+            //     }
+            //     else if (ele.key == "documentType") {
+            //         tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+            //     }
+            // })
+            tempTableData.push({metadata: "Người ký", content: this.currentDoc.metadata['signer']})
+            tempTableData.push({metadata: "Đơn vị ban hành", content: this.currentDoc.metadata['publisherName']})
+            tempTableData.push({metadata: "Loại tài liệu", content: this.currentDoc.metadata['documentType']})
+
             this.tableData = tempTableData;
         },
     },
@@ -359,19 +370,25 @@ export default {
         console.log(this.currentDoc);
         this.title = this.currentDoc.title;
         let tempTableData = [];
+        // if (this.currentDoc.metadata) {
+        //     this.currentDoc.metadata.forEach(ele => {
+        //         if (ele.key == "signer") {
+        //             tempTableData.push({metadata: "Người ký", content: ele.value})
+        //         }
+        //         else if (ele.key == "publisherName") {
+        //             tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
+        //         }
+        //         else if (ele.key == "documentType") {
+        //             tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
+        //         }
+        //     })
+        // }
         if (this.currentDoc.metadata) {
-            this.currentDoc.metadata.forEach(ele => {
-                if (ele.key == "signer") {
-                    tempTableData.push({metadata: "Người ký", content: ele.value})
-                }
-                else if (ele.key == "publisherName") {
-                    tempTableData.push({metadata: "Đơn vị ban hành", content: ele.value})
-                }
-                else if (ele.key == "documentType") {
-                    tempTableData.push({metadata: "Loại tài liệu", content: ele.value})
-                }
-            })
+            tempTableData.push({metadata: "Người ký", content: this.currentDoc.metadata['signer']})
+        tempTableData.push({metadata: "Đơn vị ban hành", content: this.currentDoc.metadata['publisherName']})
+        tempTableData.push({metadata: "Loại tài liệu", content: this.currentDoc.metadata['documentType']})
         }
+        
         
         this.tableData = tempTableData;
         console.log(this.tableData);
