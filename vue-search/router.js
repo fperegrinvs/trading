@@ -13,6 +13,9 @@ import SavedPage from './pages/saved/index.vue'
 import SearchNewVersion2Page from './pages/search-new-version-2/search-new-version-2.vue'
 import DetailPageNewVersion from './pages/detail/detail-new-version.vue'
 import DocPage from './pages/doc/doc.vue'
+import TradingPage from './pages/trading/trading.vue'
+import TradingPage2 from './pages/trading/trading-version-2.vue'
+import TradingPage3 from './pages/trading/trading-version-3.vue'
 
 Vue.use(Router);
 
@@ -35,6 +38,9 @@ export const router = new Router({
     { path: '/saved', component: SavedPage, name: 'saved' },
     { path: '/detail', component: DetailPageNewVersion, name: "detail"},
     { path: '/doc', component: DocPage, name: "doc"},
+    { path: '/trading', component: TradingPage, name: "trading"},
+    { path: '/trading2', component: TradingPage2, name: "trading2"},
+    { path: '/trading3', component: TradingPage3, name: "trading3"},
 
 
 

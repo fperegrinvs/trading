@@ -1,5 +1,3 @@
-# Giao diện Ademax
-
 ## Cài đặt
 
 ```
